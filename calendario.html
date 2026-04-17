@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PRLS OS · Calendário de Marketing 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fafaf9;
+    --bg-alt:#f5f5f4;
+    --surface:#ffffff;
+    --surface-2:#f9f9f8;
+    --border:#e7e5e4;
+    --border-strong:#d6d3d1;
+    --ink:#18181b;
+    --ink-soft:#3f3f46;
+    --ink-2:#52525b;
+    --muted:#78716c;
+    --muted-2:#a8a29e;
+    --accent-soft:#f4f1ee;
+
+    /* Categorias de eventos */
+    --cat-drop:#18181b;
+    --cat-drop-bg:#e7e5e4;
+    --cat-flash:#b91c1c;
+    --cat-flash-bg:#fee2e2;
+    --cat-key:#92400e;
+    --cat-key-bg:#fef3c7;
+    --cat-regional:#166534;
+    --cat-regional-bg:#dcfce7;
+    --cat-season:#1e40af;
+    --cat-season-bg:#dbeafe;
+    --cat-holiday:#57534e;
+    --cat-holiday-bg:#f5f5f4;
+    --cat-fashion:#78350f;
+    --cat-fashion-bg:#fef3c7;
+    --cat-commercial:#7c2d12;
+    --cat-commercial-bg:#ffedd5;
+    --cat-governance:#3730a3;
+    --cat-governance-bg:#e0e7ff;
+    --cat-context:#6b21a8;
+    --cat-context-bg:#f3e8ff;
+    --cat-meeting:#b45309;
+    --cat-meeting-bg:#fef3c7;
+    --cat-crm:#0e7490;
+    --cat-crm-bg:#cffafe;
+    --cat-offer:#be185d;
+    --cat-offer-bg:#fce7f3;
+
+    --shadow-sm:0 1px 2px rgba(15,15,15,0.04);
+    --shadow-md:0 1px 3px rgba(15,15,15,0.06),0 1px 2px rgba(15,15,15,0.04);
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-weight:400;line-height:1.55;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01";font-size:15px}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  ::selection{background:var(--ink);color:#fff}
+  .container{max-width:1320px;margin:0 auto;padding:0 40px}
+
+  /* TOPBAR */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(250,250,249,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;height:56px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:-0.01em;font-size:15px}
+  .brand .sq{width:18px;height:18px;background:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;font-family:var(--font-mono)}
+  .brand .sep{color:var(--muted-2);font-weight:400}
+  .brand .sub{color:var(--muted);font-weight:500}
+  .top-nav{display:flex;gap:4px;font-size:13px}
+  .top-nav a{padding:8px 12px;color:var(--muted);border-radius:6px;transition:all 0.15s;font-weight:500}
+  .top-nav a:hover{color:var(--ink);background:var(--bg-alt)}
+  .top-nav a.active{color:var(--ink);background:var(--bg-alt)}
+  .top-meta{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.02em}
+
+  /* HERO */
+  .hero{padding:72px 0 40px;border-bottom:1px solid var(--border)}
+  .hero-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:80px;align-items:end}
+  .kicker{font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+  .kicker:before{content:'';width:20px;height:1px;background:var(--ink)}
+  .hero h1{font-size:clamp(36px,4.2vw,54px);font-weight:500;letter-spacing:-0.03em;line-height:1.04;margin-bottom:20px}
+  .hero p.lead{font-size:17px;color:var(--ink-2);max-width:620px;line-height:1.55}
+  .hero-side{border-left:1px solid var(--border);padding-left:40px}
+  .hero-side .lbl{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:16px}
+  .hero-side dl{display:grid;gap:10px}
+  .hero-side dl div{display:flex;justify-content:space-between;gap:20px;padding-bottom:10px;border-bottom:1px solid var(--border);font-size:13px}
+  .hero-side dl div:last-child{border-bottom:none}
+  .hero-side dt{color:var(--muted)}
+  .hero-side dd{color:var(--ink);font-weight:500;text-align:right}
+
+  /* TOOLBAR DO CALENDÁRIO */
+  .cal-toolbar{padding:24px 0;border-bottom:1px solid var(--border);background:var(--surface-2);position:sticky;top:56px;z-index:40}
+  .cal-toolbar-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .cal-nav{display:flex;align-items:center;gap:10px}
+  .cal-nav button{width:36px;height:36px;border:1px solid var(--border);border-radius:6px;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--ink);transition:all 0.15s}
+  .cal-nav button:hover{background:var(--bg-alt);border-color:var(--border-strong)}
+  .cal-nav .mes-atual{font-size:22px;font-weight:500;letter-spacing:-0.015em;min-width:260px;padding:0 10px}
+  .cal-nav .mes-atual small{font-family:var(--font-mono);font-size:12px;color:var(--muted);margin-left:10px;font-weight:400;letter-spacing:0.04em}
+  .cal-actions{display:flex;gap:8px;align-items:center}
+  .cal-actions button{padding:8px 14px;border:1px solid var(--border);border-radius:6px;background:var(--surface);font-size:13px;font-weight:500;color:var(--ink-2);transition:all 0.15s}
+  .cal-actions button:hover{background:var(--bg-alt);color:var(--ink)}
+  .cal-actions button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* CORPO (sidebar + grid) */
+  .cal-body{padding:32px 0 80px}
+  .cal-layout{display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:start}
+
+  /* SIDEBAR */
+  .side{position:sticky;top:140px}
+  .side-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px;margin-bottom:16px;box-shadow:var(--shadow-sm)}
+  .side-box h4{font-size:12px;font-family:var(--font-mono);color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:14px;font-weight:500}
+  .side-box .jump{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .side-box .jump button{padding:8px 0;border:1px solid var(--border);border-radius:6px;font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;color:var(--ink-2);background:var(--surface);transition:all 0.15s;font-weight:500}
+  .side-box .jump button:hover{border-color:var(--ink);color:var(--ink)}
+  .side-box .jump button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .filters{display:flex;flex-direction:column;gap:6px}
+  .filters label{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13px;transition:background 0.15s}
+  .filters label:hover{background:var(--bg-alt)}
+  .filters input{appearance:none;width:14px;height:14px;border:1.5px solid var(--border-strong);border-radius:3px;position:relative;cursor:pointer;transition:all 0.15s}
+  .filters input:checked{background:var(--ink);border-color:var(--ink)}
+  .filters input:checked:after{content:"";position:absolute;left:3px;top:0px;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .filters .sw{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+  .filters .ct{flex:1;font-weight:500}
+  .filters .ct small{display:block;font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.06em;margin-top:2px;font-weight:400}
+
+  /* GRID CALENDÁRIO GOOGLE STYLE */
+  .cal-grid-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow-sm)}
+  .cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);background:var(--surface-2);border-bottom:1px solid var(--border)}
+  .cal-weekdays .wd{padding:10px 12px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:500;text-align:left;border-right:1px solid var(--border)}
+  .cal-weekdays .wd:last-child{border-right:none}
+  .cal-weekdays .wd.weekend{color:var(--ink-soft)}
+
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:minmax(120px,1fr)}
+  .cal-cell{border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px 10px;display:flex;flex-direction:column;gap:4px;position:relative;background:var(--surface);min-height:120px;overflow:hidden}
+  .cal-cell:nth-child(7n){border-right:none}
+  .cal-cell.out{background:var(--bg-alt);color:var(--muted-2)}
+  .cal-cell.weekend{background:#fbfaf8}
+  .cal-cell.today{background:var(--accent-soft)}
+  .cal-cell.today .day-num{background:var(--ink);color:#fff;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px}
+  .cal-cell .day-num{font-family:var(--font-mono);font-size:12px;color:var(--ink-2);font-weight:500;margin-bottom:4px}
+  .cal-cell.saturday-m1 .day-num:after{content:'M1';position:absolute;top:8px;right:10px;font-family:var(--font-mono);font-size:9px;color:var(--cat-meeting);background:var(--cat-meeting-bg);padding:2px 5px;border-radius:3px;letter-spacing:0.08em;font-weight:500}
+  .evt{padding:3px 7px;border-radius:4px;font-size:11px;line-height:1.3;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;transition:transform 0.1s}
+  .evt:hover{transform:translateX(1px)}
+  .evt .dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+  .evt-drop{background:var(--cat-drop-bg);color:var(--cat-drop)}
+  .evt-drop .dot{background:var(--cat-drop)}
+  .evt-flash{background:var(--cat-flash-bg);color:var(--cat-flash)}
+  .evt-flash .dot{background:var(--cat-flash)}
+  .evt-key{background:var(--cat-key-bg);color:var(--cat-key)}
+  .evt-key .dot{background:var(--cat-key)}
+  .evt-regional{background:var(--cat-regional-bg);color:var(--cat-regional)}
+  .evt-regional .dot{background:var(--cat-regional)}
+  .evt-season{background:var(--cat-season-bg);color:var(--cat-season)}
+  .evt-season .dot{background:var(--cat-season)}
+  .evt-holiday{background:var(--cat-holiday-bg);color:var(--cat-holiday)}
+  .evt-holiday .dot{background:var(--cat-holiday)}
+  .evt-fashion{background:var(--cat-fashion-bg);color:var(--cat-fashion)}
+  .evt-fashion .dot{background:var(--cat-fashion)}
+  .evt-commercial{background:var(--cat-commercial-bg);color:var(--cat-commercial)}
+  .evt-commercial .dot{background:var(--cat-commercial)}
+  .evt-governance{background:var(--cat-governance-bg);color:var(--cat-governance)}
+  .evt-governance .dot{background:var(--cat-governance)}
+  .evt-context{background:var(--cat-context-bg);color:var(--cat-context)}
+  .evt-context .dot{background:var(--cat-context)}
+  .evt-crm{background:var(--cat-crm-bg);color:var(--cat-crm)}
+  .evt-crm .dot{background:var(--cat-crm)}
+  .evt-offer{background:var(--cat-offer-bg);color:var(--cat-offer)}
+  .evt-offer .dot{background:var(--cat-offer)}
+  .more-link{font-family:var(--font-mono);font-size:10px;color:var(--muted);padding:2px 7px;cursor:pointer;letter-spacing:0.06em}
+  .more-link:hover{color:var(--ink)}
+
+  /* DETALHE DO DIA */
+  .detail-panel{margin-top:24px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:28px;box-shadow:var(--shadow-sm)}
+  .detail-panel .dp-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+  .detail-panel .dp-title{font-size:20px;font-weight:500;letter-spacing:-0.015em}
+  .detail-panel .dp-title small{font-family:var(--font-mono);font-size:12px;color:var(--muted);margin-left:12px;font-weight:400}
+  .detail-panel .dp-count{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+  .detail-items{display:grid;gap:10px}
+  .detail-item{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:start;padding:14px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px}
+  .detail-item .di-date{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.06em;white-space:nowrap;padding-top:2px}
+  .detail-item .di-body .di-title{font-size:14px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .detail-item .di-body .di-title .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .detail-item .di-body .di-rat{font-size:13px;color:var(--ink-2);line-height:1.55}
+  .detail-item .di-cat{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:3px 7px;border-radius:3px;font-weight:500}
+
+  /* LEGENDA COMPACTA */
+  .legend-compact{display:flex;gap:20px;flex-wrap:wrap;font-size:12px;color:var(--ink-2)}
+  .legend-compact span{display:flex;align-items:center;gap:6px}
+  .legend-compact span .sw{width:10px;height:10px;border-radius:3px}
+
+  /* FOOTER */
+  footer{padding:60px 0 60px;background:var(--ink);color:#fafaf9}
+  footer .fgrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px}
+  footer .f-brand h3{font-size:26px;font-weight:500;letter-spacing:-0.025em;margin-bottom:10px;color:#fff}
+  footer .f-brand p{color:#a8a29e;font-size:14px;max-width:360px;line-height:1.6}
+  footer .fcol .fl{font-family:var(--font-mono);font-size:10px;color:#78716c;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px}
+  footer .fcol ul{list-style:none}
+  footer .fcol ul li{padding:5px 0;color:#d6d3d1;font-size:13.5px}
+  footer .fcol ul li a{color:#d6d3d1}
+  footer .fcol ul li a:hover{color:#fff}
+  footer .f-bot{margin-top:48px;padding-top:24px;border-top:1px solid #292524;display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:11px;color:#78716c;letter-spacing:0.06em}
+
+  @media (max-width:1100px){
+    .container{padding:0 24px}
+    .cal-layout{grid-template-columns:1fr;gap:20px}
+    .side{position:static}
+    .hero-grid{grid-template-columns:1fr;gap:32px}
+    .hero-side{border-left:none;border-top:1px solid var(--border);padding:24px 0 0}
+    .cal-grid{grid-auto-rows:minmax(84px,1fr)}
+    .cal-cell{min-height:84px;padding:6px 7px}
+    .evt{font-size:9.5px;padding:2px 5px}
+    .cal-weekdays .wd{padding:8px 6px;font-size:9px}
+    .cal-nav .mes-atual{font-size:18px;min-width:auto}
+    footer .fgrid{grid-template-columns:1fr}
+  }
+  @media (max-width:640px){
+    .cal-grid{grid-auto-rows:minmax(60px,1fr)}
+    .cal-cell{min-height:60px}
+    .evt span:not(.dot){display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand">
+      <span class="sq">P</span>
+      <span>PRLS OS</span>
+      <span class="sep">/</span>
+      <span class="sub">Calendário 2026</span>
+    </div>
+    <nav class="top-nav">
+      <a href="./index.html">Mapa</a>
+      <a href="./index.html#m08">Squad</a>
+      <a href="./index.html#m09">Benchmark</a>
+      <a href="./index.html#m10">Playbook</a>
+      <a href="./index.html#m11">CRM</a>
+      <a href="#" class="active">Calendário</a>
+      <a href="./rotina-vendas.html" style="background:var(--ink);color:#fff">Rotina</a>
+    </nav>
+    <div class="top-meta">v1.1 · 2026</div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="kicker">PRLS OS · Calendário de Marketing e Comercial</div>
+        <h1>Ano de 2026, filtrado para a PRLS.</h1>
+        <p class="lead">Datas que importam para uma marca feminina de calçados com forte presença no Nordeste. Feriados, campanhas chave, datas regionais, transições de estação e rituais operacionais (drop, flash sale e M1). Tudo no mesmo lugar.</p>
+      </div>
+      <aside class="hero-side">
+        <div class="lbl">Panorama</div>
+        <dl>
+          <div><dt>Eventos no ano</dt><dd id="totalEvents">0</dd></div>
+          <div><dt>Drops previstos</dt><dd>24 · 2 por mês</dd></div>
+          <div><dt>Flash sales</dt><dd>12 · mensal</dd></div>
+          <div><dt>M1</dt><dd>12 · 1º ou 2º sábado</dd></div>
+          <div><dt>Fonte base</dt><dd>Calendário Miner 2026</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLBAR -->
+<section class="cal-toolbar">
+  <div class="container cal-toolbar-inner">
+    <div class="cal-nav">
+      <button id="prevMonth" aria-label="Anterior">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button id="nextMonth" aria-label="Próximo">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <div class="mes-atual" id="mesAtual">Abril <small>2026</small></div>
+    </div>
+    <div class="cal-actions">
+      <button id="btnHoje">Hoje</button>
+      <button class="active" data-view="month">Mês</button>
+    </div>
+  </div>
+</section>
+
+<!-- CORPO -->
+<section class="cal-body">
+  <div class="container">
+    <div class="cal-layout">
+      <!-- SIDEBAR -->
+      <aside class="side">
+        <div class="side-box">
+          <h4>Meses</h4>
+          <div class="jump" id="jumpMonths"></div>
+        </div>
+        <div class="side-box">
+          <h4>Categorias</h4>
+          <div class="filters" id="filtersBox"></div>
+        </div>
+      </aside>
+
+      <!-- GRID -->
+      <div>
+        <div class="cal-grid-wrap">
+          <div class="cal-weekdays">
+            <div class="wd">Dom</div>
+            <div class="wd">Seg</div>
+            <div class="wd">Ter</div>
+            <div class="wd">Qua</div>
+            <div class="wd">Qui</div>
+            <div class="wd">Sex</div>
+            <div class="wd weekend">Sáb</div>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+        </div>
+
+        <!-- PAINEL DE DETALHE MENSAL -->
+        <div class="detail-panel">
+          <div class="dp-head">
+            <div class="dp-title" id="dpTitle">Abril <small>agenda do mês</small></div>
+            <div class="dp-count" id="dpCount">0 eventos</div>
+          </div>
+          <div class="detail-items" id="dpItems"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="fgrid">
+      <div class="f-brand">
+        <h3>PRLS OS</h3>
+        <p>Calendário de marketing e comercial filtrado para a PRLS. Uso interno. Base para governança, planejamento de drops e campanhas de mídia.</p>
+      </div>
+      <div class="fcol">
+        <div class="fl">Navegação</div>
+        <ul>
+          <li><a href="./index.html">Mapa de Processos</a></li>
+          <li><a href="./index.html#m03">Lançamento</a></li>
+          <li><a href="./index.html#m04">Mídia Paga</a></li>
+          <li><a href="./index.html#m05">Conteúdo</a></li>
+          <li><a href="./index.html#m07">M1</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <div class="fl">Categorias</div>
+        <ul>
+          <li>Drop · dia 5 a 10</li>
+          <li>Flash · dia 25 a 5</li>
+          <li>Campanhas chave</li>
+          <li>Regional Nordeste</li>
+          <li>Estação e feriado</li>
+        </ul>
+      </div>
+    </div>
+    <div class="f-bot">
+      <span>PRLS OS · Calendário 2026 · v1.1</span>
+      <span>Uso interno · Gestão</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============== DADOS: EVENTOS FILTRADOS PARA PRLS ============== */
+/*
+ Categorias:
+  drop       · lançamentos mensais (dia 5 a 10)
+  flash      · flash sale (dia 25 a 5 seguinte)
+  key        · campanhas chave (Mães, Namorados, BF, Cyber, Consumidor, Cliente, Mulher)
+  regional   · datas regionais Nordeste (Carnaval, São João, Nordestino, Fortaleza, São Luís, Teresina, Recife)
+  season     · transições de estação (Outono, Primavera, Verão)
+  holiday    · feriados nacionais relevantes
+  fashion    · moda e tendência (SPFW, Dia da Moda)
+  commercial · janela comercial (saldões, Prime Day, Dia Consumidor)
+  governance · rituais internos (M1, fechamentos Q1/Q2/Q3/Q4)
+  context    · contexto de posicionamento (Setembro Amarelo, Outubro Rosa, Empreendedorismo Feminino)
+*/
+const events = [
+  // JANEIRO
+  {d:'2026-01-01', title:'Ano Novo', cat:'holiday', rat:'Feriado nacional. Sem push forte, comunicação institucional leve.'},
+  {d:'2026-01-05', title:'Retomada econômica pós festas', cat:'commercial', rat:'Consumidor retomando compras funcionais. Comunicação racional, benefício claro.'},
+  {d:'2026-01-07', title:'Início dos saldões de ano', cat:'commercial', rat:'Janela forte para sale fulltime de curva CD. Foco em giro de estoque parado.'},
+  {d:'2026-01-16', title:'Janela de consumo racional', cat:'commercial', rat:'Conteúdo com linguagem de valor, durabilidade e custo benefício.'},
+
+  // FEVEREIRO
+  {d:'2026-02-04', title:'Aquecimento de demanda reprimida', cat:'commercial', rat:'Quem adiou em janeiro começa a decidir. Reforçar drop e remarketing de carrinho.'},
+  {d:'2026-02-14', title:"Valentine's Day", cat:'context', rat:'Referência internacional. Pode ativar conteúdo de presentear, sem ser foco comercial.'},
+  {d:'2026-02-17', title:'Carnaval', cat:'regional', rat:'Nordeste em peso. Oportunidade forte para sandália, rasteira e papete. Conteúdo de praia e festa.'},
+  {d:'2026-02-18', title:'Quarta-feira de Cinzas', cat:'holiday', rat:'Fim do Carnaval. Transição de tom de comunicação.'},
+  {d:'2026-02-20', title:'SP Fashion Week Primavera/Verão', cat:'fashion', rat:'Referência de tendência. Captar looks para conteúdo e orientar coleção B.'},
+
+  // MARÇO
+  {d:'2026-03-08', title:'Dia Internacional da Mulher', cat:'key', rat:'Campanha chave para marca feminina. Celebrar público, não vender desconto.'},
+  {d:'2026-03-12', title:'Aniversário de Recife', cat:'regional', rat:'Ativação regional opcional. Conteúdo de pertencimento.'},
+  {d:'2026-03-15', title:'Dia do Consumidor', cat:'key', rat:'Flash sale. Uma das 5 datas comerciais mais fortes do ano no ecommerce.'},
+  {d:'2026-03-20', title:'Início do Outono', cat:'season', rat:'Transição de catálogo. Fechar coleção Summer e preparar Winter 26.'},
+  {d:'2026-03-27', title:'Revisão de mix e sortimento', cat:'governance', rat:'Governança interna. Preparação para Q2.'},
+  {d:'2026-03-30', title:'Fechamento estratégico do Q1', cat:'governance', rat:'Análise de performance. Input para M1 de abril.'},
+
+  // ABRIL
+  {d:'2026-04-03', title:'Sexta-feira da Paixão', cat:'holiday', rat:'Feriado religioso. Redução de operação, conteúdo leve.'},
+  {d:'2026-04-05', title:'Páscoa', cat:'holiday', rat:'Campanha sutil de presentear. Não é data forte para calçado.'},
+  {d:'2026-04-12', title:'Aniversário de Fortaleza', cat:'regional', rat:'Casa da PRLS. Ativação regional com forte apelo de marca.'},
+  {d:'2026-04-21', title:'Tiradentes', cat:'holiday', rat:'Feriado nacional. Tráfego orgânico alto em mobile.'},
+
+  // MAIO
+  {d:'2026-05-01', title:'Dia do Trabalho', cat:'holiday', rat:'Feriado. Pode ancorar começo de campanha de Mães.'},
+  {d:'2026-05-08', title:'Ajuste de estoque e sortimento Q2', cat:'governance', rat:'Governança interna antes do pico de Mães.'},
+  {d:'2026-05-10', title:'Dia das Mães', cat:'key', rat:'Maior pico do primeiro semestre. Ativação integral em site, WhatsApp, blogueiras e mídia.'},
+  {d:'2026-05-15', title:'Dia Internacional da Família', cat:'context', rat:'Cauda da campanha de Mães. Continuidade de narrativa.'},
+
+  // JUNHO
+  {d:'2026-06-04', title:'Corpus Christi', cat:'holiday', rat:'Feriado prolongado. Tráfego de navegação em mobile.'},
+  {d:'2026-06-12', title:'Dia dos Namorados', cat:'key', rat:'Pico do mês. Campanha de casal e presentear. Foco em ticket médio via combinações.'},
+  {d:'2026-06-24', title:'São João', cat:'regional', rat:'Data forte no Nordeste. Base PRLS em Fortaleza, São Luís e Teresina pede conteúdo temático. Mule, sandália e bota curta combinam com arraial.'},
+  {d:'2026-06-28', title:'Dia do Orgulho', cat:'context', rat:'Posicionamento. Usar apenas se alinhado à marca.'},
+
+  // JULHO
+  {d:'2026-07-07', title:'Amazon Prime Day', cat:'commercial', rat:'Pico de tráfego em ecommerce global. CPM de Meta pode subir. Ajustar bid e criativos.'},
+  {d:'2026-07-20', title:'Amazon Prime Day', cat:'commercial', rat:'Segundo dia de Prime. Continuar monitoramento e flash sale interno para não perder atenção.'},
+  {d:'2026-07-26', title:'Dia dos Avós', cat:'context', rat:'Conteúdo de afeto. Mãe comprando para filha, avó para neta.'},
+
+  // AGOSTO
+  {d:'2026-08-09', title:'Dia dos Pais', cat:'context', rat:'Pouco relevante para PRLS (feminina). Pode rodar conteúdo de filha homenageando pai.'},
+  {d:'2026-08-12', title:'Aquecimento pré primavera', cat:'commercial', rat:'Desejo de renovação. Preparar comunicação da próxima estação.'},
+  {d:'2026-08-16', title:'Aniversário de Teresina', cat:'regional', rat:'Segunda maior base regional da marca.'},
+  {d:'2026-08-21', title:'Dia Internacional da Moda', cat:'fashion', rat:'Data temática. Bom para conteúdo editorial, street shooting e reels.'},
+  {d:'2026-08-28', title:'Revisão YTD', cat:'governance', rat:'Análise acumulada do ano. Ajuste de rota para Q4.'},
+
+  // SETEMBRO
+  {d:'2026-09-05', title:'Início do planejamento Q4', cat:'governance', rat:'Definição de metas, BF e Natal. Input para M1 de setembro.'},
+  {d:'2026-09-07', title:'Independência', cat:'holiday', rat:'Feriado. Pode ancorar uma campanha pré primavera.'},
+  {d:'2026-09-08', title:'Aniversário de São Luís', cat:'regional', rat:'Terceira maior base regional. Conteúdo local.'},
+  {d:'2026-09-15', title:'Dia do Cliente', cat:'key', rat:'Campanha chave para ativar base recorrente. Benefício exclusivo para quem já comprou.'},
+  {d:'2026-09-19', title:'Antecipação de compras de fim de ano', cat:'commercial', rat:'Consumidor começa a planejar BF e Natal. Capturar intenção antes da concorrência.'},
+  {d:'2026-09-22', title:'Início da Primavera', cat:'season', rat:'Transição para coleção Summer. Comunicação de estação no ar.'},
+  {d:'2026-09-30', title:'Setembro Amarelo', cat:'context', rat:'Apoio à causa. Sem exploração comercial.'},
+
+  // OUTUBRO
+  {d:'2026-10-07', title:'Virada para fechamento de ano', cat:'commercial', rat:'Comunicação migra para consolidação. Preparar BF e Natal.'},
+  {d:'2026-10-08', title:'Dia do Nordestino', cat:'regional', rat:'Alta aderência com o posicionamento da marca. Campanha de pertencimento.'},
+  {d:'2026-10-12', title:'Nossa Senhora Aparecida', cat:'holiday', rat:'Feriado nacional. Tráfego orgânico em mobile.'},
+  {d:'2026-10-12', title:'Dia das Crianças', cat:'context', rat:'Mãe compra para ela mesma enquanto compra para a criança. Ativação indireta.'},
+  {d:'2026-10-15', title:'Dia do Professor', cat:'context', rat:'Conteúdo leve de agradecimento. Pode ancorar mini flash para professoras.'},
+  {d:'2026-10-21', title:'Ajuste final de estoque e portfólio', cat:'governance', rat:'Última chance de recompra antes de BF.'},
+  {d:'2026-10-31', title:'Outubro Rosa', cat:'context', rat:'Apoio institucional. Sem promoção comercial.'},
+  {d:'2026-10-31', title:'Halloween', cat:'context', rat:'Conteúdo leve de marca. Pouca relevância comercial no Brasil.'},
+
+  // NOVEMBRO
+  {d:'2026-11-02', title:'Finados', cat:'holiday', rat:'Feriado. Sem push comercial.'},
+  {d:'2026-11-11', title:'Dia dos Solteiros (Singles Day)', cat:'commercial', rat:'Data global de ecommerce. Flash sale com tema de auto presente.'},
+  {d:'2026-11-11', title:'Pressão por resultado anual', cat:'governance', rat:'Intensificar campanhas e ações de conversão.'},
+  {d:'2026-11-15', title:'Proclamação da República', cat:'holiday', rat:'Feriado nacional. Tráfego elevado em mobile.'},
+  {d:'2026-11-19', title:'Dia do Empreendedorismo Feminino', cat:'context', rat:'Alinhado ao posicionamento. Conteúdo editorial, não comercial.'},
+  {d:'2026-11-20', title:'Consciência Negra', cat:'holiday', rat:'Feriado e data de causa. Comunicação institucional alinhada.'},
+  {d:'2026-11-27', title:'Black Friday', cat:'key', rat:'Maior pico comercial do ano. Ativação total. Mídia máxima, WhatsApp pronto, estoque revisado.'},
+  {d:'2026-11-27', title:'Preparação encerramento operacional', cat:'governance', rat:'Planejamento de férias e redução de ritmo.'},
+  {d:'2026-11-30', title:'Cyber Monday', cat:'key', rat:'Extensão digital da BF. Sustentar oferta e remarketing.'},
+
+  // DEZEMBRO
+  {d:'2026-12-10', title:'Desaceleração progressiva do mercado', cat:'commercial', rat:'Execução do que já está no ar. Menos abertura para novidade.'},
+  {d:'2026-12-20', title:'Início do Verão', cat:'season', rat:'Coleção Summer em pico. Catálogo de estação no ar com força.'},
+  {d:'2026-12-20', title:'Encerramento estratégico do ano', cat:'governance', rat:'Fechamento financeiro e aprendizados para 2027.'},
+  {d:'2026-12-24', title:'Véspera de Natal', cat:'holiday', rat:'Último dia de prazo de entrega. Comunicação de urgência e vale presente.'},
+  {d:'2026-12-25', title:'Natal', cat:'holiday', rat:'Feriado. Pausa de operação.'},
+  {d:'2026-12-26', title:'Boxing Day', cat:'commercial', rat:'Saldão pós Natal. Flash sale forte para girar estoque.'},
+  {d:'2026-12-31', title:'Véspera de Ano Novo', cat:'holiday', rat:'Fechamento do ano. Comunicação de agradecimento e teaser de 2027.'}
+];
+
+/* ========== MECÂNICAS DE OFERTA (inspiradas em Arezzo/Schutz/Vicenza) ========== */
+events.push(
+  // Mães · Maio
+  {d:'2026-04-15', title:'Ativar curadoria "THE MOM PRLS"', cat:'offer', rat:'Aplicar mecânica Vicenza: página de presente por faixa de preço (até R$ 149, R$ 199, R$ 299). Subir 25 dias antes do Dia das Mães.'},
+  {d:'2026-05-01', title:'Compre e Ganhe Mães', cat:'offer', rat:'Mecânica Schutz. Compras acima de R$ 500 ganham sacolinha ou necessaire. Roda de 01 a 10 de maio.'},
+  // Namorados · Junho
+  {d:'2026-06-01', title:'Curadoria "a partir de" Namorados', cat:'offer', rat:'Presente feminino por faixa. Conversão de quem presenteia sobe com guia de escolha.'},
+  // Consumidor · Março
+  {d:'2026-03-15', title:'Flash progressivo Consumidor', cat:'offer', rat:'Mecânica Schutz: 1 par 40%, 2 pares 50%, 3+ pares 60%. Sobe ticket médio e gira curva CD.'},
+  // Cliente · Setembro
+  {d:'2026-09-15', title:'Cashback em dobro Cliente', cat:'offer', rat:'Mecânica Schutz. Cashback em dobro só para base ativa. Teste controlado antes de ativar programa permanente.'},
+  // Black Friday
+  {d:'2026-11-20', title:'Compre 2 Leve 3 esquenta BF', cat:'offer', rat:'Mecânica Arezzo. 3º par igual ou menor 100% OFF. 7 dias antes da BF para esvaziar estoque secundário.'},
+  {d:'2026-11-27', title:'Progressivo Black Friday', cat:'offer', rat:'1 par desconto padrão, 2 pares extra, 3+ pares pico. Maximiza ticket médio no maior pico do ano.'},
+  // Natal
+  {d:'2026-12-03', title:'Compre e Ganhe Natal', cat:'offer', rat:'Replicar Schutz Dust Bag. Compra acima de R$ 500 ganha sacolinha exclusiva. Brinde premium, custo controlado.'},
+  {d:'2026-12-15', title:'Cashback duplo Natal', cat:'offer', rat:'Cashback para gerar recompra no início de 2027. Credita em até 3 dias, validade 60 dias.'},
+  // Liquidação Janeiro
+  {d:'2026-01-10', title:'Compre 2 Leve 3 liquidação', cat:'offer', rat:'Janela de liquidação de verão. Mecânica sazonal para virar estoque.'}
+);
+
+/* ========== AÇÕES DE CRM (gerados programaticamente) ========== */
+const allMonthsCrm = [0,1,2,3,4,5,6,7,8,9,10,11];
+allMonthsCrm.forEach(m=>{
+  const mm = String(m+1).padStart(2,'0');
+  // Dia 1: disparo de cupom aniversário
+  events.push({
+    d:`2026-${mm}-01`,
+    title:'Cupom aniversariantes do mês',
+    cat:'crm',
+    rat:'Mecânica Arezzo: código rotativo mensal (ex: PRLSMAI26). 10% OFF válido 15 dias. Disparo para todos aniversariantes + ativação manual semanal pelas vendedoras.'
+  });
+  // Dia 3: Campanha compra única (quinzenal, início de mês)
+  events.push({
+    d:`2026-${mm}-03`,
+    title:'Ativação compra única · 1ª quinzena',
+    cat:'crm',
+    rat:'91% da base comprou só uma vez. Cross-sell com combinação + frete grátis. Meta: gerar 2ª compra.'
+  });
+  // Dia 17: Compra única segunda quinzena
+  events.push({
+    d:`2026-${mm}-17`,
+    title:'Ativação compra única · 2ª quinzena',
+    cat:'crm',
+    rat:'Continuação do trabalho de segunda compra. Sugestão de combinação visual e cupom de frete.'
+  });
+  // Primeiro sábado (mesma data do M1): win-back 360d
+  const firstSat2 = getFirstSaturday(2026, m);
+  events.push({
+    d:`2026-${mm}-${String(firstSat2).padStart(2,'0')}`,
+    title:'Win-back 360 dias',
+    cat:'crm',
+    rat:'Sábado mensal dedicado à base de inativos 360+. Cupom forte (20% OFF), validade 7 dias. Mensagem emocional de reencontro.'
+  });
+  // Quarta de cada semana: sacolinha VIP (todo drop)
+  // Simplificação: adiciona no dia do drop parte 1
+  const drop1Day2 = 5 + (m % 3);
+  events.push({
+    d:`2026-${mm}-${String(drop1Day2).padStart(2,'0')}`,
+    title:'Sacolinha VIP · top 20',
+    cat:'crm',
+    rat:'Em todo drop, top 20 clientes premium recebem curadoria pessoal 3 a 5 peças antes do lançamento público. Envio 1:1 via WhatsApp.'
+  });
+  // Dia 10: reativação 120 dias (quinzenal)
+  events.push({
+    d:`2026-${mm}-10`,
+    title:'Reativação 120 dias',
+    cat:'crm',
+    rat:'Clientes sem compra há 4 meses. Cupom médio (10 a 15%) + frete grátis. Validade 7 dias.'
+  });
+  events.push({
+    d:`2026-${mm}-24`,
+    title:'Reativação 120 dias',
+    cat:'crm',
+    rat:'Segunda onda quinzenal de reativação 120d.'
+  });
+});
+
+/* DROPS, FLASH SALES e M1 gerados programaticamente */
+const allMonths = [0,1,2,3,4,5,6,7,8,9,10,11];
+allMonths.forEach(m=>{
+  // Drops dia 5 ao 10 (considerando dois drops no mês: 5 a 6, e 20 por exemplo)
+  // Mas o processo diz: lançamento entre 5 e 10 (no máximo), divididos em 2 ondas por mês.
+  // Interpretação: drop 1 = dia 5 a 10; drop 2 = dia 19 a 20 (meio do mês)
+  const drop1Day = 5 + (m % 3); // variação de 5 a 7
+  events.push({
+    d:`2026-${String(m+1).padStart(2,'0')}-${String(drop1Day).padStart(2,'0')}`,
+    title:'Drop mensal · parte 1',
+    cat:'drop',
+    rat:'Lançamento da primeira onda do mês. Novidades cadastradas, conteúdo pronto, mídia ativada.'
+  });
+  const drop2Day = 19 + (m % 2); // dia 19 ou 20
+  events.push({
+    d:`2026-${String(m+1).padStart(2,'0')}-${String(drop2Day).padStart(2,'0')}`,
+    title:'Drop mensal · parte 2',
+    cat:'drop',
+    rat:'Segunda onda de lançamento do mês. Sustenta ritmo de catálogo.'
+  });
+
+  // Flash sale: dia 25 do mês corrente ao dia 5 do próximo. Inserir os marcos 25 (início) e 5 (encerramento).
+  events.push({
+    d:`2026-${String(m+1).padStart(2,'0')}-25`,
+    title:'Flash sale · início',
+    cat:'flash',
+    rat:'Início da janela de flash sale. Vai até o dia 5 do mês seguinte. Gera caixa antes do próximo drop.'
+  });
+  // Encerramento cai no dia 5 do mês seguinte
+  const nextM = (m+1) % 12;
+  const nextY = m === 11 ? 2027 : 2026;
+  events.push({
+    d:`${nextY}-${String(nextM+1).padStart(2,'0')}-05`,
+    title:'Flash sale · encerramento',
+    cat:'flash',
+    rat:'Fim da janela de flash sale iniciada no mês anterior.'
+  });
+
+  // M1: 1º ou 2º sábado. Vamos usar o 1º sábado.
+  const firstSat = getFirstSaturday(2026, m);
+  events.push({
+    d:`2026-${String(m+1).padStart(2,'0')}-${String(firstSat).padStart(2,'0')}`,
+    title:'M1 · reunião mensal',
+    cat:'governance',
+    rat:'Governança mensal. Avalia estoque, marketing, financeiro, calendário e vendas.'
+  });
+});
+
+function getFirstSaturday(year, monthIdx){
+  // monthIdx: 0-11
+  const d = new Date(year, monthIdx, 1);
+  const day = d.getDay(); // 0 Sunday - 6 Saturday
+  let offset = (6 - day + 7) % 7;
+  if(offset === 0) offset = 0; // if first day IS saturday
+  return 1 + offset;
+}
+
+/* ============== CATEGORIAS E FILTROS ============== */
+const categories = [
+  {id:'drop',       name:'Drop',                        desc:'Lançamento mensal',        color:'#18181b'},
+  {id:'flash',      name:'Flash sale',                  desc:'Dia 25 a 5 seguinte',      color:'#b91c1c'},
+  {id:'key',        name:'Campanha chave',              desc:'Mães, Namorados, BF, Cliente', color:'#92400e'},
+  {id:'regional',   name:'Regional Nordeste',           desc:'Carnaval, São João, Nordestino', color:'#166534'},
+  {id:'commercial', name:'Janela comercial',            desc:'Saldões, Consumidor, Prime', color:'#7c2d12'},
+  {id:'season',     name:'Estação',                     desc:'Outono, Primavera, Verão',  color:'#1e40af'},
+  {id:'fashion',    name:'Moda e tendência',            desc:'SPFW, Dia da Moda',         color:'#78350f'},
+  {id:'holiday',    name:'Feriado',                     desc:'Nacional e religioso',      color:'#57534e'},
+  {id:'governance', name:'Governança',                  desc:'M1, Q1, Q2, Q3, Q4',        color:'#3730a3'},
+  {id:'context',    name:'Contexto',                    desc:'Causa e posicionamento',    color:'#6b21a8'},
+  {id:'crm',        name:'CRM e reativação',            desc:'Aniversário, 60/120/360, VIP', color:'#0e7490'},
+  {id:'offer',      name:'Mecânica de oferta',          desc:'Playbook Arezzo/Schutz/Vicenza', color:'#be185d'}
+];
+
+const monthNames = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const monthShort = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+let currentMonth = 3; // abril (0-indexed)
+const currentYear = 2026;
+let activeCats = new Set(categories.map(c=>c.id));
+const TODAY = new Date();
+const todayISO = `${TODAY.getFullYear()}-${String(TODAY.getMonth()+1).padStart(2,'0')}-${String(TODAY.getDate()).padStart(2,'0')}`;
+
+/* ============== RENDERIZAÇÃO ============== */
+function buildJumpMonths(){
+  const el = document.getElementById('jumpMonths');
+  el.innerHTML = '';
+  monthShort.forEach((m, idx)=>{
+    const b = document.createElement('button');
+    b.textContent = m;
+    if(idx === currentMonth) b.classList.add('active');
+    b.onclick = ()=>{ currentMonth = idx; render(); };
+    el.appendChild(b);
+  });
+}
+
+function buildFilters(){
+  const el = document.getElementById('filtersBox');
+  el.innerHTML = '';
+  categories.forEach(c=>{
+    const lb = document.createElement('label');
+    lb.innerHTML = `
+      <input type="checkbox" ${activeCats.has(c.id)?'checked':''} data-cat="${c.id}">
+      <span class="sw" style="background:${c.color}"></span>
+      <span class="ct">${c.name}<small>${c.desc}</small></span>
+    `;
+    lb.querySelector('input').onchange = (e)=>{
+      if(e.target.checked) activeCats.add(c.id); else activeCats.delete(c.id);
+      render();
+    };
+    el.appendChild(lb);
+  });
+}
+
+function eventsInMonth(m){
+  return events.filter(e=>{
+    const [y, mo, d] = e.d.split('-').map(Number);
+    return y === currentYear && mo === m+1 && activeCats.has(e.cat);
+  });
+}
+
+function buildGrid(){
+  const el = document.getElementById('calGrid');
+  el.innerHTML = '';
+
+  const firstDay = new Date(currentYear, currentMonth, 1);
+  const startDow = firstDay.getDay();
+  const lastDay = new Date(currentYear, currentMonth+1, 0).getDate();
+  const prevLast = new Date(currentYear, currentMonth, 0).getDate();
+
+  const totalCells = Math.ceil((startDow + lastDay)/7)*7;
+
+  const monthEvents = eventsInMonth(currentMonth);
+
+  for(let i = 0; i < totalCells; i++){
+    const cell = document.createElement('div');
+    cell.className = 'cal-cell';
+
+    let dayNum, isOut=false, cellDate;
+    if(i < startDow){
+      dayNum = prevLast - (startDow - 1 - i);
+      isOut = true;
+      cellDate = new Date(currentYear, currentMonth-1, dayNum);
+    } else if(i < startDow + lastDay){
+      dayNum = i - startDow + 1;
+      cellDate = new Date(currentYear, currentMonth, dayNum);
+    } else {
+      dayNum = i - (startDow + lastDay) + 1;
+      isOut = true;
+      cellDate = new Date(currentYear, currentMonth+1, dayNum);
+    }
+
+    const dow = cellDate.getDay();
+    if(dow === 0 || dow === 6) cell.classList.add('weekend');
+    if(isOut) cell.classList.add('out');
+
+    const iso = `${cellDate.getFullYear()}-${String(cellDate.getMonth()+1).padStart(2,'0')}-${String(cellDate.getDate()).padStart(2,'0')}`;
+    if(iso === todayISO) cell.classList.add('today');
+
+    // Número do dia
+    const num = document.createElement('div');
+    num.className = 'day-num';
+    num.textContent = dayNum;
+    cell.appendChild(num);
+
+    // Eventos do dia (só se in-month)
+    if(!isOut){
+      const dayEvents = monthEvents.filter(e=>e.d === iso);
+      const maxShow = window.innerWidth < 1200 ? 2 : 3;
+      dayEvents.slice(0, maxShow).forEach(ev=>{
+        const e = document.createElement('div');
+        e.className = `evt evt-${ev.cat}`;
+        e.innerHTML = `<span class="dot"></span><span>${ev.title}</span>`;
+        e.title = ev.title + ' · ' + ev.rat;
+        cell.appendChild(e);
+      });
+      if(dayEvents.length > maxShow){
+        const m = document.createElement('div');
+        m.className = 'more-link';
+        m.textContent = '+ ' + (dayEvents.length - maxShow) + ' mais';
+        cell.appendChild(m);
+      }
+    }
+
+    el.appendChild(cell);
+  }
+}
+
+function buildDetail(){
+  const monthEvts = eventsInMonth(currentMonth).sort((a,b)=> a.d.localeCompare(b.d));
+  document.getElementById('dpTitle').innerHTML = `${monthNames[currentMonth]} <small>agenda do mês</small>`;
+  document.getElementById('dpCount').textContent = `${monthEvts.length} eventos`;
+
+  const wrap = document.getElementById('dpItems');
+  wrap.innerHTML = '';
+  monthEvts.forEach(ev=>{
+    const cat = categories.find(c=>c.id === ev.cat);
+    const [y,m,d] = ev.d.split('-');
+    const di = document.createElement('div');
+    di.className = 'detail-item';
+    di.innerHTML = `
+      <div class="di-date">${d}/${m}</div>
+      <div class="di-body">
+        <div class="di-title"><span class="dot" style="background:${cat.color}"></span>${ev.title}</div>
+        <div class="di-rat">${ev.rat}</div>
+      </div>
+      <div class="di-cat" style="background:${cat.color};color:#fff">${cat.name}</div>
+    `;
+    wrap.appendChild(di);
+  });
+}
+
+function updateMonthLabel(){
+  document.getElementById('mesAtual').innerHTML = `${monthNames[currentMonth]} <small>${currentYear}</small>`;
+  document.querySelectorAll('#jumpMonths button').forEach((b, i)=>{
+    b.classList.toggle('active', i === currentMonth);
+  });
+}
+
+function render(){
+  buildGrid();
+  buildDetail();
+  updateMonthLabel();
+  buildJumpMonths();
+}
+
+document.getElementById('prevMonth').onclick = ()=>{
+  currentMonth = (currentMonth - 1 + 12) % 12;
+  render();
+};
+document.getElementById('nextMonth').onclick = ()=>{
+  currentMonth = (currentMonth + 1) % 12;
+  render();
+};
+document.getElementById('btnHoje').onclick = ()=>{
+  currentMonth = new Date().getMonth();
+  render();
+};
+
+document.getElementById('totalEvents').textContent = events.length;
+
+buildJumpMonths();
+buildFilters();
+render();
+</script>
+
+</body>
+</html>

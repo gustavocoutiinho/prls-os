@@ -1,0 +1,9 @@
+{
+  "name": "prls-os",
+  "version": "1.1.0",
+  "private": true,
+  "description": "PRLS OS · Mapa de Processos e Calendário de Marketing 2026",
+  "dependencies": {
+    "vercel": "^51.6.1"
+  }
+}

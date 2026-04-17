@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PRLS OS · Rotina de Vendas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fafaf9;--bg-alt:#f5f5f4;--surface:#ffffff;--surface-2:#f9f9f8;
+    --border:#e7e5e4;--border-strong:#d6d3d1;
+    --ink:#18181b;--ink-soft:#3f3f46;--ink-2:#52525b;
+    --muted:#78716c;--muted-2:#a8a29e;--accent-soft:#f4f1ee;
+    --seg-premium:#7c2d12;--seg-premium-bg:#ffedd5;
+    --seg-birth:#92400e;--seg-birth-bg:#fef3c7;
+    --seg-unique:#1e40af;--seg-unique-bg:#dbeafe;
+    --seg-60:#166534;--seg-60-bg:#dcfce7;
+    --seg-120:#0f766e;--seg-120-bg:#ccfbf1;
+    --seg-360:#b91c1c;--seg-360-bg:#fee2e2;
+    --seg-sale:#6b21a8;--seg-sale-bg:#f3e8ff;
+    --seg-active:#3730a3;--seg-active-bg:#e0e7ff;
+    --shadow-sm:0 1px 2px rgba(15,15,15,0.04);
+    --shadow-md:0 1px 3px rgba(15,15,15,0.06),0 1px 2px rgba(15,15,15,0.04);
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-weight:400;line-height:1.55;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01";font-size:15px}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--ink);color:#fff}
+  .container{max-width:1320px;margin:0 auto;padding:0 40px}
+
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(250,250,249,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;height:56px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:-0.01em;font-size:15px}
+  .brand .sq{width:18px;height:18px;background:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;font-family:var(--font-mono)}
+  .brand .sep{color:var(--muted-2);font-weight:400}
+  .brand .sub{color:var(--muted);font-weight:500}
+  .top-nav{display:flex;gap:4px;font-size:13px}
+  .top-nav a{padding:8px 12px;color:var(--muted);border-radius:6px;font-weight:500;transition:all 0.15s}
+  .top-nav a:hover{color:var(--ink);background:var(--bg-alt)}
+  .top-nav a.active{background:var(--ink);color:#fff}
+  .top-meta{font-family:var(--font-mono);font-size:11px;color:var(--muted)}
+
+  /* HERO */
+  .hero{padding:96px 0 72px;border-bottom:1px solid var(--border)}
+  .hero-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:80px;align-items:end}
+  .kicker{font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;display:flex;align-items:center;gap:10px}
+  .kicker:before{content:'';width:20px;height:1px;background:var(--ink)}
+  .hero h1{font-size:clamp(36px,4.5vw,56px);font-weight:500;letter-spacing:-0.03em;line-height:1.04;margin-bottom:22px}
+  .hero p.lead{font-size:17px;color:var(--ink-2);max-width:620px;line-height:1.55}
+  .hero-side{border-left:1px solid var(--border);padding-left:40px}
+  .hero-side .lbl{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:16px}
+  .hero-side dl{display:grid;gap:10px}
+  .hero-side dl div{display:flex;justify-content:space-between;gap:20px;padding-bottom:10px;border-bottom:1px solid var(--border);font-size:13px}
+  .hero-side dl div:last-child{border-bottom:none}
+  .hero-side dt{color:var(--muted)}
+  .hero-side dd{color:var(--ink);font-weight:500;text-align:right}
+
+  /* SECTIONS */
+  section{padding:96px 0;border-bottom:1px solid var(--border)}
+  section.alt{background:var(--surface-2)}
+  .section-title{margin-bottom:56px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end}
+  .section-title .left .num{font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:0.12em;margin-bottom:12px}
+  .section-title .left h2{font-size:clamp(28px,3.5vw,42px);font-weight:500;letter-spacing:-0.02em;line-height:1.1}
+  .section-title .right{color:var(--ink-2);font-size:15px;max-width:460px;padding-bottom:6px}
+
+  /* PILARES */
+  .pilares{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .pilar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:28px;box-shadow:var(--shadow-sm);position:relative}
+  .pilar .pn{position:absolute;top:20px;right:20px;font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.14em}
+  .pilar .pi{width:32px;height:32px;background:var(--accent-soft);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--ink);margin-bottom:16px}
+  .pilar h3{font-size:18px;font-weight:600;letter-spacing:-0.015em;margin-bottom:8px}
+  .pilar p{font-size:13.5px;color:var(--ink-2);line-height:1.55}
+
+  /* WEEKLY GRID */
+  .week{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow-sm)}
+  .week-head{display:grid;grid-template-columns:120px repeat(6,1fr);border-bottom:1px solid var(--border);background:var(--surface-2)}
+  .week-head .wh{padding:16px 18px;border-right:1px solid var(--border);font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .week-head .wh:last-child{border-right:none}
+  .week-head .wh .wh-day{font-family:var(--font-sans);font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-0.01em;text-transform:none;margin-top:4px}
+  .week-head .wh .wh-theme{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:0.14em;margin-top:2px}
+
+  .week-row{display:grid;grid-template-columns:120px repeat(6,1fr);border-bottom:1px solid var(--border)}
+  .week-row:last-child{border-bottom:none}
+  .time-col{padding:18px 16px;border-right:1px solid var(--border);background:var(--surface-2);display:flex;flex-direction:column;gap:4px}
+  .time-col .tc-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .time-col .tc-time{font-family:var(--font-mono);font-size:11px;color:var(--ink);font-weight:500}
+  .task{padding:18px 16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:8px;min-height:160px}
+  .task:last-child{border-right:none}
+  .task .seg{display:inline-flex;align-items:center;gap:4px;padding:3px 7px;border-radius:4px;font-family:var(--font-mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;align-self:flex-start}
+  .task h4{font-size:13.5px;font-weight:600;letter-spacing:-0.005em;line-height:1.3}
+  .task p{font-size:12.5px;color:var(--ink-2);line-height:1.5}
+  .task .meta{margin-top:auto;padding-top:8px;border-top:1px dashed var(--border);font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;display:flex;flex-direction:column;gap:2px}
+  .task .meta b{color:var(--ink-2);font-weight:500}
+
+  .seg-premium{background:var(--seg-premium-bg);color:var(--seg-premium)}
+  .seg-birth{background:var(--seg-birth-bg);color:var(--seg-birth)}
+  .seg-unique{background:var(--seg-unique-bg);color:var(--seg-unique)}
+  .seg-60{background:var(--seg-60-bg);color:var(--seg-60)}
+  .seg-120{background:var(--seg-120-bg);color:var(--seg-120)}
+  .seg-360{background:var(--seg-360-bg);color:var(--seg-360)}
+  .seg-sale{background:var(--seg-sale-bg);color:var(--seg-sale)}
+  .seg-active{background:var(--seg-active-bg);color:var(--seg-active)}
+
+  /* CRM TABLE */
+  .crm-table{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow-sm)}
+  .crm-row{display:grid;grid-template-columns:160px 1.5fr 1.5fr 1fr 0.8fr;border-bottom:1px solid var(--border)}
+  .crm-row:last-child{border-bottom:none}
+  .crm-row.hd{background:var(--surface-2);font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;font-weight:500}
+  .crm-row > div{padding:18px 20px;border-right:1px solid var(--border);display:flex;align-items:center}
+  .crm-row > div:last-child{border-right:none}
+  .crm-row .c-seg{font-weight:600;font-size:14px;display:flex;align-items:center;gap:10px}
+  .crm-row .c-seg .sw{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+  .crm-row .c-what{color:var(--ink-2);font-size:13.5px;line-height:1.4}
+  .crm-row .c-offer{color:var(--ink-2);font-size:13px;line-height:1.4}
+  .crm-row .c-when{font-family:var(--font-mono);font-size:11px;color:var(--ink);letter-spacing:0.04em}
+  .crm-row .c-kpi{font-family:var(--font-mono);font-size:11px;color:var(--ink-2);letter-spacing:0.04em}
+
+  /* ESPECIAL CARDS */
+  .special{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .sp-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:32px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden}
+  .sp-card:before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--ink)}
+  .sp-card.premium:before{background:var(--seg-premium)}
+  .sp-card.birth:before{background:var(--seg-birth)}
+  .sp-card.winback:before{background:var(--seg-360)}
+  .sp-card h3{font-size:20px;font-weight:500;letter-spacing:-0.015em;margin-bottom:6px}
+  .sp-card .sp-tag{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:18px}
+  .sp-card p{font-size:13.5px;color:var(--ink-2);line-height:1.6;margin-bottom:18px}
+  .sp-card ol{list-style:none;counter-reset:s}
+  .sp-card ol li{counter-increment:s;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+  .sp-card ol li:last-child{border-bottom:none}
+  .sp-card ol li:before{content:"0" counter(s);font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;padding-top:2px}
+
+  /* RESPONSE TEMPLATE */
+  .scripts{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:32px}
+  .scr{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:28px;box-shadow:var(--shadow-sm)}
+  .scr .s-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  .scr .s-head .seg{padding:3px 7px;border-radius:4px;font-family:var(--font-mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600}
+  .scr h4{font-size:15px;font-weight:600;letter-spacing:-0.01em}
+  .scr .msg{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:18px;font-size:13.5px;color:var(--ink);line-height:1.6;white-space:pre-wrap}
+  .scr .msg b{font-weight:600}
+  .scr .hint{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:12px}
+
+  /* FOOTER */
+  footer{padding:60px 0;background:var(--ink);color:#fafaf9}
+  footer .fgrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px}
+  footer .f-brand h3{font-size:26px;font-weight:500;letter-spacing:-0.025em;margin-bottom:10px;color:#fff}
+  footer .f-brand p{color:#a8a29e;font-size:14px;max-width:360px;line-height:1.6}
+  footer .fcol .fl{font-family:var(--font-mono);font-size:10px;color:#78716c;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px}
+  footer .fcol ul{list-style:none}
+  footer .fcol ul li{padding:5px 0;color:#d6d3d1;font-size:13.5px}
+  footer .fcol ul li a{color:#d6d3d1}
+  footer .f-bot{margin-top:48px;padding-top:24px;border-top:1px solid #292524;display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:11px;color:#78716c;letter-spacing:0.06em}
+
+  @media (max-width:1100px){
+    .container{padding:0 24px}
+    .hero-grid,.section-title{grid-template-columns:1fr;gap:32px}
+    .hero-side{border-left:none;border-top:1px solid var(--border);padding:24px 0 0}
+    .pilares{grid-template-columns:repeat(2,1fr)}
+    .week{overflow-x:auto}
+    .week-head,.week-row{min-width:1000px}
+    .crm-table{overflow-x:auto}
+    .crm-row{min-width:900px}
+    .special{grid-template-columns:1fr}
+    .scripts{grid-template-columns:1fr}
+    footer .fgrid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand">
+      <span class="sq">P</span>
+      <span>PRLS OS</span>
+      <span class="sep">/</span>
+      <span class="sub">Rotina de Vendas</span>
+    </div>
+    <nav class="top-nav">
+      <a href="./index.html">Mapa</a>
+      <a href="./index.html#m08">Squad</a>
+      <a href="./index.html#m09">Benchmark</a>
+      <a href="./index.html#m10">Playbook</a>
+      <a href="./index.html#m11">CRM</a>
+      <a href="./calendario.html">Calendário</a>
+      <a href="#" class="active">Rotina</a>
+    </nav>
+    <div class="top-meta">v1.0 · Semanal</div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="kicker">PRLS OS · Rotina comercial</div>
+        <h1>Parar de esperar o lead cair. Semana com missão diária.</h1>
+        <p class="lead">Calendário operacional das vendedoras no WhatsApp. Cada dia tem um tema, cada momento tem um segmento da base. O objetivo é sair do modo reativo e transformar a base existente na principal fonte de receita diária.</p>
+      </div>
+      <aside class="hero-side">
+        <div class="lbl">Panorama</div>
+        <dl>
+          <div><dt>Cadência</dt><dd>Seg a Sáb · 18 slots</dd></div>
+          <div><dt>Segmentos ativados</dt><dd>8</dd></div>
+          <div><dt>Time</dt><dd>Alyssa, Natasha</dd></div>
+          <div><dt>Líder</dt><dd>Leonardo</dd></div>
+          <div><dt>Meta comercial</dt><dd>OTE mensal</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- 4 PILARES -->
+<section>
+  <div class="container">
+    <div class="section-title">
+      <div class="left">
+        <div class="num">01 · PILARES</div>
+        <h2>Quatro objetivos atravessam a semana.</h2>
+      </div>
+      <div class="right">Toda ação que uma vendedora faz no WhatsApp encaixa em um destes quatro objetivos. Se não encaixa, não é rotina, é improviso.</div>
+    </div>
+
+    <div class="pilares">
+      <div class="pilar">
+        <div class="pn">01</div>
+        <div class="pi">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 16v-2a4 4 0 0 0-3-3.87M3 16v-2a4 4 0 0 1 3-3.87M16 3.13a4 4 0 0 1 0 7.75M12 3a4 4 0 0 0 0 8"/></svg>
+        </div>
+        <h3>Prospecção ativa</h3>
+        <p>Ir atrás de quem pode comprar, não esperar. Quem clicou, perguntou, abandonou carrinho ou comentou. Base fria vira conversa quente.</p>
+      </div>
+      <div class="pilar">
+        <div class="pn">02</div>
+        <div class="pi">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M3 12h18M5.64 5.64l12.73 12.73M18.36 5.64L5.64 18.36"/></svg>
+        </div>
+        <h3>Reativação</h3>
+        <p>Trazer quem parou. 60 dias sem compra é sinal leve, 120 é alerta, 360 é cliente perdido. Cada um exige mensagem e oferta diferentes.</p>
+      </div>
+      <div class="pilar">
+        <div class="pn">03</div>
+        <div class="pi">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12V8H4v11a1 1 0 0 0 1 1h10M3 3h18v4H3z"/><path d="M16 16h6M19 13l3 3-3 3"/></svg>
+        </div>
+        <h3>Recorrência e upsell</h3>
+        <p>Quem já comprou uma vez é mais barato de converter de novo. Combinação, sugestão, segundo par. Ticket médio sobe pela orquestração, não pelo preço.</p>
+      </div>
+      <div class="pilar">
+        <div class="pn">04</div>
+        <div class="pi">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+        </div>
+        <h3>Fidelização VIP</h3>
+        <p>Top 10% da base. Sacolinha, lançamento antecipado, aniversário. Não é relacionamento genérico, é tratamento de cliente premium, um a um.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GRID SEMANAL -->
+<section class="alt">
+  <div class="container">
+    <div class="section-title">
+      <div class="left">
+        <div class="num">02 · GRID SEMANAL</div>
+        <h2>Seis dias, três momentos. Dezoito ações por semana.</h2>
+      </div>
+      <div class="right">Cada coluna é um dia com tema próprio. Cada linha é um bloco do expediente. Leitura de cima para baixo mostra o que a vendedora faz em cada momento. Leitura da esquerda para a direita mostra a intenção da semana.</div>
+    </div>
+
+    <div class="week">
+      <!-- CABEÇALHO -->
+      <div class="week-head">
+        <div class="wh"></div>
+        <div class="wh"><div class="wh-theme">Segunda</div><div class="wh-day">Reset</div><div class="wh-theme">Reativação leve</div></div>
+        <div class="wh"><div class="wh-theme">Terça</div><div class="wh-day">Premium</div><div class="wh-theme">Sacolinha VIP</div></div>
+        <div class="wh"><div class="wh-theme">Quarta</div><div class="wh-day">Cross-sell</div><div class="wh-theme">Compra única</div></div>
+        <div class="wh"><div class="wh-theme">Quinta</div><div class="wh-day">Curva CD</div><div class="wh-theme">Sale e 120 dias</div></div>
+        <div class="wh"><div class="wh-theme">Sexta</div><div class="wh-day">Drop</div><div class="wh-theme">Ativação e caixa</div></div>
+        <div class="wh"><div class="wh-theme">Sábado</div><div class="wh-day">Win-back</div><div class="wh-theme">360 dias e fecho</div></div>
+      </div>
+
+      <!-- MANHÃ -->
+      <div class="week-row">
+        <div class="time-col"><div class="tc-label">Manhã</div><div class="tc-time">09h às 12h</div></div>
+        <div class="task">
+          <span class="seg seg-60">60 dias</span>
+          <h4>Mensagem suave de volta</h4>
+          <p>Lista de quem comprou há 45 a 75 dias. Mensagem pessoal, sem oferta agressiva. Mostrar novidades e perguntar.</p>
+          <div class="meta"><span>Base: <b>segmento 60d</b></span><span>Volume: <b>30 a 50 contatos</b></span></div>
+        </div>
+        <div class="task">
+          <span class="seg seg-premium">VIP</span>
+          <h4>Curadoria da sacolinha</h4>
+          <p>Selecionar 3 a 5 peças para cada top 20 com base em histórico de compra, tamanho e estilo. Preparar pacote do dia.</p>
+          <div class="meta"><span>Base: <b>top 10% LTV</b></span><span>Saída: <b>10 sacolinhas/dia</b></span></div>
+        </div>
+        <div class="task">
+          <span class="seg seg-unique">Compra única</span>
+          <h4>Cross-sell com combinação</h4>
+          <p>Cliente que comprou só uma vez, sugerir o par que combina. Mostrar look montado, não o produto solto.</p>
+          <div class="meta"><span>Base: <b>91% da base</b></span><span>Meta: <b>2ª compra</b></span></div>
+        </div>
+        <div class="task">
+          <span class="seg seg-sale">Sale</span>
+          <h4>Oferta de curva CD</h4>
+          <p>Clientes que compram em sale recebem oferta de produto da curva CD antes do flash. Giro de estoque parado.</p>
+          <div class="meta"><span>Base: <b>comprador de sale</b></span><span>Meta: <b>escoar CD</b></span></div>
+        </div>
+        <div class="task">
+          <span class="seg seg-active">Ativos</span>
+          <h4>Ativação do drop</h4>
+          <p>Lista de clientes recentes (até 90 dias) recebe primeiro as novidades do drop da semana antes do envio em massa.</p>
+          <div class="meta"><span>Base: <b>ativos recentes</b></span><span>Meta: <b>primeira compra no drop</b></span></div>
+        </div>
+        <div class="task">
+          <span class="seg seg-360">360 dias</span>
+          <h4>Win-back agressivo</h4>
+          <p>Cliente perdido há mais de um ano. Mensagem com cupom especial de retorno. É a ação comercial mais pesada do sábado.</p>
+          <div class="meta"><span>Base: <b>360d+ inativos</b></span><span>Oferta: <b>cupom forte</b></span></div>
+        </div>
+      </div>
+
+      <!-- MEIO-DIA -->
+      <div class="week-row">
+        <div class="time-col"><div class="tc-label">Meio-dia</div><div class="tc-time">12h às 15h</div></div>
+        <div class="task">
+          <span class="seg seg-active">Carrinho</span>
+          <h4>Recuperar carrinho do fim de semana</h4>
+          <p>Lista do Shopify dos últimos 3 dias. Mensagem humana, foto do produto abandonado, pergunta sobre tamanho.</p>
+          <div class="meta"><span>Base: <b>abandonos 72h</b></span><span>Meta: <b>recuperar 20%</b></span></div>
+        </div>
+        <div class="task">
+          <span class="seg seg-premium">VIP</span>
+          <h4>Envio personalizado</h4>
+          <p>Enviar foto ou áudio curto apresentando a sacolinha para cada cliente premium. Individual, não broadcast.</p>
+          <div class="meta"><span>Canal: <b>WhatsApp 1:1</b></span><span>Formato: <b>áudio ou vídeo</b></span></div>
+        </div>
+        <div class="task">
+          <span class="seg seg-active">Base ativa</span>
+          <h4>Stories e engajamento</h4>
+          <p>Postagem da vendedora em stories mostrando produto, respondendo dúvida e chamando para DM. Presença digital.</p>
+          <div class="meta"><span>Formato: <b>stories</b></span><span>Frequência: <b>3x/dia</b></span></div>
+        </div>
+        <div class="task">
+          <span class="seg seg-active">Flash</span>
+          <h4>Follow up de flash sale</h4>
+          <p>Quem abriu a mensagem de flash sale mas não comprou. Reforço com última peça ou último dia.</p>
+          <div class="meta"><span>Base: <b>abertura sem compra</b></span><span>Meta: <b>urgência</b></span></div>
+        </div>
+        <div class="task">
+          <span class="seg seg-premium">Lookbook VIP</span>
+          <h4>Enviar lookbook do drop</h4>
+          <p>PDF ou carrossel para lista VIP com os destaques do drop. Linguagem de preview, não de venda em massa.</p>
+          <div class="meta"><span>Base: <b>VIP + ativos</b></span><span>Formato: <b>catálogo curado</b></span></div>
+        </div>
+        <div class="task">
+          <span class="seg seg-sale">Sale</span>
+          <h4>Reativação leve de sale</h4>
+          <p>Clientes que compraram em sale anterior e não voltaram. Mostrar peças novas que entraram na sale.</p>
+          <div class="meta"><span>Base: <b>comprador passado de sale</b></span><span>Meta: <b>recompra em sale</b></span></div>
+        </div>
+      </div>
+
+      <!-- TARDE -->
+      <div class="week-row">
+        <div class="time-col"><div class="tc-label">Tarde</div><div class="tc-time">15h às 18h</div></div>
+        <div class="task">
+          <span class="seg seg-birth">Aniversariantes</span>
+          <h4>Aniversariantes da semana</h4>
+          <p>Lista das próximas 7 a 10 datas. Cupom exclusivo do mês de aniversário. Mensagem calorosa, não robótica.</p>
+          <div class="meta"><span>Base: <b>niver +7 dias</b></span><span>Oferta: <b>10% OFF</b></span></div>
+        </div>
+        <div class="task">
+          <span class="seg seg-premium">VIP</span>
+          <h4>Follow-up dos premium</h4>
+          <p>Cliente VIP que recebeu sacolinha e não respondeu ainda. Mensagem reforço. Fechar venda na semana.</p>
+          <div class="meta"><span>Meta: <b>fecho sacolinha</b></span><span>Prazo: <b>até sexta</b></span></div>
+        </div>
+        <div class="task">
+          <span class="seg seg-unique">Orçamento</span>
+          <h4>Recuperar orçamento parado</h4>
+          <p>Cliente pediu preço ou tirou dúvida nos últimos 7 dias e não fechou. Retomar com foto + benefício.</p>
+          <div class="meta"><span>Base: <b>dúvida sem compra</b></span><span>Meta: <b>conversão</b></span></div>
+        </div>
+        <div class="task">
+          <span class="seg seg-120">120 dias</span>
+          <h4>Reativação média 120 dias</h4>
+          <p>Cliente que não compra há 4 meses. Mensagem com benefício mais atrativo que a dos 60 dias.</p>
+          <div class="meta"><span>Base: <b>segmento 120d</b></span><span>Oferta: <b>cupom médio</b></span></div>
+        </div>
+        <div class="task">
+          <span class="seg seg-active">Close</span>
+          <h4>Close de pedidos em aberto</h4>
+          <p>Varredura de toda conversa aberta da semana. Pedidos aguardando decisão, pix pendente, confirmação.</p>
+          <div class="meta"><span>Meta: <b>fechar mês</b></span><span>Tempo: <b>2h focadas</b></span></div>
+        </div>
+        <div class="task">
+          <span class="seg seg-active">Report</span>
+          <h4>Fechamento e report</h4>
+          <p>Report da semana: conversão, ticket médio, follow up, OTE parcial. Enviar para Leonardo até 17h.</p>
+          <div class="meta"><span>Output: <b>relatório OTE</b></span><span>Destino: <b>Leonardo</b></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRM SEGMENTAÇÃO -->
+<section>
+  <div class="container">
+    <div class="section-title">
+      <div class="left">
+        <div class="num">03 · SEGMENTAÇÃO CRM</div>
+        <h2>A base dividida em oito conversas diferentes.</h2>
+      </div>
+      <div class="right">Cada segmento tem linguagem, oferta e frequência próprias. O erro mais comum é tratar a base como um bloco único. A régua da PRLS precisa reconhecer o estágio de cada cliente.</div>
+    </div>
+
+    <div class="crm-table">
+      <div class="crm-row hd">
+        <div>Segmento</div>
+        <div>Quem é</div>
+        <div>Oferta típica</div>
+        <div>Cadência</div>
+        <div>KPI</div>
+      </div>
+      <div class="crm-row">
+        <div class="c-seg"><span class="sw" style="background:var(--seg-premium)"></span>VIP Premium</div>
+        <div class="c-what">Top 10% em LTV ou 3ª compra ou mais no site.</div>
+        <div class="c-offer">Sacolinha curada com lançamentos, preview de drop, mimo personalizado.</div>
+        <div class="c-when">Semanal</div>
+        <div class="c-kpi">Recorrência</div>
+      </div>
+      <div class="crm-row">
+        <div class="c-seg"><span class="sw" style="background:var(--seg-birth)"></span>Aniversariantes</div>
+        <div class="c-what">Clientes no mês do aniversário (com data cadastrada).</div>
+        <div class="c-offer">Cupom exclusivo de 10 a 15% OFF válido por 15 dias, não acumulativo.</div>
+        <div class="c-when">Mensal</div>
+        <div class="c-kpi">Ativação emocional</div>
+      </div>
+      <div class="crm-row">
+        <div class="c-seg"><span class="sw" style="background:var(--seg-unique)"></span>Compra única</div>
+        <div class="c-what">91% da base. Uma compra apenas em todo o histórico.</div>
+        <div class="c-offer">Cross-sell com combinação, frete grátis em segunda compra, look completo.</div>
+        <div class="c-when">Quinzenal</div>
+        <div class="c-kpi">2ª compra</div>
+      </div>
+      <div class="crm-row">
+        <div class="c-seg"><span class="sw" style="background:var(--seg-60)"></span>Inativos 60 dias</div>
+        <div class="c-what">Sem compra há 45 a 75 dias. Ainda em janela de reativação natural.</div>
+        <div class="c-offer">Novidades, conteúdo, sem oferta agressiva. Só convite.</div>
+        <div class="c-when">Semanal</div>
+        <div class="c-kpi">Reabertura de conversa</div>
+      </div>
+      <div class="crm-row">
+        <div class="c-seg"><span class="sw" style="background:var(--seg-120)"></span>Inativos 120 dias</div>
+        <div class="c-what">Sem compra há 4 meses. Sinal amarelo.</div>
+        <div class="c-offer">Cupom médio (10 a 15%), frete grátis, produto campeão destacado.</div>
+        <div class="c-when">Quinzenal</div>
+        <div class="c-kpi">Retorno à base ativa</div>
+      </div>
+      <div class="crm-row">
+        <div class="c-seg"><span class="sw" style="background:var(--seg-360)"></span>Inativos 360 dias</div>
+        <div class="c-what">Sem compra há um ano ou mais. Cliente perdido.</div>
+        <div class="c-offer">Cupom forte (20% ou mais), mensagem de reencontro, produto sale.</div>
+        <div class="c-when">Mensal</div>
+        <div class="c-kpi">Win-back</div>
+      </div>
+      <div class="crm-row">
+        <div class="c-seg"><span class="sw" style="background:var(--seg-sale)"></span>Comprador de sale</div>
+        <div class="c-what">Clientes que só compram quando tem oferta.</div>
+        <div class="c-offer">Alerta antecipado de flash sale, curva CD, saldão.</div>
+        <div class="c-when">Semanal</div>
+        <div class="c-kpi">Giro de estoque</div>
+      </div>
+      <div class="crm-row">
+        <div class="c-seg"><span class="sw" style="background:var(--seg-active)"></span>Ativos recentes</div>
+        <div class="c-what">Compra nos últimos 90 dias. Base quente.</div>
+        <div class="c-offer">Preview de drop, novidade antes de todos, conteúdo de curadoria.</div>
+        <div class="c-when">Todo drop</div>
+        <div class="c-kpi">Manter engajamento</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AÇÕES ESPECIAIS MENSAIS -->
+<section class="alt">
+  <div class="container">
+    <div class="section-title">
+      <div class="left">
+        <div class="num">04 · AÇÕES ESPECIAIS</div>
+        <h2>Três rituais mensais que escalam a rotina.</h2>
+      </div>
+      <div class="right">Saem da agenda diária e viram projeto do mês. Rodam em paralelo ao grid de WhatsApp e geram receita incremental sem depender de novo tráfego.</div>
+    </div>
+
+    <div class="special">
+      <div class="sp-card premium">
+        <div class="sp-tag">Mensal · Top 20 clientes</div>
+        <h3>Sacolinha VIP com lançamento</h3>
+        <p>Toda vez que um drop entra, os 20 top clientes recebem uma sacolinha curada com 3 a 5 peças escolhidas para elas. Envio manual, mensagem personalizada, prioridade de acesso.</p>
+        <ol>
+          <li>Identificar top 20 por LTV e recência.</li>
+          <li>Curar seleção com base em histórico e estilo.</li>
+          <li>Vendedora envia foto, áudio ou vídeo personalizado.</li>
+          <li>Cliente responde interesse. Pedido fechado no mesmo dia.</li>
+          <li>Pós compra: agradecimento com mimo ou cartão.</li>
+        </ol>
+      </div>
+
+      <div class="sp-card birth">
+        <div class="sp-tag">Mensal · Todos do mês</div>
+        <h3>Campanha de aniversariantes</h3>
+        <p>Dia 1 do mês: disparo de cupom de aniversário para todos do mês. Válido por 15 dias. Conversa individual da vendedora reforça nos aniversariantes da semana.</p>
+        <ol>
+          <li>Dia 1: disparo em massa com cupom de aniversário.</li>
+          <li>Semanal: vendedora trabalha aniversariantes da semana.</li>
+          <li>Cliente responde, vendedora ajuda a escolher.</li>
+          <li>Registrar ticket médio e conversão do segmento.</li>
+          <li>Fechar mês com report de campanha aniversário.</li>
+        </ol>
+      </div>
+
+      <div class="sp-card winback">
+        <div class="sp-tag">Mensal · 360 dias inativos</div>
+        <h3>Win-back dos 360 dias</h3>
+        <p>Uma vez por mês, em sábado específico, a base inteira de inativos há mais de 360 dias recebe mensagem de reencontro com cupom forte. Meta não é volume, é recuperar parte da base.</p>
+        <ol>
+          <li>Extrair lista de inativos 360 dias no primeiro sábado.</li>
+          <li>Mensagem curta, emocional, sem tom comercial agressivo.</li>
+          <li>Cupom expressivo com validade curta (7 dias).</li>
+          <li>Vendedora acompanha individual quem responde.</li>
+          <li>Report ao final: quantos voltaram, qual ticket.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCRIPTS / TEMPLATES -->
+<section>
+  <div class="container">
+    <div class="section-title">
+      <div class="left">
+        <div class="num">05 · TEMPLATES</div>
+        <h2>Scripts base por segmento.</h2>
+      </div>
+      <div class="right">Ponto de partida para a vendedora. Não são mensagens prontas para copiar, são estruturas para adaptar. O nome, o produto, a referência pessoal são sempre específicos.</div>
+    </div>
+
+    <div class="scripts">
+      <div class="scr">
+        <div class="s-head"><span class="seg seg-birth">Aniversário</span><h4>Cupom do mês</h4></div>
+        <div class="msg">Oi [Nome], tudo bem?
+
+Aqui é a [Vendedora] da PRLS. Vi aqui que este mês é seu aniversário e queria te mandar um mimo.
+
+Separei um cupom exclusivo pra você usar dentro dos próximos 15 dias: <b>[CUPOM] · 10% OFF</b>
+
+Tem peças novas que chegaram essa semana que acho que tem a sua cara. Posso te mandar?</div>
+        <div class="hint">Variáveis: Nome, Vendedora, Cupom · personalizar semanalmente</div>
+      </div>
+
+      <div class="scr">
+        <div class="s-head"><span class="seg seg-60">60 dias</span><h4>Mensagem suave</h4></div>
+        <div class="msg">Oi [Nome],
+
+Lembrei de você aqui porque chegou uma [categoria de produto que comprou antes] que ficou linda. Ainda não mandei pra ninguém, pensei em te mostrar.
+
+Quer dar uma olhada? Sem compromisso.</div>
+        <div class="hint">Sem cupom, sem oferta. Só reabertura de conversa.</div>
+      </div>
+
+      <div class="scr">
+        <div class="s-head"><span class="seg seg-120">120 dias</span><h4>Reativação média</h4></div>
+        <div class="msg">Oi [Nome],
+
+Faz um tempinho que a gente não se fala. Queria te chamar com algo que vai te interessar.
+
+Temos novidades que combinam com o seu estilo, e reservei um benefício especial: <b>[CUPOM] · 15% OFF + frete grátis</b> válido só esta semana.
+
+Posso te mandar as opções?</div>
+        <div class="hint">Cupom médio + senso de urgência curto</div>
+      </div>
+
+      <div class="scr">
+        <div class="s-head"><span class="seg seg-360">360 dias · Win-back</span><h4>Reencontro</h4></div>
+        <div class="msg">Oi [Nome],
+
+A gente se perdeu um pouquinho de vista, né? Sua presença faz falta por aqui.
+
+Queria te dar um motivo de volta: <b>[CUPOM] · 20% OFF</b> em qualquer peça, inclusive novidades. Vale até [data, 7 dias].
+
+Se quiser, te mando o que está chegando forte agora.</div>
+        <div class="hint">Cupom forte, validade curta, tom emocional</div>
+      </div>
+
+      <div class="scr">
+        <div class="s-head"><span class="seg seg-premium">VIP · Sacolinha</span><h4>Preview do drop</h4></div>
+        <div class="msg">Oi [Nome], tudo bem?
+
+Antes de publicar o drop dessa semana, separei algumas peças que lembrei de você. Olhei seu histórico e montei essa curadoria.
+
+[3 a 5 fotos + nome + numeração]
+
+Se gostar de alguma, reservo pra você agora antes de subir no site. O que acha?</div>
+        <div class="hint">Preview antes do público geral · prioridade</div>
+      </div>
+
+      <div class="scr">
+        <div class="s-head"><span class="seg seg-unique">Compra única</span><h4>Segundo par</h4></div>
+        <div class="msg">Oi [Nome],
+
+Fiquei pensando aqui no [produto que comprou]. Tenho uma peça que combina perfeitamente pra fechar o look.
+
+[Foto do combinado]
+
+Com frete grátis no seu próximo pedido. Posso te mostrar?</div>
+        <div class="hint">Combinação com produto comprado · cross-sell visual</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="fgrid">
+      <div class="f-brand">
+        <h3>PRLS OS</h3>
+        <p>Rotina de vendas consultiva para o time de WhatsApp. Operação ativa na base existente, não só reativa em lead novo.</p>
+      </div>
+      <div class="fcol">
+        <div class="fl">Navegação</div>
+        <ul>
+          <li><a href="./index.html">Mapa de Processos</a></li>
+          <li><a href="./index.html#m06">Módulo Vendas</a></li>
+          <li><a href="./calendario.html">Calendário 2026</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <div class="fl">Pilares da rotina</div>
+        <ul>
+          <li>Prospecção ativa</li>
+          <li>Reativação 60/120/360</li>
+          <li>Recorrência e upsell</li>
+          <li>Fidelização VIP</li>
+        </ul>
+      </div>
+    </div>
+    <div class="f-bot">
+      <span>PRLS OS · Rotina de Vendas · v1.0</span>
+      <span>Uso interno · Time comercial</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
