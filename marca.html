@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PRLS OS · Sessão Estratégica de Marca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fafaf9;--bg-alt:#f5f5f4;--surface:#ffffff;--surface-2:#f9f9f8;
+    --border:#e7e5e4;--border-strong:#d6d3d1;
+    --ink:#18181b;--ink-soft:#3f3f46;--ink-2:#52525b;
+    --muted:#78716c;--muted-2:#a8a29e;
+    --green:#15803d;--amber:#b45309;--red:#b91c1c;--blue:#1e40af;
+    --green-bg:#dcfce7;--red-bg:#fee2e2;--amber-bg:#fef3c7;--blue-bg:#dbeafe;
+    --shadow-sm:0 1px 2px rgba(15,15,15,0.04);
+    --shadow-md:0 1px 3px rgba(15,15,15,0.06),0 1px 2px rgba(15,15,15,0.04);
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-weight:400;line-height:1.6;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01";font-size:15px}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--ink);color:#fff}
+
+  .container{max-width:1180px;margin:0 auto;padding:0 40px}
+
+  /* TOPBAR */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(250,250,249,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;height:56px;max-width:1320px;margin:0 auto;padding:0 40px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:-0.01em;font-size:15px}
+  .brand .sq{width:18px;height:18px;background:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;font-family:var(--font-mono)}
+  .brand .sep{color:var(--muted-2);font-weight:400}
+  .brand .sub{color:var(--muted);font-weight:500}
+  .top-nav{display:flex;align-items:flex-end;gap:14px;font-size:13px}
+  .top-nav .nav-group{display:flex;flex-direction:column;gap:5px;position:relative}
+  .top-nav .nav-group + .nav-group::before{content:'';position:absolute;left:-7px;top:18px;bottom:4px;width:1px;background:var(--border)}
+  .top-nav .nav-label{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-weight:500;padding-left:12px;opacity:.7}
+  .top-nav .nav-items{display:flex;gap:2px}
+  .top-nav .nav-emphasis .nav-items{background:var(--bg-alt);border-radius:8px;padding:2px}
+  .top-nav a{padding:8px 12px;color:var(--muted);border-radius:6px;transition:all 0.15s;font-weight:500}
+  .top-nav a:hover{color:var(--ink);background:var(--bg-alt)}
+  .top-nav .nav-emphasis a:hover{background:#fff}
+  .top-nav a.active{background:var(--ink);color:#fff}
+  .top-meta{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.02em}
+
+  /* HERO */
+  .hero{padding:80px 0 56px;border-bottom:1px solid var(--border)}
+  .hero .kicker{font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;display:flex;align-items:center;gap:10px}
+  .hero .kicker:before{content:'';width:20px;height:1px;background:var(--ink)}
+  .hero h1{font-size:clamp(36px,4.5vw,52px);font-weight:500;letter-spacing:-0.035em;line-height:1.05;margin-bottom:24px;color:var(--ink);max-width:900px}
+  .hero p.lead{font-size:17px;color:var(--ink-2);max-width:720px;line-height:1.6}
+
+  /* BRIEFING */
+  .briefing{background:var(--surface-2);border-bottom:1px solid var(--border);padding:48px 0}
+  .briefing h2{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+  .briefing-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+  .b-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px}
+  .b-card h3{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px;letter-spacing:-0.01em}
+  .b-card p{font-size:13.5px;color:var(--ink-2);line-height:1.6}
+  .b-card.rules{background:#fefce8;border-color:#fde68a}
+  .b-card.rules ul{margin-top:8px;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+  .b-card.rules li{font-size:13px;color:#713f12;line-height:1.55}
+  .b-card.rules li b{color:#451a03}
+
+  /* LEGEND BAR */
+  .legend-bar{padding:32px 0;border-bottom:1px solid var(--border);background:var(--bg)}
+  .legend-bar .container{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .legend-bar h4{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-right:8px}
+  .leg-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:6px;font-size:12px;color:var(--ink-2);background:var(--surface);border:1px solid var(--border)}
+  .leg-pill .dot{width:8px;height:8px;border-radius:50%}
+  .leg-pill .dot.data{background:var(--blue)}
+  .leg-pill .dot.hyp{background:var(--amber)}
+  .leg-pill .dot.team{background:var(--ink)}
+  .leg-pill b{color:var(--ink);font-weight:600}
+
+  /* BLOCO */
+  .bloco{padding:72px 0;border-bottom:1px solid var(--border)}
+  .bloco.alt{background:var(--surface-2)}
+  .bloco-head{display:flex;align-items:baseline;gap:24px;margin-bottom:48px}
+  .bloco-num{font-family:var(--font-mono);font-size:13px;color:var(--muted);letter-spacing:0.14em}
+  .bloco-title{font-size:clamp(26px,3vw,34px);font-weight:500;letter-spacing:-0.03em;color:var(--ink);line-height:1.1}
+
+  /* QUESTION */
+  .q{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:36px;margin-bottom:24px;box-shadow:var(--shadow-sm)}
+  .q-num{font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;color:var(--muted);margin-bottom:12px}
+  .q-text{font-size:20px;font-weight:500;letter-spacing:-0.02em;color:var(--ink);line-height:1.35;margin-bottom:24px;max-width:920px}
+
+  .answer-stack{display:grid;gap:14px;margin-top:8px}
+  .ans{padding:20px 22px;border-radius:8px;border-left:3px solid;display:grid;grid-template-columns:1fr;gap:6px}
+  .ans .ans-label{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;display:flex;align-items:center;gap:8px}
+  .ans .ans-label .dot{width:8px;height:8px;border-radius:50%}
+  .ans p{font-size:14px;color:var(--ink-2);line-height:1.65}
+  .ans p + p{margin-top:8px}
+  .ans b{color:var(--ink);font-weight:600}
+  .ans ul{margin:6px 0 0 18px;display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--ink-2)}
+
+  .ans.data{background:#eff6ff;border-color:var(--blue)}
+  .ans.data .ans-label{color:var(--blue)}
+  .ans.data .ans-label .dot{background:var(--blue)}
+  .ans.hyp{background:#fffbeb;border-color:var(--amber)}
+  .ans.hyp .ans-label{color:var(--amber)}
+  .ans.hyp .ans-label .dot{background:var(--amber)}
+  .ans.team{background:var(--bg-alt);border-color:var(--ink);border-style:dashed}
+  .ans.team .ans-label{color:var(--ink)}
+  .ans.team .ans-label .dot{background:var(--ink)}
+  .ans.team p{color:var(--muted);font-style:italic}
+  .ans.unk{background:#fef2f2;border-color:var(--red)}
+  .ans.unk .ans-label{color:var(--red)}
+  .ans.unk .ans-label .dot{background:var(--red)}
+
+  /* CLOSING */
+  .closing{background:#0f172a;color:#fff;padding:80px 0}
+  .closing h2{font-size:clamp(26px,3vw,36px);font-weight:500;letter-spacing:-0.025em;margin-bottom:18px;color:#fff;line-height:1.15;max-width:780px}
+  .closing p{color:#cbd5e1;font-size:16px;max-width:720px;line-height:1.6}
+  .closing .next{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+  .closing .next .ncard{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:22px}
+  .closing .next .ncard b{display:block;font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#94a3b8;margin-bottom:8px}
+  .closing .next .ncard p{color:#e2e8f0;font-size:13.5px}
+
+  footer{padding:48px 0;color:var(--muted);font-size:12px;font-family:var(--font-mono);letter-spacing:0.04em}
+  footer .container{display:flex;justify-content:space-between}
+
+  @media (max-width:1024px){
+    .briefing-grid{grid-template-columns:1fr}
+    .closing .next{grid-template-columns:1fr}
+    .top-nav{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="sq">P</span>
+      <span>PRLS OS</span>
+      <span class="sep">/</span>
+      <span class="sub">Sessão Estratégica de Marca</span>
+    </div>
+    <nav class="top-nav" aria-label="Navegação principal">
+      <div class="nav-group">
+        <span class="nav-label">Estratégia</span>
+        <div class="nav-items">
+          <a href="./index.html#macro">Mapa</a>
+          <a href="./index.html#m08">Squad</a>
+          <a href="./index.html#m09">Benchmark</a>
+          <a href="./clientes.html">ICP</a>
+          <a href="#" class="active">Marca</a>
+        </div>
+      </div>
+      <div class="nav-group nav-emphasis">
+        <span class="nav-label">Operação</span>
+        <div class="nav-items">
+          <a href="./index.html#m10">Playbook</a>
+          <a href="./index.html#m11">CRM</a>
+          <a href="./calendario.html">Calendário</a>
+          <a href="./rotina-vendas.html">Rotina</a>
+        </div>
+      </div>
+      <div class="nav-group">
+        <span class="nav-label">Suporte</span>
+        <div class="nav-items">
+          <a href="./financeiro.html">Financeiro</a>
+          <a href="./automacao.html">Automação</a>
+        </div>
+      </div>
+    </nav>
+    <div class="top-meta">v1.0 · 05/2026</div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="kicker">M00 · Verdade fundadora</div>
+    <h1>A base narrativa antes de qualquer execução.</h1>
+    <p class="lead">Dez perguntas, quatro blocos. Cada pessoa do time responde individualmente, por escrito, sem consultar os colegas. Respostas vagas que poderiam servir para qualquer marca devem ser reescritas. Se a resposta couber em qualquer concorrente, ela ainda não é uma resposta sobre a PRLS.</p>
+  </div>
+</section>
+
+<!-- BRIEFING -->
+<section class="briefing">
+  <div class="container">
+    <h2>Como conduzir a sessão</h2>
+    <div class="briefing-grid">
+      <div class="b-card">
+        <h3>Tempo</h3>
+        <p><b>90 minutos</b> para responder individualmente. <b>2 horas</b> para discutir em grupo depois. As divergências entre as respostas são o material mais valioso da sessão — não tente harmonizá-las antes da hora.</p>
+      </div>
+      <div class="b-card rules">
+        <h3>Regras de qualidade da resposta</h3>
+        <ul>
+          <li>Não use adjetivos genéricos como <b>qualidade</b>, <b>exclusividade</b>, <b>sofisticação</b>, <b>autenticidade</b> sem amarrar a um fato concreto da operação.</li>
+          <li>Não descreva produto. <b>Descreva consequência.</b></li>
+          <li>Se a resposta soar como texto institucional de site, reescreva.</li>
+          <li>Se você não conseguir responder, registre que não sabe. <b>Não saber é informação estratégica.</b></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEGEND -->
+<section class="legend-bar">
+  <div class="container">
+    <h4>Como ler cada pergunta:</h4>
+    <span class="leg-pill"><span class="dot data"></span><b>Dados</b> · o que mostrou na operação</span>
+    <span class="leg-pill"><span class="dot hyp"></span><b>Hipótese</b> · leitura provisória pra debate</span>
+    <span class="leg-pill"><span class="dot team"></span><b>Resposta do time</b> · espaço pra preencher</span>
+    <span class="leg-pill" style="background:#fef2f2;border-color:#fecaca"><span class="dot" style="background:var(--red)"></span><b style="color:var(--red)">Não sei</b> · só fundador/time pode responder</span>
+  </div>
+</section>
+
+<!-- BLOCO 1 -->
+<section class="bloco">
+  <div class="container">
+    <div class="bloco-head">
+      <span class="bloco-num">BLOCO 1</span>
+      <h2 class="bloco-title">Verdade fundadora</h2>
+    </div>
+
+    <div class="q">
+      <div class="q-num">Pergunta 1</div>
+      <div class="q-text">Se a PRLS deixasse de existir amanhã, o que exatamente o mercado perderia que nenhum concorrente entrega hoje?</div>
+      <div class="answer-stack">
+        <div class="ans data">
+          <div class="ans-label"><span class="dot"></span>Dados disponíveis</div>
+          <p>Operação multi-canal (Site 25%, WhatsApp 58%, Atacado 22%) com matriz em Fortaleza. Faturamento 2025 fechou em <b>R$ 1,17 MM</b> (+139% sobre 2024). Em 2026 o ritmo é <b>+151% YoY</b> nos 4 primeiros meses. Base de clientes do Site é 35% concentrada em CE — sinal de marca regional forte.</p>
+        </div>
+        <div class="ans unk">
+          <div class="ans-label"><span class="dot"></span>Não sei — só fundador responde</div>
+          <p>Os dados mostram <b>como</b> a PRLS opera, não <b>o que</b> ela entrega de único. A resposta dessa pergunta exige conhecer o produto, a história e a relação que Júlio quer construir com o cliente. Sem isso, qualquer hipótese que eu escrever cabe em qualquer concorrente.</p>
+        </div>
+        <div class="ans team">
+          <div class="ans-label"><span class="dot"></span>Resposta do time</div>
+          <p>[Em aberto · responder individualmente]</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-num">Pergunta 2</div>
+      <div class="q-text">Qual foi a inquietação real que levou à criação da PRLS, e essa inquietação ainda está viva na operação atual ou virou apenas memória?</div>
+      <div class="answer-stack">
+        <div class="ans data">
+          <div class="ans-label"><span class="dot"></span>Dados disponíveis</div>
+          <p>A operação atual tem comportamento de <b>marca jovem em fase de tração</b>: aquisição cresceu 6× entre Jun/25 e Nov/25, depois caiu 89% em Jan/26. Estoque parado de R$ 107k, descontos 25% (planejado 15%), 13 SKUs deficitários. Ou seja, o crescimento veio rápido e a operação ainda corre atrás.</p>
+        </div>
+        <div class="ans unk">
+          <div class="ans-label"><span class="dot"></span>Não sei — só fundador responde</div>
+          <p>A inquietação fundadora é narrativa, não numérica. Os sintomas operacionais (descontos, estoque) sugerem que o time vem operando "para vender", não "para defender uma tese" — mas isso é leitura externa.</p>
+        </div>
+        <div class="ans team">
+          <div class="ans-label"><span class="dot"></span>Resposta do time</div>
+          <p>[Em aberto · responder individualmente]</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOCO 2 -->
+<section class="bloco alt">
+  <div class="container">
+    <div class="bloco-head">
+      <span class="bloco-num">BLOCO 2</span>
+      <h2 class="bloco-title">Cliente e território</h2>
+    </div>
+
+    <div class="q">
+      <div class="q-num">Pergunta 3</div>
+      <div class="q-text">Quem é a pessoa que compra da PRLS hoje, e quem é a pessoa que deveria comprar mas ainda não compra?</div>
+      <div class="answer-stack">
+        <div class="ans data">
+          <div class="ans-label"><span class="dot"></span>Dados disponíveis · canal Shopify (980 clientes)</div>
+          <p><b>Quem compra hoje (ICP — Tier 1+2, 3,8% da base):</b></p>
+          <ul>
+            <li>Geografia: 35% Ceará (Fortaleza concentra), 13,5% São Paulo, 13% cluster nordestino (BA, PB, PE)</li>
+            <li>Email: 86% Gmail ou Hotmail (audiência tradicional, não-tech)</li>
+            <li>AOV R$ 254 · 2-3 compras em ~99 dias · ticket-vida médio R$ 605</li>
+            <li>É a cliente que <b>volta</b>, não a que gasta muito</li>
+          </ul>
+          <p><b>Cauda (86,4% da base):</b> 846 clientes one-time, AOV similar (R$ 250), nunca voltaram.</p>
+          <p><b>Lacuna geográfica:</b> SP tem 13% dos clientes mas recorrência menor que CE. Interior do NE quase ausente. Sul/Centro-Oeste pulverizado em &lt;3% cada.</p>
+        </div>
+        <div class="ans hyp">
+          <div class="ans-label"><span class="dot"></span>Hipótese inicial · debater</div>
+          <p>Quem compra hoje é <b>mulher em capital nordestina, faixa 30-50, conectada por Shopify ou WhatsApp, que descobriu a PRLS por indicação local ou influência regional</b>. Quem deveria comprar e ainda não compra: a cliente <b>de SP que fez 1 pedido e não voltou</b> (127 clientes só desse estado, recorrência baixa). Significa que SP foi atraída por mídia mas não foi retida — provavelmente porque a história da marca não chega lá com a mesma clareza com que circula em Fortaleza.</p>
+        </div>
+        <div class="ans team">
+          <div class="ans-label"><span class="dot"></span>Resposta do time</div>
+          <p>[Em aberto · cada pessoa descreve a cliente em 3-4 frases concretas, sem adjetivos]</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-num">Pergunta 4</div>
+      <div class="q-text">Qual é o problema concreto, prático e emocional que o cliente carrega antes de encontrar a PRLS, e o que muda na vida dele depois da compra?</div>
+      <div class="answer-stack">
+        <div class="ans data">
+          <div class="ans-label"><span class="dot"></span>Dados disponíveis</div>
+          <p>Não há dado direto sobre dor do cliente nesta base — o CSV só traz nome, e-mail, cidade, datas e valor. Não temos transcrições de WhatsApp, NPS, reviews ou entrevistas categorizados aqui.</p>
+        </div>
+        <div class="ans unk">
+          <div class="ans-label"><span class="dot"></span>Não sei — exige pesquisa qualitativa</div>
+          <p>Para responder essa pergunta com seriedade é preciso: (1) ler 30 conversas no WhatsApp do M1, (2) entrevistar 5 clientes Tier 1+2 (defensoras), (3) ler reviews/comentários nos posts. Sem esse insumo, qualquer resposta vira texto institucional.</p>
+        </div>
+        <div class="ans team">
+          <div class="ans-label"><span class="dot"></span>Resposta do time</div>
+          <p>[Em aberto · cada pessoa descreve <b>uma cliente real</b> que conhece e o que mudou pra ela]</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-num">Pergunta 5</div>
+      <div class="q-text">Em qual conversa cultural, comportamental ou estética a PRLS está inserida, e qual é a posição da marca dentro dessa conversa?</div>
+      <div class="answer-stack">
+        <div class="ans data">
+          <div class="ans-label"><span class="dot"></span>Dados disponíveis</div>
+          <p>A geografia (concentração CE + capitais NE) sugere que a PRLS circula principalmente em <b>conversas culturais nordestinas</b>. O domínio Hotmail predominante (30%) indica audiência fora da bolha tech/SP — perfil mais tradicional. Pico de vendas em Nov/25 (Black Friday) sugere que a marca participa de calendário comercial mainstream.</p>
+        </div>
+        <div class="ans unk">
+          <div class="ans-label"><span class="dot"></span>Não sei — sem dado de produto/conteúdo</div>
+          <p>Para mapear a "conversa cultural" precisaria saber: o que a PRLS posta, o que a concorrência (sessão Benchmark) posta, que figuras a marca cita, com que estética se associa. Nada disso está nesta base.</p>
+        </div>
+        <div class="ans team">
+          <div class="ans-label"><span class="dot"></span>Resposta do time</div>
+          <p>[Em aberto · qual é a conversa em que a marca participa, e a marca <b>lidera</b>, <b>segue</b> ou <b>tensiona</b> essa conversa?]</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOCO 3 -->
+<section class="bloco">
+  <div class="container">
+    <div class="bloco-head">
+      <span class="bloco-num">BLOCO 3</span>
+      <h2 class="bloco-title">Posicionamento e diferenciação</h2>
+    </div>
+
+    <div class="q">
+      <div class="q-num">Pergunta 6</div>
+      <div class="q-text">O que a PRLS faz, defende ou rejeita que a maioria dos concorrentes não tem coragem de fazer, defender ou rejeitar?</div>
+      <div class="answer-stack">
+        <div class="ans data">
+          <div class="ans-label"><span class="dot"></span>Dados disponíveis</div>
+          <p>A operação revela <b>algumas escolhas observáveis</b>: matriz em Fortaleza (não migrou para SP), canal WhatsApp domina vendas (58%) — escolha não-óbvia que muitas marcas evitam por escala. Atacado representa 22% — sinal de que aceita ser revendida. Descontos 25% efetivos — escolha implícita de competir por preço.</p>
+        </div>
+        <div class="ans hyp">
+          <div class="ans-label"><span class="dot"></span>Hipótese inicial · debater</div>
+          <p>A PRLS opera em uma estrutura que muitas D2C "modernas" rejeitariam: WhatsApp como canal principal, atacado ativo, base de clientes Hotmail. Isso pode ser <b>uma escolha estratégica de proximidade real</b> com cliente fora da bolha — ou pode ser <b>inércia operacional</b>. Esse é um dos pontos que precisa de verdade fundadora pra distinguir.</p>
+        </div>
+        <div class="ans team">
+          <div class="ans-label"><span class="dot"></span>Resposta do time</div>
+          <p>[Em aberto · cite <b>uma decisão concreta</b> que a PRLS tomou nos últimos 12 meses que um concorrente não tomaria]</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-num">Pergunta 7</div>
+      <div class="q-text">Se um cliente fosse descrever a PRLS para um amigo em uma frase, o que ele diria hoje, e o que precisaria dizer para a marca ocupar o lugar que queremos ocupar?</div>
+      <div class="answer-stack">
+        <div class="ans data">
+          <div class="ans-label"><span class="dot"></span>Dados disponíveis</div>
+          <p>Sem reviews/NPS na base. O comportamento dos 37 clientes ICP (compram 2-3 vezes em 99 dias) sugere que o que dizem hoje é forte o suficiente pra fazer voltar — mas <b>não suficiente pra fazer indicar em massa</b>: a aquisição em Jan/26 caiu 89% e os 86% one-time não voltaram. Boca-a-boca não está se sustentando.</p>
+        </div>
+        <div class="ans unk">
+          <div class="ans-label"><span class="dot"></span>Não sei — exige escuta direta</div>
+          <p>Resposta exige pesquisa de "frase espontânea" com 5-10 clientes Tier 1+2. Sem essa coleta, qualquer formulação é projeção.</p>
+        </div>
+        <div class="ans team">
+          <div class="ans-label"><span class="dot"></span>Resposta do time</div>
+          <p>[Em aberto · escreva <b>duas frases</b>: a que você acha que dizem hoje, e a que você quer que digam em 12 meses]</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-num">Pergunta 8</div>
+      <div class="q-text">Qual é o inimigo da PRLS? Pode ser uma prática de mercado, um comportamento, uma estética ou uma cultura comercial. Marcas fortes têm inimigo claro. Marcas fracas tentam agradar todo mundo.</div>
+      <div class="answer-stack">
+        <div class="ans hyp">
+          <div class="ans-label"><span class="dot"></span>Hipótese inicial · debater</div>
+          <p>Possíveis inimigos visíveis na operação: <b>(1) a estética genérica de marca-aplicativo de SP</b> — limpa, fria, sem origem; <b>(2) o desconto como única alavanca</b> — a própria PRLS está caindo nesse vício (25% descontos efetivos vs 15% planejado); <b>(3) o produto descartável</b> — clientes que compram uma vez e somem podem estar respondendo a marcas que entregam novidade barata em vez de relação.</p>
+          <p>Nenhuma dessas é a resposta certa — são hipóteses para o time tensionar.</p>
+        </div>
+        <div class="ans team">
+          <div class="ans-label"><span class="dot"></span>Resposta do time</div>
+          <p>[Em aberto · cada pessoa nomeia <b>um</b> inimigo específico, não três genéricos]</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOCO 4 -->
+<section class="bloco alt">
+  <div class="container">
+    <div class="bloco-head">
+      <span class="bloco-num">BLOCO 4</span>
+      <h2 class="bloco-title">Promessa e consequência</h2>
+    </div>
+
+    <div class="q">
+      <div class="q-num">Pergunta 9</div>
+      <div class="q-text">Qual é a promessa que a PRLS faz ao cliente que, se quebrada, destrói a confiança na marca?</div>
+      <div class="answer-stack">
+        <div class="ans data">
+          <div class="ans-label"><span class="dot"></span>Dados disponíveis</div>
+          <p>Trocas e devoluções no trimestre Set-Nov/25: <b>R$ 15.387</b> (2,1% do faturamento). Não é catastrófico, mas é monitorado — sinal de que algo da promessa material falha em ~2% dos casos. <b>13 SKUs deficitários</b> indicam que existe produto sendo vendido abaixo do custo — risco silencioso de quebrar promessa de valor.</p>
+        </div>
+        <div class="ans unk">
+          <div class="ans-label"><span class="dot"></span>Não sei — depende da promessa real</div>
+          <p>A pergunta é "qual é a promessa" — não consigo derivar isso da DRE. Se a promessa for <b>"produto durável"</b>, o vetor de quebra é qualidade. Se for <b>"chega rápido na sua casa"</b>, é logística. Se for <b>"fala com gente de verdade"</b>, é o WhatsApp do M1. Cada uma exige uma defesa operacional diferente.</p>
+        </div>
+        <div class="ans team">
+          <div class="ans-label"><span class="dot"></span>Resposta do time</div>
+          <p>[Em aberto · escreva a promessa em uma frase, depois descreva <b>o que aconteceria operacionalmente se ela fosse quebrada hoje</b>]</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-num">Pergunta 10</div>
+      <div class="q-text">Daqui a cinco anos, o que precisa ser verdade sobre a PRLS para que o time olhe para trás e diga que valeu a pena?</div>
+      <div class="answer-stack">
+        <div class="ans data">
+          <div class="ans-label"><span class="dot"></span>Dados disponíveis · projeção linear (não-meta)</div>
+          <p>Mantendo +139% YoY de 2025 sobre 2024 (cenário improvável), em 5 anos PRLS faturaria R$ 25 MM/ano. Em ritmo mais sustentável de +60% YoY, chega a ~R$ 12 MM. Mas <b>números não respondem essa pergunta</b> — eles só dão escala possível.</p>
+        </div>
+        <div class="ans unk">
+          <div class="ans-label"><span class="dot"></span>Não sei — pergunta de visão</div>
+          <p>"Valer a pena" é função de <b>o que cada pessoa do time veio buscar</b>. Sem isso individualizado, qualquer resposta vira meta financeira fingindo ser visão.</p>
+        </div>
+        <div class="ans team">
+          <div class="ans-label"><span class="dot"></span>Resposta do time</div>
+          <p>[Em aberto · cada pessoa escreve <b>3 verdades</b> que precisam estar firmes em 2031, em qualquer área — produto, time, mercado, vida pessoal]</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing">
+  <div class="container">
+    <h2>O material mais valioso desta sessão são as divergências.</h2>
+    <p>Cada pessoa responde sozinha. Depois, no encontro coletivo, comparem. As perguntas em que <b style="color:#fff">todo mundo escreveu coisa parecida</b> são as que a marca já tem clareza. As perguntas em que <b style="color:#fff">cada um respondeu uma coisa</b> são onde a marca ainda não existe — e onde a sessão tem mais a entregar.</p>
+
+    <div class="next">
+      <div class="ncard">
+        <b>Antes da sessão</b>
+        <p>Imprimir esta página ou compartilhar link individual. Bloquear 90 minutos no calendário sem reuniões adjacentes.</p>
+      </div>
+      <div class="ncard">
+        <b>Durante a sessão coletiva</b>
+        <p>Ler em voz alta as respostas de cada um, pergunta por pergunta. Anotar onde divergem. Não tentar fechar consenso na primeira passada.</p>
+      </div>
+      <div class="ncard">
+        <b>Depois</b>
+        <p>Para cada pergunta com divergência, decidir <b style="color:#fff">qual versão a marca vai assumir</b> — não a média, mas uma escolha. Documentar em /marca v2.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <span>PRLS OS · Sessão Estratégica de Marca · v1.0 · Maio/2026</span>
+    <span>Documento de trabalho — não publicar sem fechar respostas</span>
+  </div>
+</footer>
+
+</body>
+</html>
