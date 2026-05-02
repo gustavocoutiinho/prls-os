@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PRLS OS · ICP & Clientes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fafaf9;--bg-alt:#f5f5f4;--surface:#ffffff;--surface-2:#f9f9f8;
+    --border:#e7e5e4;--border-strong:#d6d3d1;
+    --ink:#18181b;--ink-soft:#3f3f46;--ink-2:#52525b;
+    --muted:#78716c;--muted-2:#a8a29e;
+    --green:#15803d;--amber:#b45309;--red:#b91c1c;--blue:#1e40af;
+    --green-bg:#dcfce7;--red-bg:#fee2e2;--amber-bg:#fef3c7;--blue-bg:#dbeafe;
+    --shadow-sm:0 1px 2px rgba(15,15,15,0.04);
+    --shadow-md:0 1px 3px rgba(15,15,15,0.06),0 1px 2px rgba(15,15,15,0.04);
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-weight:400;line-height:1.55;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01";font-size:15px}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--ink);color:#fff}
+
+  .container{max-width:1320px;margin:0 auto;padding:0 40px}
+
+  /* TOPBAR */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(250,250,249,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;height:56px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:-0.01em;font-size:15px}
+  .brand .sq{width:18px;height:18px;background:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;font-family:var(--font-mono)}
+  .brand .sep{color:var(--muted-2);font-weight:400}
+  .brand .sub{color:var(--muted);font-weight:500}
+  .top-nav{display:flex;align-items:flex-end;gap:14px;font-size:13px}
+  .top-nav .nav-group{display:flex;flex-direction:column;gap:5px;position:relative}
+  .top-nav .nav-group + .nav-group::before{content:'';position:absolute;left:-7px;top:18px;bottom:4px;width:1px;background:var(--border)}
+  .top-nav .nav-label{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-weight:500;padding-left:12px;opacity:.7}
+  .top-nav .nav-items{display:flex;gap:2px}
+  .top-nav .nav-emphasis .nav-items{background:var(--bg-alt);border-radius:8px;padding:2px}
+  .top-nav a{padding:8px 12px;color:var(--muted);border-radius:6px;transition:all 0.15s;font-weight:500}
+  .top-nav a:hover{color:var(--ink);background:var(--bg-alt)}
+  .top-nav .nav-emphasis a:hover{background:#fff}
+  .top-nav a.active{background:var(--ink);color:#fff}
+  .top-meta{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.02em}
+
+  /* HERO */
+  .hero{padding:72px 0 48px;border-bottom:1px solid var(--border)}
+  .hero-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:80px;align-items:end}
+  .kicker{font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+  .kicker:before{content:'';width:20px;height:1px;background:var(--ink)}
+  .hero h1{font-size:clamp(36px,4.5vw,56px);font-weight:500;letter-spacing:-0.035em;line-height:1.04;margin-bottom:24px;color:var(--ink)}
+  .hero p.lead{font-size:17px;color:var(--ink-2);max-width:620px;line-height:1.55}
+  .hero-side{border-left:1px solid var(--border);padding-left:40px}
+  .hero-side .lbl{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:18px}
+  .hero-side dl{display:grid;gap:14px}
+  .hero-side dl div{display:flex;justify-content:space-between;gap:20px;padding-bottom:14px;border-bottom:1px solid var(--border);font-size:13px}
+  .hero-side dl div:last-child{border-bottom:none}
+  .hero-side dt{color:var(--muted)}
+  .hero-side dd{color:var(--ink);font-weight:500;text-align:right}
+
+  /* SCOPE BANNER */
+  .scope-banner{background:var(--amber-bg);border-bottom:1px solid #fde68a;padding:18px 0}
+  .scope-banner .container{display:flex;gap:16px;align-items:flex-start}
+  .scope-banner .icon{width:24px;height:24px;flex:0 0 24px;border-radius:50%;background:var(--amber);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;font-family:var(--font-mono);margin-top:2px}
+  .scope-banner h4{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px}
+  .scope-banner p{font-size:13.5px;color:var(--ink-2);line-height:1.55}
+
+  /* KPIS */
+  .kpis{padding:48px 0;background:var(--surface-2);border-bottom:1px solid var(--border)}
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .kpi{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:22px 20px;box-shadow:var(--shadow-sm)}
+  .kpi .lbl{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:12px}
+  .kpi .val{font-size:28px;font-weight:500;letter-spacing:-0.02em;color:var(--ink);line-height:1.1}
+  .kpi .sub{font-size:12px;color:var(--ink-2);margin-top:8px}
+  .kpi.red .val{color:var(--red)}
+  .kpi.amber .val{color:var(--amber)}
+  .kpi.green .val{color:var(--green)}
+
+  /* MODULES */
+  .module{padding:80px 0;border-bottom:1px solid var(--border)}
+  .module.alt{background:var(--surface-2)}
+  .mod-header{display:grid;grid-template-columns:80px 1fr auto;gap:40px;margin-bottom:48px;align-items:start}
+  .mod-ref{font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:0.14em;padding-top:6px}
+  .mod-title h2{font-size:clamp(24px,2.6vw,32px);font-weight:500;letter-spacing:-0.02em;color:var(--ink);margin-bottom:10px;line-height:1.15}
+  .mod-title p{color:var(--ink-2);font-size:15px;max-width:720px}
+  .mod-meta{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+  .mm-chip{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+  .mm-chip b{color:var(--ink);font-weight:600;margin-left:4px}
+
+  /* TIERS */
+  .tier-list{display:flex;flex-direction:column;gap:12px}
+  .tier{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px 26px;display:grid;grid-template-columns:48px 1fr 1.4fr 1fr 1fr;gap:24px;align-items:center;transition:all .15s}
+  .tier:hover{border-color:var(--border-strong);box-shadow:var(--shadow-sm)}
+  .tier.t1{background:linear-gradient(180deg,#0f172a 0%,#1e293b 100%);color:#fff;border-color:#0f172a}
+  .tier.t1 .tier-num{background:#fff;color:#0f172a}
+  .tier.t1 .tier-name{color:#fff}
+  .tier.t1 .tier-desc, .tier.t1 .tier-stat .lbl{color:#94a3b8}
+  .tier.t1 .tier-stat .val{color:#fff}
+  .tier.t2{background:#fafaf9;border-color:#d6d3d1}
+  .tier.t6{opacity:.78}
+  .tier-num{width:48px;height:48px;border-radius:50%;background:var(--bg-alt);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:18px;font-weight:600;color:var(--ink);letter-spacing:-0.02em}
+  .tier-info .tier-name{font-size:16px;font-weight:600;color:var(--ink);letter-spacing:-0.01em;margin-bottom:4px}
+  .tier-info .tier-desc{font-size:12.5px;color:var(--muted);font-family:var(--font-mono);letter-spacing:0.02em}
+  .tier-bar-wrap{display:flex;flex-direction:column;gap:6px}
+  .tier-bar{height:8px;background:var(--bg-alt);border-radius:4px;overflow:hidden}
+  .tier.t1 .tier-bar{background:rgba(255,255,255,0.15)}
+  .tier-bar .fill{height:100%;background:var(--ink);border-radius:4px}
+  .tier.t1 .tier-bar .fill{background:#fff}
+  .tier-bar-meta{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase}
+  .tier.t1 .tier-bar-meta{color:#94a3b8}
+  .tier-stat{display:flex;flex-direction:column;gap:4px}
+  .tier-stat .lbl{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase}
+  .tier-stat .val{font-family:var(--font-mono);font-size:16px;color:var(--ink);font-weight:500;letter-spacing:-0.01em}
+
+  /* TABLE */
+  .tbl{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .tbl table{width:100%;border-collapse:collapse;font-size:13px}
+  .tbl th, .tbl td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--border)}
+  .tbl th{background:var(--bg-alt);font-family:var(--font-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .tbl td{color:var(--ink-2)}
+  .tbl td.num{font-family:var(--font-mono);text-align:right;color:var(--ink)}
+  .tbl tr.total td{background:var(--bg-alt);font-weight:600;color:var(--ink);border-bottom:2px solid var(--border-strong)}
+  .tbl tr.hl td{background:#f4f1ee}
+  .pos{color:var(--green);font-weight:500}
+  .neg{color:var(--red);font-weight:500}
+
+  /* CARDS */
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:28px;box-shadow:var(--shadow-sm)}
+  .card h3{font-size:17px;font-weight:600;letter-spacing:-0.01em;margin-bottom:12px;color:var(--ink)}
+  .card p{color:var(--ink-2);font-size:14px;line-height:1.6}
+  .card.dark{background:#0f172a;color:#fff;border-color:#0f172a}
+  .card.dark h3{color:#fff}
+  .card.dark p{color:#cbd5e1}
+
+  /* COHORT BARS */
+  .cohort{display:grid;grid-template-columns:repeat(12,1fr);gap:8px;align-items:end;height:200px;padding:16px 0;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px 28px}
+  .cohort-col{display:flex;flex-direction:column;gap:8px;align-items:center}
+  .cohort-col .bar{width:100%;background:var(--ink);border-radius:4px 4px 0 0;min-height:2px;position:relative;transition:all .2s}
+  .cohort-col .bar:hover{background:var(--blue)}
+  .cohort-col .bar .v{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:11px;color:var(--ink);font-weight:500}
+  .cohort-col .lab{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;text-align:center;white-space:nowrap}
+  .cohort-col.peak .bar{background:var(--blue)}
+
+  /* GEO BARS */
+  .geo-list{display:flex;flex-direction:column;gap:10px}
+  .geo-row{display:grid;grid-template-columns:80px 1fr 100px 100px;gap:16px;align-items:center;padding:10px 16px;background:var(--surface);border:1px solid var(--border);border-radius:6px}
+  .geo-row.hl{background:#f4f1ee;border-color:var(--border-strong)}
+  .geo-row .uf{font-family:var(--font-mono);font-size:13px;color:var(--ink);font-weight:600;letter-spacing:0.04em}
+  .geo-row .geo-bar{height:8px;background:var(--bg-alt);border-radius:4px;overflow:hidden}
+  .geo-row .geo-bar .fill{height:100%;background:var(--ink);border-radius:4px}
+  .geo-row .num{font-family:var(--font-mono);font-size:13px;color:var(--ink-2);text-align:right}
+
+  /* INSIGHT */
+  .insight{display:grid;grid-template-columns:1fr 1fr;gap:32px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:36px;box-shadow:var(--shadow-sm)}
+  .insight h3{font-size:13px;font-family:var(--font-mono);letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+  .insight ul{list-style:none;display:flex;flex-direction:column;gap:14px}
+  .insight li{display:flex;gap:14px;font-size:14px;color:var(--ink-2);line-height:1.55}
+  .insight li b{color:var(--ink)}
+  .insight li:before{content:'';flex:0 0 6px;width:6px;height:6px;border-radius:50%;background:var(--ink);margin-top:8px}
+
+  /* RECOMMENDS */
+  .rec-row{display:grid;grid-template-columns:60px 1fr 2fr 1.4fr;gap:16px;padding:20px 24px;border-bottom:1px solid var(--border);align-items:start}
+  .rec-row:last-child{border-bottom:none}
+  .prio{display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:0.1em;padding:4px 10px;border-radius:4px}
+  .prio.p0{background:var(--red);color:#fff}
+  .prio.p1{background:var(--amber);color:#fff}
+  .prio.p2{background:var(--blue);color:#fff}
+  .rec-row .col-title{font-weight:600;font-size:14px;color:var(--ink);line-height:1.4}
+  .rec-row .col-text{font-size:13px;color:var(--ink-2);line-height:1.55}
+  .rec-row .col-resp{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.04em}
+
+  footer{padding:48px 0;color:var(--muted);font-size:12px;font-family:var(--font-mono);letter-spacing:0.04em}
+  footer .container{display:flex;justify-content:space-between}
+
+  @media (max-width: 1024px){
+    .hero-grid{grid-template-columns:1fr;gap:40px}
+    .hero-side{border-left:none;border-top:1px solid var(--border);padding:40px 0 0}
+    .kpi-grid{grid-template-columns:repeat(2,1fr)}
+    .grid-2,.grid-3{grid-template-columns:1fr}
+    .insight{grid-template-columns:1fr}
+    .tier{grid-template-columns:1fr;gap:14px}
+    .top-nav{display:none}
+    .cohort{grid-template-columns:repeat(6,1fr)}
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand">
+      <span class="sq">P</span>
+      <span>PRLS OS</span>
+      <span class="sep">/</span>
+      <span class="sub">ICP & Clientes</span>
+    </div>
+    <nav class="top-nav" aria-label="Navegação principal">
+      <div class="nav-group">
+        <span class="nav-label">Estratégia</span>
+        <div class="nav-items">
+          <a href="./index.html#macro">Mapa</a>
+          <a href="./index.html#m08">Squad</a>
+          <a href="./index.html#m09">Benchmark</a>
+          <a href="#" class="active">ICP</a>
+        </div>
+      </div>
+      <div class="nav-group nav-emphasis">
+        <span class="nav-label">Operação</span>
+        <div class="nav-items">
+          <a href="./index.html#m10">Playbook</a>
+          <a href="./index.html#m11">CRM</a>
+          <a href="./calendario.html">Calendário</a>
+          <a href="./rotina-vendas.html">Rotina</a>
+        </div>
+      </div>
+      <div class="nav-group">
+        <span class="nav-label">Suporte</span>
+        <div class="nav-items">
+          <a href="./financeiro.html">Financeiro</a>
+          <a href="./automacao.html">Automação</a>
+        </div>
+      </div>
+    </nav>
+    <div class="top-meta">v1.0 · 05/2026</div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="kicker">C00 · Identificação do ICP</div>
+        <h1>Quem é o cliente que volta — e por que ele é minoria.</h1>
+        <p class="lead">Análise de 980 clientes do canal Shopify. Seis tiers hierárquicos por valor estratégico, leitura geográfica, cohort de aquisição e perfil do ICP. A base mostra alta pulverização, baixa recorrência e dependência de Fortaleza/CE.</p>
+      </div>
+      <div class="hero-side">
+        <div class="lbl">Snapshot · 02/05/2026</div>
+        <dl>
+          <div><dt>Clientes únicos</dt><dd>980</dd></div>
+          <div><dt>Faturamento total</dt><dd>R$ 291.627</dd></div>
+          <div><dt>Pedidos totais</dt><dd>1.088</dd></div>
+          <div><dt>Ticket médio (pedido)</dt><dd>R$ 268</dd></div>
+          <div><dt>Compradores 1x</dt><dd>90,3%</dd></div>
+          <div><dt>Janela coberta</dt><dd>Mai/25 → Abr/26</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCOPE BANNER -->
+<section class="scope-banner">
+  <div class="container">
+    <div class="icon">!</div>
+    <div>
+      <h4>Escopo da análise: canal Shopify apenas.</h4>
+      <p>O arquivo recebido (<code style="font-family:var(--font-mono);font-size:12.5px">customers_purchase_summary.csv</code>) traz R$ 291k em 12 meses — bate com a linha "Site (Shopify)" da DRE. WhatsApp (58% do faturamento PRLS) e Atacado (22%) <b>não estão nesta base</b>. Para ICP de atacado e WhatsApp é preciso exportar do Bling/ERP. Os outros dois arquivos sinalizados (.tmp.driveupload/229801, 229803) já não estavam mais no disco — cache do Drive Desktop foi limpo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- KPIS -->
+<section class="kpis">
+  <div class="container">
+    <div class="kpi-grid">
+      <div class="kpi"><div class="lbl">Pareto 50/26</div><div class="val">26,5%</div><div class="sub">Da base concentra 50% do faturamento (vs 20% no Pareto clássico)</div></div>
+      <div class="kpi red"><div class="lbl">Adormecidos</div><div class="val">79,1%</div><div class="sub">Não compram há mais de 90 dias (775 clientes)</div></div>
+      <div class="kpi amber"><div class="lbl">Recorrência</div><div class="val">9,7%</div><div class="sub">Compraram 2 ou mais vezes (95 de 980 clientes)</div></div>
+      <div class="kpi"><div class="lbl">Concentração CE</div><div class="val">35,2%</div><div class="sub">Do faturamento entre quem tem UF identificada</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== TIERS =============== -->
+<section class="module" id="tiers">
+  <div class="container">
+    <div class="mod-header">
+      <div class="mod-ref">C01</div>
+      <div class="mod-title">
+        <h2>Seis tiers hierárquicos por valor estratégico.</h2>
+        <p>Combina recência, frequência e valor (RFM). Tier 1 e 2 representam o ICP — quem volta e merece esforço de retenção. Tier 6 representa a inércia — base que entrou e desapareceu.</p>
+      </div>
+      <div class="mod-meta">
+        <div class="mm-chip">Total: <b>980 clientes</b></div>
+        <div class="mm-chip">Modelo: <b>RFM</b></div>
+      </div>
+    </div>
+
+    <div class="tier-list">
+      <div class="tier t1">
+        <div class="tier-num">1</div>
+        <div class="tier-info">
+          <div class="tier-name">Defensor VIP</div>
+          <div class="tier-desc">3+ pedidos · qualquer recência</div>
+        </div>
+        <div class="tier-bar-wrap">
+          <div class="tier-bar"><div class="fill" style="width:1.3%"></div></div>
+          <div class="tier-bar-meta"><span>13 clientes</span><span>1,3% da base</span></div>
+        </div>
+        <div class="tier-stat"><span class="lbl">Faturamento</span><span class="val">R$ 10.657</span></div>
+        <div class="tier-stat"><span class="lbl">% do total</span><span class="val">3,7%</span></div>
+      </div>
+
+      <div class="tier t2">
+        <div class="tier-num">2</div>
+        <div class="tier-info">
+          <div class="tier-name">Recorrente Ativo</div>
+          <div class="tier-desc">2 pedidos · último em até 90d</div>
+        </div>
+        <div class="tier-bar-wrap">
+          <div class="tier-bar"><div class="fill" style="width:2.4%"></div></div>
+          <div class="tier-bar-meta"><span>24 clientes</span><span>2,4% da base</span></div>
+        </div>
+        <div class="tier-stat"><span class="lbl">Faturamento</span><span class="val">R$ 11.729</span></div>
+        <div class="tier-stat"><span class="lbl">% do total</span><span class="val">4,0%</span></div>
+      </div>
+
+      <div class="tier">
+        <div class="tier-num">3</div>
+        <div class="tier-info">
+          <div class="tier-name">Recorrente Adormecido</div>
+          <div class="tier-desc">2 pedidos · último há mais de 90d</div>
+        </div>
+        <div class="tier-bar-wrap">
+          <div class="tier-bar"><div class="fill" style="width:5.9%"></div></div>
+          <div class="tier-bar-meta"><span>58 clientes</span><span>5,9% da base</span></div>
+        </div>
+        <div class="tier-stat"><span class="lbl">Faturamento</span><span class="val">R$ 32.090</span></div>
+        <div class="tier-stat"><span class="lbl">% do total</span><span class="val">11,0%</span></div>
+      </div>
+
+      <div class="tier">
+        <div class="tier-num">4</div>
+        <div class="tier-info">
+          <div class="tier-name">One-time Alto Valor</div>
+          <div class="tier-desc">1 pedido · ≥ R$ 350 · &lt; 90d</div>
+        </div>
+        <div class="tier-bar-wrap">
+          <div class="tier-bar"><div class="fill" style="width:4.0%"></div></div>
+          <div class="tier-bar-meta"><span>39 clientes</span><span>4,0% da base</span></div>
+        </div>
+        <div class="tier-stat"><span class="lbl">Faturamento</span><span class="val">R$ 20.177</span></div>
+        <div class="tier-stat"><span class="lbl">% do total</span><span class="val">6,9%</span></div>
+      </div>
+
+      <div class="tier">
+        <div class="tier-num">5</div>
+        <div class="tier-info">
+          <div class="tier-name">One-time Recente</div>
+          <div class="tier-desc">1 pedido · &lt; 180 dias</div>
+        </div>
+        <div class="tier-bar-wrap">
+          <div class="tier-bar"><div class="fill" style="width:48.8%"></div></div>
+          <div class="tier-bar-meta"><span>478 clientes</span><span>48,8% da base</span></div>
+        </div>
+        <div class="tier-stat"><span class="lbl">Faturamento</span><span class="val">R$ 111.186</span></div>
+        <div class="tier-stat"><span class="lbl">% do total</span><span class="val">38,1%</span></div>
+      </div>
+
+      <div class="tier t6">
+        <div class="tier-num">6</div>
+        <div class="tier-info">
+          <div class="tier-name">Adormecido</div>
+          <div class="tier-desc">1 pedido · há mais de 180 dias</div>
+        </div>
+        <div class="tier-bar-wrap">
+          <div class="tier-bar"><div class="fill" style="width:37.6%"></div></div>
+          <div class="tier-bar-meta"><span>368 clientes</span><span>37,6% da base</span></div>
+        </div>
+        <div class="tier-stat"><span class="lbl">Faturamento</span><span class="val">R$ 105.789</span></div>
+        <div class="tier-stat"><span class="lbl">% do total</span><span class="val">36,3%</span></div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:32px">
+      <div class="card dark">
+        <h3>Núcleo do ICP — Tier 1 + 2</h3>
+        <p style="margin-bottom:14px">37 clientes. 3,8% da base. R$ 22,4k em vida. AOV R$ 254. Ticket-vida médio R$ 605. Concentrados em <b style="color:#fff">Fortaleza, São Paulo e capitais nordestinas</b>. Domínios Gmail e Hotmail. Compram 2-3 vezes em janela média de 99 dias.</p>
+        <p style="color:#94a3b8;font-size:13px">É essa a "PRLS de quem volta". Toda automação de retenção, programa fidelidade, lançamento antecipado e campanha de aniversário deveria começar por esse grupo.</p>
+      </div>
+      <div class="card">
+        <h3>Cauda — Tier 5 + 6</h3>
+        <p style="margin-bottom:14px">846 clientes. <b>86,4% da base</b>. R$ 217k em vida (74,4% do faturamento). One-time. AOV ~R$ 250. Esse grupo já comprou e não voltou.</p>
+        <p style="color:var(--muted);font-size:13px">A pergunta não é "como vender mais pra eles" — é "por que não voltaram". Tier 5 ainda tem janela quente (&lt; 180d) e merece reativação. Tier 6 é evangelismo perdido salvo prova em contrário.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== ICP PROFILE =============== -->
+<section class="module alt" id="icp">
+  <div class="container">
+    <div class="mod-header">
+      <div class="mod-ref">C02</div>
+      <div class="mod-title">
+        <h2>Perfil do ICP — quem é a "cliente que volta".</h2>
+        <p>Síntese demográfica e comportamental dos 37 clientes Tier 1+2. É contra esse perfil que toda decisão de produto, mídia e mensagem deveria ser testada.</p>
+      </div>
+      <div class="mod-meta">
+        <div class="mm-chip">N: <b>37 clientes</b></div>
+        <div class="mm-chip">% base: <b>3,8%</b></div>
+      </div>
+    </div>
+
+    <div class="insight">
+      <div>
+        <h3>Quem é</h3>
+        <ul>
+          <li><div><b>Geografia.</b> 35% Ceará (Fortaleza concentra). 13,5% São Paulo. Cluster nordestino: BA, PB, PE somam mais 13%.</div></li>
+          <li><div><b>Email.</b> 86% Gmail ou Hotmail — ainda muito Hotmail (Brasil tradicional, faixa 30-50). Quase nenhum domínio próprio.</div></li>
+          <li><div><b>Ticket.</b> AOV médio R$ 254 — 5% abaixo da média geral. Não é o cliente que gasta muito por pedido, é o que volta.</div></li>
+          <li><div><b>Cadência.</b> 2 a 3 compras em ~99 dias. Janela curta entre primeira e última.</div></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Como se comporta</h3>
+        <ul>
+          <li><div><b>Recência.</b> Tier 2 (Ativo) compra de novo em até 90 dias. Tier 1 (VIP) também — só 25% do Tier 1 está adormecido apesar de ter 3+ pedidos.</div></li>
+          <li><div><b>Concentração capital.</b> Não é interior — é Fortaleza, São Paulo, Recife, JP. Cidade grande com canal de entrega rápido.</div></li>
+          <li><div><b>Não atacadista.</b> 28 clientes (2,9%) têm domínio próprio mas com AOV idêntico à base. Nenhum sinal de revenda dentro deste canal.</div></li>
+          <li><div><b>Janela de oportunidade.</b> Ticket-vida médio R$ 605 — em apenas 2-3 pedidos. Subir frequência para 4 levaria CLV a ~R$ 1k.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== GEO =============== -->
+<section class="module" id="geografia">
+  <div class="container">
+    <div class="mod-header">
+      <div class="mod-ref">C03</div>
+      <div class="mod-title">
+        <h2>De onde compram — concentração e dependência de Fortaleza.</h2>
+        <p>Apenas 707 dos 980 clientes têm UF identificada (273 estão como "ZZ" ou vazio — endereços não validados pelo Shopify). Os números abaixo são entre os 707 com geografia confiável.</p>
+      </div>
+      <div class="mod-meta">
+        <div class="mm-chip">Base com UF: <b>707</b></div>
+        <div class="mm-chip">Sem UF: <b>27,9%</b></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <h3 style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px">Top estados por faturamento</h3>
+        <div class="geo-list">
+          <div class="geo-row hl"><span class="uf">CE</span><div class="geo-bar"><div class="fill" style="width:100%"></div></div><span class="num">276 cli.</span><span class="num">R$ 74.505</span></div>
+          <div class="geo-row"><span class="uf">SP</span><div class="geo-bar"><div class="fill" style="width:56%"></div></div><span class="num">127 cli.</span><span class="num">R$ 41.728</span></div>
+          <div class="geo-row"><span class="uf">RJ</span><div class="geo-bar"><div class="fill" style="width:17%"></div></div><span class="num">39 cli.</span><span class="num">R$ 12.363</span></div>
+          <div class="geo-row"><span class="uf">MG</span><div class="geo-bar"><div class="fill" style="width:13%"></div></div><span class="num">32 cli.</span><span class="num">R$ 9.896</span></div>
+          <div class="geo-row"><span class="uf">PE</span><div class="geo-bar"><div class="fill" style="width:13%"></div></div><span class="num">23 cli.</span><span class="num">R$ 9.326</span></div>
+          <div class="geo-row"><span class="uf">PB</span><div class="geo-bar"><div class="fill" style="width:12%"></div></div><span class="num">25 cli.</span><span class="num">R$ 8.992</span></div>
+          <div class="geo-row"><span class="uf">GO</span><div class="geo-bar"><div class="fill" style="width:10%"></div></div><span class="num">22 cli.</span><span class="num">R$ 7.710</span></div>
+          <div class="geo-row"><span class="uf">RN</span><div class="geo-bar"><div class="fill" style="width:10%"></div></div><span class="num">26 cli.</span><span class="num">R$ 7.543</span></div>
+          <div class="geo-row"><span class="uf">BA</span><div class="geo-bar"><div class="fill" style="width:10%"></div></div><span class="num">17 cli.</span><span class="num">R$ 7.521</span></div>
+          <div class="geo-row"><span class="uf">SC</span><div class="geo-bar"><div class="fill" style="width:9%"></div></div><span class="num">24 cli.</span><span class="num">R$ 6.693</span></div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px">Top cidades</h3>
+        <div class="tbl">
+          <table>
+            <thead><tr><th>Cidade</th><th style="text-align:right">Clientes</th><th style="text-align:right">% base</th><th style="text-align:right">Faturamento</th></tr></thead>
+            <tbody>
+              <tr class="hl"><td>Fortaleza · CE</td><td class="num">237</td><td class="num">24,2%</td><td class="num">R$ 62.968</td></tr>
+              <tr><td><i style="color:var(--muted)">ZZ (sem cidade válida)</i></td><td class="num">228</td><td class="num">23,3%</td><td class="num">R$ 65.450</td></tr>
+              <tr><td>São Paulo · SP</td><td class="num">57</td><td class="num">5,8%</td><td class="num">R$ 21.269</td></tr>
+              <tr><td>Rio de Janeiro · RJ</td><td class="num">30</td><td class="num">3,1%</td><td class="num">R$ 9.578</td></tr>
+              <tr><td>João Pessoa · PB</td><td class="num">20</td><td class="num">2,0%</td><td class="num">R$ 7.470</td></tr>
+              <tr><td>Recife · PE</td><td class="num">18</td><td class="num">1,8%</td><td class="num">R$ 6.602</td></tr>
+              <tr><td>Goiânia · GO</td><td class="num">16</td><td class="num">1,6%</td><td class="num">R$ 5.365</td></tr>
+              <tr><td>Belo Horizonte · MG</td><td class="num">14</td><td class="num">1,4%</td><td class="num">R$ 4.755</td></tr>
+              <tr><td>Brasília · DF</td><td class="num">14</td><td class="num">1,4%</td><td class="num">R$ 4.242</td></tr>
+              <tr><td>Natal · RN</td><td class="num">12</td><td class="num">1,2%</td><td class="num">R$ 3.249</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-top:18px;line-height:1.55">23% da base com cidade "ZZ" indica problema de coleta no checkout do Shopify — endereço não está sendo validado/preenchido. <b style="color:var(--ink)">Ação: validar campo de cidade obrigatório no checkout</b> para conseguir analisar geografia com confiança.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== COHORT =============== -->
+<section class="module alt" id="cohort">
+  <div class="container">
+    <div class="mod-header">
+      <div class="mod-ref">C04</div>
+      <div class="mod-title">
+        <h2>Aquisição por mês — pico em Nov/25, queda forte em 2026.</h2>
+        <p>Novos clientes por mês de primeira compra. O pico de Nov/25 (243 clientes) sugere Black Friday. A queda em Jan/26 e o patamar em ~50-80/mês desde então é o problema central da rotina.</p>
+      </div>
+      <div class="mod-meta">
+        <div class="mm-chip">12 meses</div>
+        <div class="mm-chip">Pico: <b>243 (Nov/25)</b></div>
+      </div>
+    </div>
+
+    <div class="cohort">
+      <div class="cohort-col"><div class="bar" style="height:7%"><span class="v">17</span></div><div class="lab">Jun/25</div></div>
+      <div class="cohort-col"><div class="bar" style="height:44%"><span class="v">107</span></div><div class="lab">Jul/25</div></div>
+      <div class="cohort-col"><div class="bar" style="height:42%"><span class="v">101</span></div><div class="lab">Ago/25</div></div>
+      <div class="cohort-col"><div class="bar" style="height:46%"><span class="v">113</span></div><div class="lab">Set/25</div></div>
+      <div class="cohort-col"><div class="bar" style="height:36%"><span class="v">87</span></div><div class="lab">Out/25</div></div>
+      <div class="cohort-col peak"><div class="bar" style="height:100%"><span class="v">243</span></div><div class="lab">Nov/25</div></div>
+      <div class="cohort-col"><div class="bar" style="height:39%"><span class="v">94</span></div><div class="lab">Dez/25</div></div>
+      <div class="cohort-col"><div class="bar" style="height:11%"><span class="v">26</span></div><div class="lab">Jan/26</div></div>
+      <div class="cohort-col"><div class="bar" style="height:33%"><span class="v">79</span></div><div class="lab">Fev/26</div></div>
+      <div class="cohort-col"><div class="bar" style="height:23%"><span class="v">56</span></div><div class="lab">Mar/26</div></div>
+      <div class="cohort-col"><div class="bar" style="height:23%"><span class="v">56</span></div><div class="lab">Abr/26</div></div>
+      <div class="cohort-col"><div class="bar" style="height:0%;background:var(--muted-2)"><span class="v" style="color:var(--muted)">—</span></div><div class="lab">Mai/26</div></div>
+    </div>
+
+    <div class="grid-3" style="margin-top:32px">
+      <div class="card"><h3>Picos vs base</h3><p>Nov/25 absorveu <b>24,8% de toda a base de clientes</b> em um único mês. Sem campanha equivalente em Nov/26, a aquisição não se mantém.</p></div>
+      <div class="card"><h3>Queda Jan/26</h3><p>Apenas 26 novos clientes em Jan/26 — <b>89% abaixo</b> do pico e o pior mês desde Jun/25. Pós-feriado sem campanha de janeiro deixa o canal sem combustível.</p></div>
+      <div class="card"><h3>Patamar 2026</h3><p>Fev a Abr/26 média <b>64 novos/mês</b>, contra 102 do segundo semestre 25. O canal Shopify está captando ~37% menos novos clientes mensalmente.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== RECOMENDAÇÕES =============== -->
+<section class="module" id="acoes">
+  <div class="container">
+    <div class="mod-header">
+      <div class="mod-ref">C05</div>
+      <div class="mod-title">
+        <h2>O que fazer com isso — prioridades.</h2>
+        <p>Recomendações ordenadas por prioridade. P0 destrava a próxima análise, P1 ataca o problema de retenção, P2 amplia base e captura ICP.</p>
+      </div>
+      <div class="mod-meta">
+        <div class="mm-chip">5 ações</div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px">
+      <div class="rec-row">
+        <span class="prio p0">P0</span>
+        <div class="col-title">Exportar atacado e WhatsApp do Bling</div>
+        <div class="col-text">Esta análise cobre 25% do faturamento da PRLS (canal Site). 75% restante (WhatsApp 58%, Atacado 22%) está cego. Sem isso, não dá pra falar de ICP da empresa — só de ICP do Shopify.</div>
+        <div class="col-resp">Júlio + Miner · 1 semana</div>
+      </div>
+      <div class="rec-row">
+        <span class="prio p0">P0</span>
+        <div class="col-title">Validar campo de cidade no checkout Shopify</div>
+        <div class="col-text">28% da base sem cidade válida ("ZZ" ou vazio). Geografia fica subdimensionada. Tornar campo obrigatório com máscara de validação destrava análise regional e logística.</div>
+        <div class="col-resp">Tech · 2 dias</div>
+      </div>
+      <div class="rec-row">
+        <span class="prio p1">P1</span>
+        <div class="col-title">Reativação dos 478 Tier 5 (one-time recente)</div>
+        <div class="col-text">Sequência de 3 e-mails / WhatsApp com cupom progressivo (5% → 10% → frete grátis) em janela de 60 dias. Meta: levar 8% (38 clientes) para Tier 2/3 — adicionaria ~R$ 9k em receita recorrente/trimestre.</div>
+        <div class="col-resp">M1 · 3 semanas</div>
+      </div>
+      <div class="rec-row">
+        <span class="prio p1">P1</span>
+        <div class="col-title">Programa de fidelidade para Tier 1+2</div>
+        <div class="col-text">37 clientes que voltam merecem benefício explícito: lançamento antecipado, cupom de aniversário, frete grátis sem mínimo. Custo baixo, defesa de margem alta. Expansão de CLV de R$ 605 para meta R$ 1.000.</div>
+        <div class="col-resp">Marketing · 4 semanas</div>
+      </div>
+      <div class="rec-row">
+        <span class="prio p2">P2</span>
+        <div class="col-title">Mídia geo-segmentada — Fortaleza, SP, capitais NE</div>
+        <div class="col-text">81% do faturamento (com UF) vem de 6 estados. Reduzir mídia paga em UFs com &lt;3 clientes/mês e concentrar em CE-SP-NE. Acompanhar em /financeiro.</div>
+        <div class="col-resp">Mídia · contínuo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <span>PRLS OS · ICP & Clientes · Análise sobre canal Shopify · Maio/2026</span>
+    <span>Próximo passo: integrar atacado + WhatsApp</span>
+  </div>
+</footer>
+
+</body>
+</html>
