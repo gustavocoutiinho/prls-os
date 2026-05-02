@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="%2318181b"/><text x="12" y="17" font-family="JetBrains Mono,monospace" font-size="14" font-weight="700" fill="white" text-anchor="middle">P</text></svg>'>
 <style>
   :root{
     --bg:#fafaf9;--bg-alt:#f5f5f4;--surface:#ffffff;--surface-2:#f9f9f8;
@@ -145,10 +146,38 @@
     .closing .next{grid-template-columns:1fr}
     .top-nav{display:none}
   }
+  /* === GLOBAL ENHANCEMENTS === */
+  .scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--ink) 0%,var(--ink) 100%);width:0%;z-index:100;transition:width .08s linear}
+  .scroll-top{position:fixed;bottom:24px;right:24px;width:42px;height:42px;border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:all .2s;z-index:60;box-shadow:0 4px 14px rgba(15,15,15,0.18)}
+  .scroll-top.visible{opacity:1;pointer-events:auto}
+  .scroll-top:hover{background:var(--ink-soft);transform:translateY(-2px)}
+  .skip-link{position:absolute;top:-40px;left:0;padding:10px 18px;background:var(--ink);color:#fff;z-index:200;border-radius:0 0 8px 0;font-size:13px;font-weight:500;transition:top .15s}
+  .skip-link:focus{top:0;outline:none}
+  .topbar.scrolled{box-shadow:0 1px 12px rgba(15,15,15,0.06)}
+  *:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px}
+
+  /* TOC lateral */
+  .toc-side{position:fixed;left:24px;top:50%;transform:translateY(-50%);z-index:40;display:none}
+  @media (min-width:1500px){.toc-side{display:flex}}
+  .toc-side ol{list-style:none;display:flex;flex-direction:column;gap:14px;padding:0}
+  .toc-side a{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;transition:all .15s;padding:4px 8px;border-radius:4px}
+  .toc-side a::before{content:'';width:18px;height:1px;background:currentColor;opacity:.4;transition:all .15s}
+  .toc-side a:hover{color:var(--ink)}
+  .toc-side a:hover::before{width:24px;opacity:1}
+  .toc-side a.active{color:var(--ink);font-weight:600}
+  .toc-side a.active::before{width:28px;opacity:1;height:2px}
+
+  @media print{
+    .topbar,.scroll-progress,.scroll-top,.skip-link,.toc-side,.scope-banner,footer{display:none !important}
+    body{background:#fff;color:#000;font-size:11pt}
+    section{page-break-inside:avoid;padding:24px 0 !important;border:none !important}
+    .container{max-width:100% !important;padding:0 !important}
+  }
 </style>
 </head>
 <body>
-
+<a href="#main" class="skip-link">Pular para conteúdo</a>
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 <!-- TOPBAR -->
 <header class="topbar">
   <div class="topbar-inner">
@@ -187,7 +216,7 @@
 </header>
 
 <!-- HERO -->
-<section class="hero">
+<section id="main" class="hero">
   <div class="container">
     <div class="kicker">M00 · Verdade fundadora</div>
     <h1>A base narrativa antes de qualquer execução.</h1>
@@ -225,6 +254,38 @@
     <span class="leg-pill"><span class="dot hyp"></span><b>Hipótese</b> · leitura provisória pra debate</span>
     <span class="leg-pill"><span class="dot team"></span><b>Resposta do time</b> · espaço pra preencher</span>
     <span class="leg-pill" style="background:#fef2f2;border-color:#fecaca"><span class="dot" style="background:var(--red)"></span><b style="color:var(--red)">Não sei</b> · só fundador/time pode responder</span>
+  </div>
+</section>
+
+<!-- PROGRESS DA SESSÃO -->
+<section style="padding:48px 0;background:var(--bg-alt);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:18px">
+      <h3 style="font-size:16px;font-weight:600;letter-spacing:-0.01em">Estado das 10 perguntas</h3>
+      <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.06em">Progresso pré-sessão</span>
+    </div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:20px 24px;display:grid;grid-template-columns:repeat(10,1fr);gap:6px">
+      <!-- Bloco 1: 2 perguntas -->
+      <div style="grid-column:span 1" title="P1 · sem dados, fundador responde"><div style="height:8px;background:var(--red);border-radius:2px"></div><div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);text-align:center;margin-top:6px">P1</div></div>
+      <div style="grid-column:span 1" title="P2 · dados parciais"><div style="height:8px;background:var(--amber);border-radius:2px"></div><div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);text-align:center;margin-top:6px">P2</div></div>
+      <!-- Bloco 2: 3 perguntas -->
+      <div style="grid-column:span 1" title="P3 · dados ricos + hipótese"><div style="height:8px;background:var(--blue);border-radius:2px"></div><div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);text-align:center;margin-top:6px">P3</div></div>
+      <div style="grid-column:span 1" title="P4 · sem dado, exige pesquisa"><div style="height:8px;background:var(--red);border-radius:2px"></div><div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);text-align:center;margin-top:6px">P4</div></div>
+      <div style="grid-column:span 1" title="P5 · dados parciais"><div style="height:8px;background:var(--amber);border-radius:2px"></div><div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);text-align:center;margin-top:6px">P5</div></div>
+      <!-- Bloco 3: 3 perguntas -->
+      <div style="grid-column:span 1" title="P6 · dados parciais + hipótese"><div style="height:8px;background:var(--amber);border-radius:2px"></div><div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);text-align:center;margin-top:6px">P6</div></div>
+      <div style="grid-column:span 1" title="P7 · dados parciais"><div style="height:8px;background:var(--amber);border-radius:2px"></div><div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);text-align:center;margin-top:6px">P7</div></div>
+      <div style="grid-column:span 1" title="P8 · só hipótese"><div style="height:8px;background:var(--amber);border-radius:2px"></div><div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);text-align:center;margin-top:6px">P8</div></div>
+      <!-- Bloco 4: 2 perguntas -->
+      <div style="grid-column:span 1" title="P9 · dados parciais"><div style="height:8px;background:var(--amber);border-radius:2px"></div><div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);text-align:center;margin-top:6px">P9</div></div>
+      <div style="grid-column:span 1" title="P10 · sem dado direto"><div style="height:8px;background:var(--red);border-radius:2px"></div><div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);text-align:center;margin-top:6px">P10</div></div>
+    </div>
+    <div style="display:flex;gap:18px;margin-top:14px;font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.06em">
+      <span><i style="display:inline-block;width:12px;height:8px;background:var(--blue);border-radius:2px;margin-right:6px;vertical-align:middle"></i><b style="color:var(--ink)">1</b> com dados ricos</span>
+      <span><i style="display:inline-block;width:12px;height:8px;background:var(--amber);border-radius:2px;margin-right:6px;vertical-align:middle"></i><b style="color:var(--ink)">6</b> com dados parciais</span>
+      <span><i style="display:inline-block;width:12px;height:8px;background:var(--red);border-radius:2px;margin-right:6px;vertical-align:middle"></i><b style="color:var(--ink)">3</b> exigem fundador/pesquisa</span>
+      <span style="margin-left:auto"><b style="color:var(--ink)">7/10</b> têm input quantitativo · <b style="color:var(--ink)">10/10</b> exigem input do time</span>
+    </div>
   </div>
 </section>
 
@@ -486,12 +547,76 @@
   </div>
 </section>
 
-<footer>
-  <div class="container">
-    <span>PRLS OS · Sessão Estratégica de Marca · v1.0 · Maio/2026</span>
-    <span>Documento de trabalho — não publicar sem fechar respostas</span>
+<footer style="padding:56px 0 32px;border-top:1px solid var(--border);background:var(--bg)">
+  <div class="container" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:32px">
+    <div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <span style="width:18px;height:18px;background:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;font-family:var(--font-mono)">P</span>
+        <span style="font-weight:600;letter-spacing:-0.01em">PRLS OS</span>
+      </div>
+      <p style="font-size:13px;color:var(--ink-2);max-width:380px;line-height:1.55">Sistema operacional da PRLS · documentação viva da operação, marca, comercial e finanças. Atualizado conforme decisões reais.</p>
+    </div>
+    <div>
+      <h5 style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Marketing</h5>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px">
+        <li><a href="./marca.html" style="color:var(--ink-2)">Marca</a></li>
+        <li><a href="./clientes.html" style="color:var(--ink-2)">ICP</a></li>
+        <li><a href="./calendario.html" style="color:var(--ink-2)">Calendário</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5 style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Vendas</h5>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px">
+        <li><a href="./rotina-vendas.html" style="color:var(--ink-2)">Rotina</a></li>
+        <li><a href="./automacao.html" style="color:var(--ink-2)">Automação</a></li>
+        <li><a href="./index.html#m11" style="color:var(--ink-2)">CRM</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5 style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Suporte</h5>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px">
+        <li><a href="./financeiro.html" style="color:var(--ink-2)">Financeiro</a></li>
+        <li><a href="./index.html#macro" style="color:var(--ink-2)">Mapa</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container" style="display:flex;justify-content:space-between;padding-top:24px;border-top:1px solid var(--border);font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.04em">
+    <span>PRLS OS · v1.2 · maio/2026</span>
+    <span>Última atualização: 02/05/2026</span>
   </div>
 </footer>
 
+<button class="scroll-top" id="scrollTopBtn" aria-label="Voltar ao topo" title="Voltar ao topo">
+  <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V3M3 8l5-5 5 5"/></svg>
+</button>
+<script>
+(function(){
+  var prog=document.getElementById('scrollProgress');
+  var btn=document.getElementById('scrollTopBtn');
+  var topbar=document.querySelector('.topbar');
+  function onScroll(){
+    var d=document.documentElement;
+    var pct=(window.scrollY/(d.scrollHeight-d.clientHeight))*100;
+    if(prog) prog.style.width=Math.min(100,Math.max(0,pct))+'%';
+    if(btn) btn.classList.toggle('visible',window.scrollY>500);
+    if(topbar) topbar.classList.toggle('scrolled',window.scrollY>10);
+    // Scroll-spy TOC
+    var links=document.querySelectorAll('.toc-side a');
+    if(links.length){
+      var current=null;
+      links.forEach(function(l){
+        var id=l.getAttribute('href').replace('#','');
+        var el=document.getElementById(id);
+        if(el && el.getBoundingClientRect().top<=120) current=l;
+      });
+      links.forEach(function(l){l.classList.remove('active')});
+      if(current) current.classList.add('active');
+    }
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  if(btn) btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+  onScroll();
+})();
+</script>
 </body>
 </html>

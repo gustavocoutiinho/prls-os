@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="%2318181b"/><text x="12" y="17" font-family="JetBrains Mono,monospace" font-size="14" font-weight="700" fill="white" text-anchor="middle">P</text></svg>'>
 <style>
   :root{
     --bg:#fafaf9;--bg-alt:#f5f5f4;--surface:#ffffff;--surface-2:#f9f9f8;
@@ -227,6 +228,72 @@
   footer{padding:48px 0;color:var(--muted);font-size:12px;font-family:var(--font-mono);letter-spacing:0.04em}
   footer .container{display:flex;justify-content:space-between}
 
+  /* === CHARTS & VIZ === */
+  .pareto-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;box-shadow:var(--shadow-sm)}
+  .pareto-svg{width:100%;height:240px}
+  .pareto-svg .axis{stroke:var(--border);stroke-width:1}
+  .pareto-svg .grid{stroke:var(--border);stroke-width:1;stroke-dasharray:2 4;opacity:.5}
+  .pareto-svg .ref{stroke:var(--muted-2);stroke-width:1;stroke-dasharray:3 3}
+  .pareto-svg .area{fill:var(--ink);opacity:.08}
+  .pareto-svg .curve{fill:none;stroke:var(--ink);stroke-width:2.5}
+  .pareto-svg .ideal{fill:none;stroke:var(--muted-2);stroke-width:1.5;stroke-dasharray:4 4}
+  .pareto-svg .pt{fill:var(--ink);stroke:#fff;stroke-width:2}
+  .pareto-svg text{font-family:var(--font-mono);font-size:10px;fill:var(--muted);letter-spacing:0.04em}
+  .pareto-svg text.lab{fill:var(--ink);font-weight:600;font-size:11px}
+
+  /* HEAT cells */
+  .heat-cell{padding:10px 14px;border-radius:6px;font-family:var(--font-mono);font-size:13px;font-weight:600;text-align:center;color:var(--ink)}
+  .heat-cell.h0{background:#fef2f2;color:var(--red)}
+  .heat-cell.h1{background:#fef3c7;color:var(--amber)}
+  .heat-cell.h2{background:#ecfccb;color:#65a30d}
+  .heat-cell.h3{background:#dcfce7;color:var(--green)}
+  .heat-cell.h4{background:#15803d;color:#fff}
+
+  /* Mini bar inline */
+  .mini-bar{display:inline-block;height:6px;background:var(--bg-alt);border-radius:3px;overflow:hidden;vertical-align:middle;margin:0 6px}
+  .mini-bar .fl{height:100%;background:var(--ink);border-radius:3px}
+
+  /* TL;DR card */
+  .tldr{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;border-radius:10px;padding:20px 24px;display:flex;gap:18px;align-items:center;margin-bottom:32px;box-shadow:var(--shadow-md)}
+  .tldr .tldr-tag{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;background:rgba(255,255,255,0.12);color:#fff;padding:4px 10px;border-radius:4px;flex:0 0 auto}
+  .tldr p{color:#e2e8f0;font-size:14px;margin:0;line-height:1.5}
+  .tldr p b{color:#fff}
+
+  /* Persona Card */
+  .persona{background:linear-gradient(135deg,#fafaf9,#fff);border:1px solid var(--border);border-radius:14px;padding:36px;display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;box-shadow:var(--shadow-sm)}
+  .persona-avatar{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#0f172a,#3f3f46);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-mono);font-size:36px;font-weight:700;letter-spacing:-0.02em;box-shadow:0 4px 16px rgba(15,15,15,0.12)}
+  .persona-tag{display:inline-block;padding:4px 10px;background:var(--ink);color:#fff;border-radius:4px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:14px}
+  .persona-name{font-size:24px;font-weight:600;letter-spacing:-0.02em;margin-bottom:18px}
+  .persona-attrs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .persona-attr{padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
+  .persona-attr .lab{font-family:var(--font-mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+  .persona-attr .val{font-size:14px;font-weight:600;color:var(--ink)}
+
+  /* Recência bar chart */
+  .rec-chart{display:flex;flex-direction:column;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px}
+  .rec-row{display:grid;grid-template-columns:80px 1fr 80px 60px;gap:14px;align-items:center;font-size:13px}
+  .rec-row .lbl{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.04em}
+  .rec-row .bar{height:22px;background:var(--bg-alt);border-radius:4px;overflow:hidden;position:relative}
+  .rec-row .bar .fl{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;color:#fff;font-size:11px;font-family:var(--font-mono);font-weight:600}
+  .rec-row.hot .bar .fl{background:var(--green)}
+  .rec-row.warm .bar .fl{background:#65a30d}
+  .rec-row.cool .bar .fl{background:var(--amber)}
+  .rec-row.cold .bar .fl{background:var(--red)}
+  .rec-row .num{font-family:var(--font-mono);font-size:13px;color:var(--ink);font-weight:500;text-align:right}
+  .rec-row .pct{font-family:var(--font-mono);font-size:11px;color:var(--muted);text-align:right}
+
+  /* Mini-mapa Brasil */
+  .br-map{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}
+  .br-svg{width:280px;height:280px}
+  .br-svg path{fill:var(--bg-alt);stroke:var(--border);stroke-width:0.5;transition:fill .15s}
+  .br-svg path[data-w="5"]{fill:#0f172a}
+  .br-svg path[data-w="4"]{fill:#334155}
+  .br-svg path[data-w="3"]{fill:#64748b}
+  .br-svg path[data-w="2"]{fill:#a8a29e}
+  .br-svg path[data-w="1"]{fill:#d6d3d1}
+  .br-legend{display:flex;flex-direction:column;gap:6px;font-family:var(--font-mono);font-size:11px;color:var(--muted)}
+  .br-legend i{display:inline-block;width:14px;height:10px;border-radius:2px;margin-right:8px;vertical-align:middle}
+
   @media (max-width: 1024px){
     .hero-grid{grid-template-columns:1fr;gap:40px}
     .hero-side{border-left:none;border-top:1px solid var(--border);padding:40px 0 0}
@@ -236,11 +303,42 @@
     .tier{grid-template-columns:1fr;gap:14px}
     .top-nav{display:none}
     .cohort{grid-template-columns:repeat(6,1fr)}
+    .persona{grid-template-columns:1fr;text-align:center}
+    .persona-attrs{grid-template-columns:repeat(2,1fr)}
+    .br-map{grid-template-columns:1fr}
+  }
+  /* === GLOBAL ENHANCEMENTS === */
+  .scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--ink) 0%,var(--ink) 100%);width:0%;z-index:100;transition:width .08s linear}
+  .scroll-top{position:fixed;bottom:24px;right:24px;width:42px;height:42px;border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:all .2s;z-index:60;box-shadow:0 4px 14px rgba(15,15,15,0.18)}
+  .scroll-top.visible{opacity:1;pointer-events:auto}
+  .scroll-top:hover{background:var(--ink-soft);transform:translateY(-2px)}
+  .skip-link{position:absolute;top:-40px;left:0;padding:10px 18px;background:var(--ink);color:#fff;z-index:200;border-radius:0 0 8px 0;font-size:13px;font-weight:500;transition:top .15s}
+  .skip-link:focus{top:0;outline:none}
+  .topbar.scrolled{box-shadow:0 1px 12px rgba(15,15,15,0.06)}
+  *:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px}
+
+  /* TOC lateral */
+  .toc-side{position:fixed;left:24px;top:50%;transform:translateY(-50%);z-index:40;display:none}
+  @media (min-width:1500px){.toc-side{display:flex}}
+  .toc-side ol{list-style:none;display:flex;flex-direction:column;gap:14px;padding:0}
+  .toc-side a{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;transition:all .15s;padding:4px 8px;border-radius:4px}
+  .toc-side a::before{content:'';width:18px;height:1px;background:currentColor;opacity:.4;transition:all .15s}
+  .toc-side a:hover{color:var(--ink)}
+  .toc-side a:hover::before{width:24px;opacity:1}
+  .toc-side a.active{color:var(--ink);font-weight:600}
+  .toc-side a.active::before{width:28px;opacity:1;height:2px}
+
+  @media print{
+    .topbar,.scroll-progress,.scroll-top,.skip-link,.toc-side,.scope-banner,footer{display:none !important}
+    body{background:#fff;color:#000;font-size:11pt}
+    section{page-break-inside:avoid;padding:24px 0 !important;border:none !important}
+    .container{max-width:100% !important;padding:0 !important}
   }
 </style>
 </head>
 <body>
-
+<a href="#main" class="skip-link">Pular para conteúdo</a>
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 <!-- TOPBAR -->
 <header class="topbar">
   <div class="container topbar-inner">
@@ -279,7 +377,7 @@
 </header>
 
 <!-- HERO -->
-<section class="hero">
+<section id="main" class="hero">
   <div class="container">
     <div class="hero-grid">
       <div>
@@ -317,10 +415,45 @@
 <section class="kpis">
   <div class="container">
     <div class="kpi-grid">
-      <div class="kpi"><div class="lbl">Pareto 50/26</div><div class="val">26,5%</div><div class="sub">Da base concentra 50% do faturamento (vs 20% no Pareto clássico)</div></div>
-      <div class="kpi red"><div class="lbl">Adormecidos</div><div class="val">79,1%</div><div class="sub">Não compram há mais de 90 dias (775 clientes)</div></div>
-      <div class="kpi amber"><div class="lbl">Recorrência</div><div class="val">9,7%</div><div class="sub">Compraram 2 ou mais vezes (95 de 980 clientes)</div></div>
-      <div class="kpi"><div class="lbl">Concentração CE</div><div class="val">35,2%</div><div class="sub">Do faturamento entre quem tem UF identificada</div></div>
+      <div class="kpi">
+        <div class="lbl">Pareto 50/26</div>
+        <div class="val">26,5%</div>
+        <div class="mini-bar" style="width:80%;margin:8px 0"><div class="fl" style="width:26.5%"></div></div>
+        <div class="sub">Concentra 50% do fat (vs 20% no Pareto clássico)</div>
+      </div>
+      <div class="kpi red">
+        <div class="lbl">Adormecidos</div>
+        <div class="val">79,1%</div>
+        <div class="mini-bar" style="width:80%;margin:8px 0"><div class="fl" style="width:79.1%;background:var(--red)"></div></div>
+        <div class="sub">775 clientes &gt; 90d sem comprar</div>
+      </div>
+      <div class="kpi amber">
+        <div class="lbl">Recorrência</div>
+        <div class="val">9,7%</div>
+        <div class="mini-bar" style="width:80%;margin:8px 0"><div class="fl" style="width:9.7%;background:var(--amber)"></div></div>
+        <div class="sub">95 de 980 com 2+ pedidos</div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">Concentração CE</div>
+        <div class="val">35,2%</div>
+        <div class="mini-bar" style="width:80%;margin:8px 0"><div class="fl" style="width:35.2%"></div></div>
+        <div class="sub">Do fat entre quem tem UF</div>
+      </div>
+    </div>
+
+    <!-- Recência bar chart -->
+    <div style="margin-top:32px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px">
+        <h3 style="font-size:15px;font-weight:600;letter-spacing:-0.01em">Recência · dias desde último pedido</h3>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.06em">980 CLIENTES</span>
+      </div>
+      <div class="rec-chart">
+        <div class="rec-row hot"><span class="lbl">0–30d</span><div class="bar"><div class="fl" style="width:14.5%">5,8%</div></div><span class="num">57 cli</span><span class="pct">quente</span></div>
+        <div class="rec-row hot"><span class="lbl">31–60d</span><div class="bar"><div class="fl" style="width:16%">6,4%</div></div><span class="num">63 cli</span><span class="pct">quente</span></div>
+        <div class="rec-row warm"><span class="lbl">61–90d</span><div class="bar"><div class="fl" style="width:21.7%">8,7%</div></div><span class="num">85 cli</span><span class="pct">morno</span></div>
+        <div class="rec-row cool"><span class="lbl">91–180d</span><div class="bar"><div class="fl" style="width:97.2%">38,9%</div></div><span class="num">381 cli</span><span class="pct">esfriou</span></div>
+        <div class="rec-row cold"><span class="lbl">181–365d</span><div class="bar"><div class="fl" style="width:100%">40,2%</div></div><span class="num">394 cli</span><span class="pct">frio</span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -368,8 +501,77 @@
   </div>
 </section>
 
+<!-- =============== PARETO + TL;DR =============== -->
+<section class="module" id="pareto" style="padding-top:56px;padding-bottom:56px">
+  <div class="container">
+    <div class="tldr">
+      <span class="tldr-tag">TL;DR</span>
+      <p><b>50% do faturamento</b> vem de <b>26,5% da base</b>. Pareto fora do clássico 80/20 — base muito pulverizada. <b>3,8% da base é ICP</b> (Tier 1+2). 86% comprou uma vez e não voltou.</p>
+    </div>
+    <div class="grid-2" style="gap:32px;align-items:stretch">
+      <div class="pareto-wrap">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px">
+          <h3 style="font-size:15px;font-weight:600;letter-spacing:-0.01em">Curva de Pareto · concentração de faturamento</h3>
+          <span style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.06em">% CLI → % FAT</span>
+        </div>
+        <svg class="pareto-svg" viewBox="0 0 480 220" preserveAspectRatio="none" aria-label="Curva de Pareto">
+          <!-- Grid -->
+          <line class="grid" x1="40" y1="40" x2="460" y2="40"/>
+          <line class="grid" x1="40" y1="100" x2="460" y2="100"/>
+          <line class="grid" x1="40" y1="160" x2="460" y2="160"/>
+          <!-- Axis -->
+          <line class="axis" x1="40" y1="200" x2="460" y2="200"/>
+          <line class="axis" x1="40" y1="20" x2="40" y2="200"/>
+          <!-- Ideal (diagonal) -->
+          <line class="ideal" x1="40" y1="200" x2="460" y2="20"/>
+          <!-- Curva PRLS (dados reais: top 10=4.1%, 50=15.6%, 100=25.8%, 260=50%, 571=80%, 980=100%) -->
+          <path class="area" d="M 40,200 L 44,193 L 62,167 L 84,135 L 151,100 L 285,40 L 460,20 L 460,200 Z"/>
+          <path class="curve" d="M 40,200 L 44,193 L 62,167 L 84,135 L 151,100 L 285,40 L 460,20"/>
+          <!-- Pontos -->
+          <circle class="pt" cx="44" cy="193" r="3"/>
+          <circle class="pt" cx="62" cy="167" r="3"/>
+          <circle class="pt" cx="84" cy="135" r="3"/>
+          <circle class="pt" cx="151" cy="100" r="4"/>
+          <circle class="pt" cx="285" cy="40" r="4"/>
+          <!-- Labels eixo X -->
+          <text x="40" y="215">0%</text>
+          <text x="151" y="215" text-anchor="middle">26%</text>
+          <text x="285" y="215" text-anchor="middle">58%</text>
+          <text x="460" y="215" text-anchor="end">100% cli</text>
+          <!-- Labels eixo Y -->
+          <text x="34" y="204" text-anchor="end">0</text>
+          <text x="34" y="104" text-anchor="end">50%</text>
+          <text x="34" y="44" text-anchor="end">80%</text>
+          <text x="34" y="24" text-anchor="end">fat</text>
+          <!-- Anotações -->
+          <text class="lab" x="155" y="92" text-anchor="middle">26% → 50%</text>
+          <text class="lab" x="289" y="32" text-anchor="middle">58% → 80%</text>
+        </svg>
+        <div style="display:flex;gap:18px;margin-top:14px;font-family:var(--font-mono);font-size:11px;color:var(--muted)">
+          <span><i style="display:inline-block;width:18px;height:2px;background:var(--ink);vertical-align:middle;margin-right:6px"></i>PRLS</span>
+          <span><i style="display:inline-block;width:18px;height:1.5px;background:var(--muted-2);vertical-align:middle;margin-right:6px;border-top:1.5px dashed"></i>Pareto ideal 80/20</span>
+        </div>
+      </div>
+
+      <div class="persona">
+        <div class="persona-avatar">M</div>
+        <div>
+          <span class="persona-tag">ICP da PRLS</span>
+          <h3 class="persona-name">Mulher · 35–55 · capital nordestina</h3>
+          <div class="persona-attrs">
+            <div class="persona-attr"><div class="lab">Email</div><div class="val">Hotmail</div></div>
+            <div class="persona-attr"><div class="lab">AOV</div><div class="val">R$ 254</div></div>
+            <div class="persona-attr"><div class="lab">Recompra</div><div class="val">~99 dias</div></div>
+            <div class="persona-attr"><div class="lab">Recorrência</div><div class="val">15,6%</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- =============== TIERS =============== -->
-<section class="module" id="tiers">
+<section class="module alt" id="tiers">
   <div class="container">
     <div class="mod-header">
       <div class="mod-ref">C01</div>
@@ -381,6 +583,11 @@
         <div class="mm-chip">Total: <b>980 clientes</b></div>
         <div class="mm-chip">Modelo: <b>RFM</b></div>
       </div>
+    </div>
+
+    <div class="tldr">
+      <span class="tldr-tag">LEITURA RÁPIDA</span>
+      <p>Tiers <b>1+2 = ICP (3,8%)</b>. Tiers <b>3+4 = recuperáveis (9,9%)</b>. Tiers <b>5+6 = cauda inativa (86,4%)</b>. Esforço de retenção mira no topo, esforço de reativação no meio, esforço de aquisição no final.</p>
     </div>
 
     <div class="tier-list">
@@ -499,6 +706,11 @@
       </div>
     </div>
 
+    <div class="tldr">
+      <span class="tldr-tag">PERFIL</span>
+      <p>Mulher · 35–55 · capital nordestina · email Hotmail · AOV <b>R$ 254</b> · compra 2-3 vezes em <b>99 dias</b> · ticket-vida médio <b>R$ 605</b>. É contra esse perfil que toda decisão de produto, mídia e mensagem deveria ser testada.</p>
+    </div>
+
     <div class="insight">
       <div>
         <h3>Quem é</h3>
@@ -537,6 +749,11 @@
       </div>
     </div>
 
+    <div class="tldr">
+      <span class="tldr-tag">CONTRAINTUITIVO</span>
+      <p>A faixa <b>35–55 (Hotmail) volta +58% mais</b> que a faixa <b>22–40 (Gmail)</b>. Você está fazendo mídia pra millennial mas quem paga o LTV é mulher mais velha do nordeste.</p>
+    </div>
+
     <div style="background:var(--amber-bg);border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin-bottom:32px;display:flex;gap:12px;align-items:flex-start">
       <span style="width:20px;height:20px;flex:0 0 20px;border-radius:50%;background:var(--amber);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;font-weight:700;margin-top:2px">!</span>
       <p style="font-size:13px;color:#713f12;line-height:1.55;margin:0"><b style="color:#451a03">Estimativa por proxy</b> — gênero por nome, faixa etária por domínio de email. Para confirmar, exportar idade real do checkout Shopify (campo opcional) ou cruzar com Instagram Insights da PRLS (que tem demografia de seguidor confiável).</p>
@@ -569,17 +786,49 @@
 
       <div>
         <h3 style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px">Heat-map · gênero × faixa etária</h3>
-        <div class="tbl">
-          <table>
-            <thead><tr><th>Faixa</th><th style="text-align:right">Fem · recorrência</th><th style="text-align:right">Masc · recorrência</th><th style="text-align:right">N</th></tr></thead>
-            <tbody>
-              <tr class="hl"><td><b>35-55 (Hotmail)</b></td><td class="num pos" style="font-weight:700">15,6%</td><td class="num">—</td><td class="num">247</td></tr>
-              <tr><td>30-50 (Yahoo)</td><td class="num pos">14,3%</td><td class="num">—</td><td class="num">21</td></tr>
-              <tr><td>28-45 (Apple)</td><td class="num pos">12,5%</td><td class="num">—</td><td class="num">32</td></tr>
-              <tr><td>22-40 (Gmail)</td><td class="num">9,3%</td><td class="num">11,8%</td><td class="num">446</td></tr>
-              <tr><td>25-45 (Outlook)</td><td class="num neg">0,0%</td><td class="num">—</td><td class="num">18</td></tr>
-            </tbody>
-          </table>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px">
+          <div style="display:grid;grid-template-columns:140px 1fr 1fr 60px;gap:8px;align-items:center;font-family:var(--font-mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);padding:0 8px 8px;border-bottom:1px solid var(--border);margin-bottom:10px">
+            <span>Faixa</span><span style="text-align:center">Feminino</span><span style="text-align:center">Masculino</span><span style="text-align:right">N</span>
+          </div>
+          <div style="display:grid;grid-template-columns:140px 1fr 1fr 60px;gap:8px;align-items:center;padding:6px 8px;font-size:13px">
+            <span style="font-weight:600">35–55 Hotmail</span>
+            <div class="heat-cell h4">15,6%</div>
+            <div class="heat-cell" style="background:var(--bg-alt);color:var(--muted-2)">—</div>
+            <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);text-align:right">247</span>
+          </div>
+          <div style="display:grid;grid-template-columns:140px 1fr 1fr 60px;gap:8px;align-items:center;padding:6px 8px;font-size:13px">
+            <span style="font-weight:500">30–50 Yahoo</span>
+            <div class="heat-cell h3">14,3%</div>
+            <div class="heat-cell" style="background:var(--bg-alt);color:var(--muted-2)">—</div>
+            <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);text-align:right">21</span>
+          </div>
+          <div style="display:grid;grid-template-columns:140px 1fr 1fr 60px;gap:8px;align-items:center;padding:6px 8px;font-size:13px">
+            <span style="font-weight:500">28–45 Apple</span>
+            <div class="heat-cell h3">12,5%</div>
+            <div class="heat-cell" style="background:var(--bg-alt);color:var(--muted-2)">—</div>
+            <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);text-align:right">32</span>
+          </div>
+          <div style="display:grid;grid-template-columns:140px 1fr 1fr 60px;gap:8px;align-items:center;padding:6px 8px;font-size:13px">
+            <span style="font-weight:500">22–40 Gmail</span>
+            <div class="heat-cell h2">9,3%</div>
+            <div class="heat-cell h2">11,8%</div>
+            <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);text-align:right">446</span>
+          </div>
+          <div style="display:grid;grid-template-columns:140px 1fr 1fr 60px;gap:8px;align-items:center;padding:6px 8px;font-size:13px">
+            <span style="font-weight:500">25–45 Outlook</span>
+            <div class="heat-cell h0">0,0%</div>
+            <div class="heat-cell" style="background:var(--bg-alt);color:var(--muted-2)">—</div>
+            <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted);text-align:right">18</span>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-family:var(--font-mono);font-size:10px;color:var(--muted)">
+            <span>0%</span>
+            <i style="display:inline-block;width:14px;height:10px;background:#fef2f2;border-radius:2px"></i>
+            <i style="display:inline-block;width:14px;height:10px;background:#fef3c7;border-radius:2px"></i>
+            <i style="display:inline-block;width:14px;height:10px;background:#ecfccb;border-radius:2px"></i>
+            <i style="display:inline-block;width:14px;height:10px;background:#dcfce7;border-radius:2px"></i>
+            <i style="display:inline-block;width:14px;height:10px;background:#15803d;border-radius:2px"></i>
+            <span>20%+</span>
+          </div>
         </div>
         <div class="card dark" style="margin-top:18px;padding:22px">
           <h3 style="font-size:13px;font-family:var(--font-mono);letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;font-weight:600;margin-bottom:10px">Top conversor da base</h3>
@@ -610,6 +859,71 @@
         <div class="mm-chip">Base com UF: <b>707</b></div>
         <div class="mm-chip">Sem UF: <b>27,9%</b></div>
       </div>
+    </div>
+
+    <div class="tldr">
+      <span class="tldr-tag">CONCENTRAÇÃO</span>
+      <p>Top 6 estados (CE, SP, RJ, MG, PE, PB) = <b>69% dos clientes</b> e <b>74% do faturamento</b>. Resto do Brasil é cauda longa. Mídia geo deve focar nessas 6 UFs e <b>secundariamente</b> em GO, RN, BA, SC.</p>
+    </div>
+
+    <!-- Bubble chart de UFs -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:32px;margin-bottom:32px;text-align:center">
+      <h3 style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:24px">Distribuição por UF · tamanho proporcional ao faturamento</h3>
+      <svg viewBox="0 0 800 280" style="width:100%;max-width:800px;height:auto" aria-label="Bubble chart UFs">
+        <!-- CE: 276 cli, R$ 74.505 - maior -->
+        <circle cx="180" cy="140" r="78" fill="#0f172a"/>
+        <text x="180" y="135" font-family="Inter,sans-serif" font-size="22" font-weight="700" fill="#fff" text-anchor="middle">CE</text>
+        <text x="180" y="158" font-family="JetBrains Mono,monospace" font-size="11" fill="#cbd5e1" text-anchor="middle">35,2% fat</text>
+
+        <!-- SP: 127 cli, R$ 41.728 -->
+        <circle cx="350" cy="140" r="58" fill="#1e293b"/>
+        <text x="350" y="138" font-family="Inter,sans-serif" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">SP</text>
+        <text x="350" y="156" font-family="JetBrains Mono,monospace" font-size="10" fill="#cbd5e1" text-anchor="middle">19,7%</text>
+
+        <!-- RJ: 39 cli, R$ 12.363 -->
+        <circle cx="480" cy="120" r="32" fill="#475569"/>
+        <text x="480" y="118" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">RJ</text>
+        <text x="480" y="132" font-family="JetBrains Mono,monospace" font-size="9" fill="#e2e8f0" text-anchor="middle">5,8%</text>
+
+        <!-- MG: 32 cli, R$ 9.896 -->
+        <circle cx="555" cy="135" r="29" fill="#64748b"/>
+        <text x="555" y="133" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">MG</text>
+        <text x="555" y="148" font-family="JetBrains Mono,monospace" font-size="9" fill="#e2e8f0" text-anchor="middle">4,7%</text>
+
+        <!-- PE: 23 cli, R$ 9.326 -->
+        <circle cx="623" cy="115" r="28" fill="#78716c"/>
+        <text x="623" y="115" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">PE</text>
+        <text x="623" y="128" font-family="JetBrains Mono,monospace" font-size="9" fill="#e2e8f0" text-anchor="middle">4,4%</text>
+
+        <!-- PB: 25 cli, R$ 8.992 -->
+        <circle cx="685" cy="138" r="27" fill="#a8a29e"/>
+        <text x="685" y="138" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">PB</text>
+        <text x="685" y="151" font-family="JetBrains Mono,monospace" font-size="9" fill="#fff" text-anchor="middle">4,3%</text>
+
+        <!-- GO: 22, R$ 7.710 -->
+        <circle cx="500" cy="195" r="24" fill="#a8a29e"/>
+        <text x="500" y="195" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">GO</text>
+        <text x="500" y="207" font-family="JetBrains Mono,monospace" font-size="8" fill="#fff" text-anchor="middle">3,6%</text>
+
+        <!-- RN: 26, R$ 7.543 -->
+        <circle cx="580" cy="200" r="24" fill="#a8a29e"/>
+        <text x="580" y="200" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">RN</text>
+        <text x="580" y="212" font-family="JetBrains Mono,monospace" font-size="8" fill="#fff" text-anchor="middle">3,6%</text>
+
+        <!-- BA: 17, R$ 7.521 -->
+        <circle cx="650" cy="200" r="24" fill="#a8a29e"/>
+        <text x="650" y="200" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">BA</text>
+        <text x="650" y="212" font-family="JetBrains Mono,monospace" font-size="8" fill="#fff" text-anchor="middle">3,6%</text>
+
+        <!-- SC: 24, R$ 6.693 -->
+        <circle cx="725" cy="195" r="22" fill="#d6d3d1"/>
+        <text x="725" y="195" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#1c1917" text-anchor="middle">SC</text>
+        <text x="725" y="207" font-family="JetBrains Mono,monospace" font-size="8" fill="#52525b" text-anchor="middle">3,2%</text>
+
+        <!-- Outros pequenos -->
+        <text x="60" y="40" font-family="JetBrains Mono,monospace" font-size="11" fill="#78716c" letter-spacing="0.06em">TOP 10 UFs</text>
+        <text x="60" y="58" font-family="JetBrains Mono,monospace" font-size="9" fill="#a8a29e">+ 17 UFs com &lt;1%</text>
+      </svg>
     </div>
 
     <div class="grid-2">
@@ -669,6 +983,14 @@
       </div>
     </div>
 
+    <div class="tldr">
+      <span class="tldr-tag">QUEDA</span>
+      <p>Pico em <b>Nov/25 (Black Friday)</b> = 243 clientes novos. <b>Jan/26 = 26</b> (queda de 89%). Patamar atual de <b>2026 = 64/mês</b> vs 102/mês do 2º sem/25 — canal Shopify captando <b>37% menos</b>.</p>
+    </div>
+
+    <div style="position:relative">
+      <div style="position:absolute;left:28px;right:28px;top:97px;height:1px;background:var(--muted-2);opacity:.5;z-index:1"></div>
+      <div style="position:absolute;left:28px;top:88px;font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:0.06em;z-index:2">média 12m: 90 cli/mês</div>
     <div class="cohort">
       <div class="cohort-col"><div class="bar" style="height:7%"><span class="v">17</span></div><div class="lab">Jun/25</div></div>
       <div class="cohort-col"><div class="bar" style="height:44%"><span class="v">107</span></div><div class="lab">Jul/25</div></div>
@@ -682,6 +1004,7 @@
       <div class="cohort-col"><div class="bar" style="height:23%"><span class="v">56</span></div><div class="lab">Mar/26</div></div>
       <div class="cohort-col"><div class="bar" style="height:23%"><span class="v">56</span></div><div class="lab">Abr/26</div></div>
       <div class="cohort-col"><div class="bar" style="height:0%;background:var(--muted-2)"><span class="v" style="color:var(--muted)">—</span></div><div class="lab">Mai/26</div></div>
+    </div>
     </div>
 
     <div class="grid-3" style="margin-top:32px">
@@ -741,12 +1064,76 @@
   </div>
 </section>
 
-<footer>
-  <div class="container">
-    <span>PRLS OS · ICP & Clientes · Análise sobre canal Shopify · Maio/2026</span>
-    <span>Próximo passo: integrar atacado + WhatsApp</span>
+<footer style="padding:56px 0 32px;border-top:1px solid var(--border);background:var(--bg)">
+  <div class="container" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:32px">
+    <div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <span style="width:18px;height:18px;background:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;font-family:var(--font-mono)">P</span>
+        <span style="font-weight:600;letter-spacing:-0.01em">PRLS OS</span>
+      </div>
+      <p style="font-size:13px;color:var(--ink-2);max-width:380px;line-height:1.55">Sistema operacional da PRLS · documentação viva da operação, marca, comercial e finanças. Atualizado conforme decisões reais.</p>
+    </div>
+    <div>
+      <h5 style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Marketing</h5>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px">
+        <li><a href="./marca.html" style="color:var(--ink-2)">Marca</a></li>
+        <li><a href="./clientes.html" style="color:var(--ink-2)">ICP</a></li>
+        <li><a href="./calendario.html" style="color:var(--ink-2)">Calendário</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5 style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Vendas</h5>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px">
+        <li><a href="./rotina-vendas.html" style="color:var(--ink-2)">Rotina</a></li>
+        <li><a href="./automacao.html" style="color:var(--ink-2)">Automação</a></li>
+        <li><a href="./index.html#m11" style="color:var(--ink-2)">CRM</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5 style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Suporte</h5>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px">
+        <li><a href="./financeiro.html" style="color:var(--ink-2)">Financeiro</a></li>
+        <li><a href="./index.html#macro" style="color:var(--ink-2)">Mapa</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container" style="display:flex;justify-content:space-between;padding-top:24px;border-top:1px solid var(--border);font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.04em">
+    <span>PRLS OS · v1.2 · maio/2026</span>
+    <span>Última atualização: 02/05/2026</span>
   </div>
 </footer>
 
+<button class="scroll-top" id="scrollTopBtn" aria-label="Voltar ao topo" title="Voltar ao topo">
+  <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V3M3 8l5-5 5 5"/></svg>
+</button>
+<script>
+(function(){
+  var prog=document.getElementById('scrollProgress');
+  var btn=document.getElementById('scrollTopBtn');
+  var topbar=document.querySelector('.topbar');
+  function onScroll(){
+    var d=document.documentElement;
+    var pct=(window.scrollY/(d.scrollHeight-d.clientHeight))*100;
+    if(prog) prog.style.width=Math.min(100,Math.max(0,pct))+'%';
+    if(btn) btn.classList.toggle('visible',window.scrollY>500);
+    if(topbar) topbar.classList.toggle('scrolled',window.scrollY>10);
+    // Scroll-spy TOC
+    var links=document.querySelectorAll('.toc-side a');
+    if(links.length){
+      var current=null;
+      links.forEach(function(l){
+        var id=l.getAttribute('href').replace('#','');
+        var el=document.getElementById(id);
+        if(el && el.getBoundingClientRect().top<=120) current=l;
+      });
+      links.forEach(function(l){l.classList.remove('active')});
+      if(current) current.classList.add('active');
+    }
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  if(btn) btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+  onScroll();
+})();
+</script>
 </body>
 </html>
