@@ -52,16 +52,26 @@
   .brand .sq{width:18px;height:18px;background:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;font-family:var(--font-mono)}
   .brand .sep{color:var(--muted-2);font-weight:400}
   .brand .sub{color:var(--muted);font-weight:500}
-  .top-nav{display:flex;align-items:flex-end;gap:14px;font-size:13px}
-  .top-nav .nav-group{display:flex;flex-direction:column;gap:5px;position:relative}
-  .top-nav .nav-group + .nav-group::before{content:'';position:absolute;left:-7px;top:18px;bottom:4px;width:1px;background:var(--border)}
-  .top-nav .nav-label{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-weight:500;padding-left:12px;opacity:.7}
-  .top-nav .nav-items{display:flex;gap:2px}
-  .top-nav .nav-emphasis .nav-items{background:var(--bg-alt);border-radius:8px;padding:2px}
-  .top-nav a{padding:8px 12px;color:var(--muted);border-radius:6px;transition:all 0.15s;font-weight:500}
-  .top-nav a:hover{color:var(--ink);background:var(--bg-alt)}
-  .top-nav .nav-emphasis a:hover{background:#fff}
-  .top-nav a.active{background:var(--ink);color:#fff}
+  .top-nav{display:flex;align-items:center;gap:4px;font-size:13px;position:relative}
+  .top-nav .nav-group{position:relative}
+  .top-nav .nav-trigger{display:flex;align-items:center;gap:7px;padding:8px 14px;color:var(--muted);border-radius:7px;font-weight:500;cursor:pointer;background:transparent;border:none;font-size:13px;font-family:inherit;transition:all 0.15s;letter-spacing:-0.005em}
+  .top-nav .nav-trigger svg{width:10px;height:10px;opacity:.55;transition:transform .15s}
+  .top-nav .nav-trigger:hover{color:var(--ink);background:var(--bg-alt)}
+  .top-nav .nav-group:hover .nav-trigger svg,.top-nav .nav-group:focus-within .nav-trigger svg{transform:rotate(180deg);opacity:1}
+  .top-nav .nav-group:has(a.active) .nav-trigger{background:var(--ink);color:#fff}
+  .top-nav .nav-group:has(a.active) .nav-trigger:hover{background:var(--ink-soft)}
+  .top-nav .nav-panel{position:absolute;top:calc(100% + 6px);left:0;min-width:240px;padding:6px;background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:0 8px 28px rgba(15,15,15,0.08),0 1px 3px rgba(15,15,15,0.05);z-index:60;opacity:0;transform:translateY(-4px);pointer-events:none;transition:opacity .15s, transform .15s}
+  .top-nav .nav-group:hover .nav-panel,.top-nav .nav-group:focus-within .nav-panel{opacity:1;transform:translateY(0);pointer-events:auto}
+  .top-nav .nav-panel-label{font-family:var(--font-mono);font-size:9px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);font-weight:600;padding:10px 12px 6px;display:flex;justify-content:space-between;align-items:center}
+  .top-nav .nav-panel-label small{font-weight:500;opacity:.7;letter-spacing:0.06em}
+  .top-nav .nav-panel a{display:flex;align-items:center;gap:12px;padding:9px 12px;color:var(--ink-2);border-radius:6px;font-size:13.5px;font-weight:500;letter-spacing:-0.005em;transition:all .12s}
+  .top-nav .nav-panel a:hover{background:var(--bg-alt);color:var(--ink)}
+  .top-nav .nav-panel a.active{background:var(--ink);color:#fff}
+  .top-nav .nav-panel a .topic-num{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.06em;min-width:20px}
+  .top-nav .nav-panel a.active .topic-num{color:#94a3b8}
+  .top-nav .nav-panel a:hover .topic-num{color:var(--ink-2)}
+  .top-nav .nav-panel a .topic-desc{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-left:auto;letter-spacing:0.04em;opacity:.7}
+  .top-nav .nav-panel a.active .topic-desc{color:#94a3b8}
   .top-meta{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.02em}
 
   /* ============ HERO ============ */
@@ -316,29 +326,32 @@
     </div>
     <nav class="top-nav" aria-label="Navegação principal">
       <div class="nav-group">
-        <span class="nav-label">Estratégia</span>
-        <div class="nav-items">
-          <a href="#macro">Mapa</a>
-          <a href="#m08">Squad</a>
-          <a href="#m09">Benchmark</a>
-          <a href="./clientes.html">ICP</a>
-          <a href="./marca.html">Marca</a>
-        </div>
-      </div>
-      <div class="nav-group nav-emphasis">
-        <span class="nav-label">Operação</span>
-        <div class="nav-items">
-          <a href="#m10">Playbook</a>
-          <a href="#m11">CRM</a>
-          <a href="./calendario.html">Calendário</a>
-          <a href="./rotina-vendas.html">Rotina</a>
+        <button class="nav-trigger" aria-haspopup="true"><span>Estratégia</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l3 3 3-3"/></svg></button>
+        <div class="nav-panel" role="menu">
+          <div class="nav-panel-label"><span>Estratégia</span><small>5 tópicos</small></div>
+          <a href="#macro"><span class="topic-num">01</span><span>Mapa</span><span class="topic-desc">fluxo macro</span></a>
+          <a href="#m08"><span class="topic-num">02</span><span>Squad</span><span class="topic-desc">responsabilidades</span></a>
+          <a href="#m09"><span class="topic-num">03</span><span>Benchmark</span><span class="topic-desc">mercado nacional</span></a>
+          <a href="./clientes.html"><span class="topic-num">04</span><span>ICP</span><span class="topic-desc">6 tiers + perfil</span></a>
+          <a href="./marca.html"><span class="topic-num">05</span><span>Marca</span><span class="topic-desc">verdade fundadora</span></a>
         </div>
       </div>
       <div class="nav-group">
-        <span class="nav-label">Suporte</span>
-        <div class="nav-items">
-          <a href="./financeiro.html">Financeiro</a>
-          <a href="./automacao.html">Automação</a>
+        <button class="nav-trigger" aria-haspopup="true"><span>Operação</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l3 3 3-3"/></svg></button>
+        <div class="nav-panel" role="menu">
+          <div class="nav-panel-label"><span>Operação</span><small>4 tópicos</small></div>
+          <a href="#m10"><span class="topic-num">01</span><span>Playbook</span><span class="topic-desc">ofertas</span></a>
+          <a href="#m11"><span class="topic-num">02</span><span>CRM</span><span class="topic-desc">segmentação</span></a>
+          <a href="./calendario.html"><span class="topic-num">03</span><span>Calendário</span><span class="topic-desc">ano de 2026</span></a>
+          <a href="./rotina-vendas.html"><span class="topic-num">04</span><span>Rotina</span><span class="topic-desc">semana M1</span></a>
+        </div>
+      </div>
+      <div class="nav-group">
+        <button class="nav-trigger" aria-haspopup="true"><span>Suporte</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l3 3 3-3"/></svg></button>
+        <div class="nav-panel" role="menu">
+          <div class="nav-panel-label"><span>Suporte</span><small>2 tópicos</small></div>
+          <a href="./financeiro.html"><span class="topic-num">01</span><span>Financeiro</span><span class="topic-desc">DRE · DFC · metas</span></a>
+          <a href="./automacao.html"><span class="topic-num">02</span><span>Automação</span><span class="topic-desc">WhatsApp</span></a>
         </div>
       </div>
     </nav>
