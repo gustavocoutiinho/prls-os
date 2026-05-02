@@ -35,6 +35,8 @@
   .brand .sq{width:18px;height:18px;background:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;font-family:var(--font-mono)}
   .brand .sep{color:var(--muted-2);font-weight:400}
   .brand .sub{color:var(--muted);font-weight:500}
+  .brand{cursor:pointer;transition:opacity 0.15s}
+  .brand:hover{opacity:0.7}
   .top-nav{display:flex;align-items:center;gap:4px;font-size:13px;position:relative}
   .top-nav .nav-group{position:relative}
   .top-nav .nav-trigger{display:flex;align-items:center;gap:7px;padding:8px 14px;color:var(--muted);border-radius:7px;font-weight:500;cursor:pointer;background:transparent;border:none;font-size:13px;font-family:inherit;transition:all 0.15s;letter-spacing:-0.005em}
@@ -55,6 +57,10 @@
   .top-nav .nav-panel a:hover .topic-num{color:var(--ink-2)}
   .top-nav .nav-panel a .topic-desc{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-left:auto;letter-spacing:0.04em;opacity:.7}
   .top-nav .nav-panel a.active .topic-desc{color:#94a3b8}
+  .top-nav .nav-direct{display:flex;align-items:center;padding:8px 14px;color:var(--muted);border-radius:7px;font-weight:500;font-size:13px;letter-spacing:-0.005em;transition:all 0.15s}
+  .top-nav .nav-direct:hover{color:var(--ink);background:var(--bg-alt)}
+  .top-nav .nav-direct.active{background:var(--ink);color:#fff}
+  .top-nav .nav-direct.active:hover{background:var(--ink-soft)}
   .top-meta{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.02em}
 
   /* HERO */
@@ -238,42 +244,35 @@
 <!-- TOPBAR -->
 <header class="topbar">
   <div class="container topbar-inner">
-    <div class="brand">
+    <a class="brand" href="./index.html#macro" title="Mapa de processos">
       <span class="sq">P</span>
       <span>PRLS OS</span>
       <span class="sep">/</span>
       <span class="sub">ICP & Clientes</span>
-    </div>
+    </a>
     <nav class="top-nav" aria-label="Navegação principal">
       <div class="nav-group">
-        <button class="nav-trigger" aria-haspopup="true"><span>Estratégia</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l3 3 3-3"/></svg></button>
+        <button class="nav-trigger" aria-haspopup="true"><span>Marketing</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l3 3 3-3"/></svg></button>
         <div class="nav-panel" role="menu">
-          <div class="nav-panel-label"><span>Estratégia</span><small>5 tópicos</small></div>
-          <a href="./index.html#macro"><span class="topic-num">01</span><span>Mapa</span><span class="topic-desc">fluxo macro</span></a>
-          <a href="./index.html#m08"><span class="topic-num">02</span><span>Squad</span><span class="topic-desc">responsabilidades</span></a>
+          <div class="nav-panel-label"><span>Marketing</span><small>5 tópicos</small></div>
+          <a href="./marca.html"><span class="topic-num">01</span><span>Marca</span><span class="topic-desc">verdade fundadora</span></a>
+          <a href="#" class="active"><span class="topic-num">02</span><span>ICP</span><span class="topic-desc">6 tiers + perfil</span></a>
           <a href="./index.html#m09"><span class="topic-num">03</span><span>Benchmark</span><span class="topic-desc">mercado nacional</span></a>
-          <a href="#" class="active"><span class="topic-num">04</span><span>ICP</span><span class="topic-desc">6 tiers + perfil</span></a>
-          <a href="./marca.html"><span class="topic-num">05</span><span>Marca</span><span class="topic-desc">verdade fundadora</span></a>
+          <a href="./index.html#m10"><span class="topic-num">04</span><span>Playbook</span><span class="topic-desc">ofertas</span></a>
+          <a href="./calendario.html"><span class="topic-num">05</span><span>Calendário</span><span class="topic-desc">ano de 2026</span></a>
         </div>
       </div>
       <div class="nav-group">
-        <button class="nav-trigger" aria-haspopup="true"><span>Operação</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l3 3 3-3"/></svg></button>
+        <button class="nav-trigger" aria-haspopup="true"><span>Vendas</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l3 3 3-3"/></svg></button>
         <div class="nav-panel" role="menu">
-          <div class="nav-panel-label"><span>Operação</span><small>4 tópicos</small></div>
-          <a href="./index.html#m10"><span class="topic-num">01</span><span>Playbook</span><span class="topic-desc">ofertas</span></a>
+          <div class="nav-panel-label"><span>Vendas</span><small>4 tópicos</small></div>
+          <a href="./index.html#m08"><span class="topic-num">01</span><span>Squad</span><span class="topic-desc">responsabilidades</span></a>
           <a href="./index.html#m11"><span class="topic-num">02</span><span>CRM</span><span class="topic-desc">segmentação</span></a>
-          <a href="./calendario.html"><span class="topic-num">03</span><span>Calendário</span><span class="topic-desc">ano de 2026</span></a>
-          <a href="./rotina-vendas.html"><span class="topic-num">04</span><span>Rotina</span><span class="topic-desc">semana M1</span></a>
+          <a href="./rotina-vendas.html"><span class="topic-num">03</span><span>Rotina</span><span class="topic-desc">semana M1</span></a>
+          <a href="./automacao.html"><span class="topic-num">04</span><span>Automação</span><span class="topic-desc">WhatsApp</span></a>
         </div>
       </div>
-      <div class="nav-group">
-        <button class="nav-trigger" aria-haspopup="true"><span>Suporte</span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l3 3 3-3"/></svg></button>
-        <div class="nav-panel" role="menu">
-          <div class="nav-panel-label"><span>Suporte</span><small>2 tópicos</small></div>
-          <a href="./financeiro.html"><span class="topic-num">01</span><span>Financeiro</span><span class="topic-desc">DRE · DFC · metas</span></a>
-          <a href="./automacao.html"><span class="topic-num">02</span><span>Automação</span><span class="topic-desc">WhatsApp</span></a>
-        </div>
-      </div>
+      <a href="./financeiro.html" class="nav-direct"><span>Financeiro</span></a>
     </nav>
     <div class="top-meta">v1.0 · 05/2026</div>
   </div>
@@ -523,11 +522,86 @@
   </div>
 </section>
 
-<!-- =============== GEO =============== -->
-<section class="module" id="geografia">
+<!-- =============== DEMOGRAFIA =============== -->
+<section class="module" id="demografia">
   <div class="container">
     <div class="mod-header">
       <div class="mod-ref">C03</div>
+      <div class="mod-title">
+        <h2>Idade e gênero — quem mais converte.</h2>
+        <p>O CSV não tem campo de idade nem gênero. Inferimos por padrão: <b>gênero pelo primeiro nome</b> (alta confiança em nomes brasileiros) e <b>faixa etária pelo domínio de email</b> (Hotmail tende a 35-55, Gmail 22-40, iCloud Apple-user, etc.). Não é dado real — é proxy comportamental. Use como hipótese, valide com pesquisa.</p>
+      </div>
+      <div class="mod-meta">
+        <div class="mm-chip">Mulheres: <b>78,4%</b></div>
+        <div class="mm-chip">Top conversor: <b>Mulher 35-55</b></div>
+      </div>
+    </div>
+
+    <div style="background:var(--amber-bg);border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin-bottom:32px;display:flex;gap:12px;align-items:flex-start">
+      <span style="width:20px;height:20px;flex:0 0 20px;border-radius:50%;background:var(--amber);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;font-weight:700;margin-top:2px">!</span>
+      <p style="font-size:13px;color:#713f12;line-height:1.55;margin:0"><b style="color:#451a03">Estimativa por proxy</b> — gênero por nome, faixa etária por domínio de email. Para confirmar, exportar idade real do checkout Shopify (campo opcional) ou cruzar com Instagram Insights da PRLS (que tem demografia de seguidor confiável).</p>
+    </div>
+
+    <div class="kpi-grid" style="margin-bottom:32px">
+      <div class="kpi"><div class="lbl">Feminino</div><div class="val">78,4%</div><div class="sub">768 clientes · R$ 231.509 (79,4% fat)</div></div>
+      <div class="kpi"><div class="lbl">Masculino</div><div class="val">2,1%</div><div class="sub">21 clientes · R$ 3.063 (1,1% fat)</div></div>
+      <div class="kpi"><div class="lbl">Faixa 22-40 (Gmail)</div><div class="val">56,3%</div><div class="sub">552 clientes · 8,3% recorrência</div></div>
+      <div class="kpi green"><div class="lbl">Faixa 35-55 (Hotmail)</div><div class="val">31,8%</div><div class="sub">312 clientes · 13,1% recorrência ↑</div></div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <div>
+        <h3 style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px">Recorrência por faixa etária estimada</h3>
+        <div class="tbl">
+          <table>
+            <thead><tr><th>Faixa (proxy email)</th><th style="text-align:right">Clientes</th><th style="text-align:right">Recorrência</th><th style="text-align:right">AOV</th></tr></thead>
+            <tbody>
+              <tr class="hl"><td><b>35-55</b> · Hotmail/legacy</td><td class="num">312</td><td class="num pos">13,1%</td><td class="num">R$ 274</td></tr>
+              <tr><td>28-45 · Apple (iCloud)</td><td class="num">33</td><td class="num pos">12,1%</td><td class="num">R$ 294</td></tr>
+              <tr><td>30-50 · Yahoo</td><td class="num">28</td><td class="num pos">10,7%</td><td class="num">R$ 261</td></tr>
+              <tr><td>22-40 · Gmail</td><td class="num">552</td><td class="num">8,3%</td><td class="num">R$ 261</td></tr>
+              <tr><td>25-45 · Outlook</td><td class="num">27</td><td class="num neg">0,0%</td><td class="num">R$ 279</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-top:14px;line-height:1.55"><b style="color:var(--ink)">Insight contraintuitivo:</b> a faixa "mais velha" (35-55, Hotmail) volta <b style="color:var(--green)">+58% mais</b> que a faixa jovem (22-40, Gmail). Quem você acha que é o cliente provavelmente não é quem está pagando o LTV.</p>
+      </div>
+
+      <div>
+        <h3 style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px">Heat-map · gênero × faixa etária</h3>
+        <div class="tbl">
+          <table>
+            <thead><tr><th>Faixa</th><th style="text-align:right">Fem · recorrência</th><th style="text-align:right">Masc · recorrência</th><th style="text-align:right">N</th></tr></thead>
+            <tbody>
+              <tr class="hl"><td><b>35-55 (Hotmail)</b></td><td class="num pos" style="font-weight:700">15,6%</td><td class="num">—</td><td class="num">247</td></tr>
+              <tr><td>30-50 (Yahoo)</td><td class="num pos">14,3%</td><td class="num">—</td><td class="num">21</td></tr>
+              <tr><td>28-45 (Apple)</td><td class="num pos">12,5%</td><td class="num">—</td><td class="num">32</td></tr>
+              <tr><td>22-40 (Gmail)</td><td class="num">9,3%</td><td class="num">11,8%</td><td class="num">446</td></tr>
+              <tr><td>25-45 (Outlook)</td><td class="num neg">0,0%</td><td class="num">—</td><td class="num">18</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card dark" style="margin-top:18px;padding:22px">
+          <h3 style="font-size:13px;font-family:var(--font-mono);letter-spacing:0.1em;text-transform:uppercase;color:#94a3b8;font-weight:600;margin-bottom:10px">Top conversor da base</h3>
+          <p style="color:#fff;font-size:18px;font-weight:500;letter-spacing:-0.01em;line-height:1.3;margin-bottom:8px">Mulher · 35-55 anos · Hotmail/legacy</p>
+          <p style="color:#cbd5e1;font-size:13px;line-height:1.55"><b style="color:#fff">15,6% volta a comprar</b> (vs 9,3% da faixa Gmail jovem). Representa 25,2% da base mas tem a maior cadência de recompra. <b style="color:#fff">Mídia paga e conteúdo deveriam falar com ela primeiro</b> — não com a "millennial digital".</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-top:24px">
+      <div class="card"><h3>Gênero ≠ diferencial de conversão</h3><p>Mulheres 11,2% recorrência vs masculino 9,5% — quase iguais. O que diferencia é a faixa etária estimada, não o sexo. Mas o volume é 36× maior em mulher: 768 vs 21.</p></div>
+      <div class="card"><h3>Outlook não converte</h3><p>27 clientes Outlook · 0% voltou. Pequena amostra mas chama atenção — pode ser perfil corporativo com email do trabalho, não o canal de compra recorrente.</p></div>
+      <div class="card"><h3>Apple-users gastam mais</h3><p>iCloud tem AOV R$ 294 (12% acima da média) e recorrência 12,1%. Pequeno em volume (3,4%), grande em valor por pedido — mídia segmentada por iOS pode valer.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== GEO =============== -->
+<section class="module alt" id="geografia">
+  <div class="container">
+    <div class="mod-header">
+      <div class="mod-ref">C04</div>
       <div class="mod-title">
         <h2>De onde compram — concentração e dependência de Fortaleza.</h2>
         <p>Apenas 707 dos 980 clientes têm UF identificada (273 estão como "ZZ" ou vazio — endereços não validados pelo Shopify). Os números abaixo são entre os 707 com geografia confiável.</p>
@@ -581,10 +655,10 @@
 </section>
 
 <!-- =============== COHORT =============== -->
-<section class="module alt" id="cohort">
+<section class="module" id="cohort">
   <div class="container">
     <div class="mod-header">
-      <div class="mod-ref">C04</div>
+      <div class="mod-ref">C05</div>
       <div class="mod-title">
         <h2>Aquisição por mês — pico em Nov/25, queda forte em 2026.</h2>
         <p>Novos clientes por mês de primeira compra. O pico de Nov/25 (243 clientes) sugere Black Friday. A queda em Jan/26 e o patamar em ~50-80/mês desde então é o problema central da rotina.</p>
@@ -619,10 +693,10 @@
 </section>
 
 <!-- =============== RECOMENDAÇÕES =============== -->
-<section class="module" id="acoes">
+<section class="module alt" id="acoes">
   <div class="container">
     <div class="mod-header">
-      <div class="mod-ref">C05</div>
+      <div class="mod-ref">C06</div>
       <div class="mod-title">
         <h2>O que fazer com isso — prioridades.</h2>
         <p>Recomendações ordenadas por prioridade. P0 destrava a próxima análise, P1 ataca o problema de retenção, P2 amplia base e captura ICP.</p>
