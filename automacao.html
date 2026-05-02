@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PRLS OS · Automação WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fafaf9; --bg-alt:#f5f5f4; --surface:#ffffff; --surface-2:#f9f9f8;
+    --border:#e7e5e4; --border-strong:#d6d3d1;
+    --ink:#18181b; --ink-soft:#3f3f46; --ink-2:#52525b; --muted:#78716c; --muted-2:#a8a29e;
+    --accent:#18181b; --accent-soft:#f4f1ee;
+    --blue:#1e40af; --green:#15803d; --amber:#b45309; --red:#b91c1c;
+    --status-sent-bg:#dcfce7; --status-sent-fg:#166534;
+    --status-failed-bg:#fee2e2; --status-failed-fg:#991b1b;
+    --status-pending-bg:#fef3c7; --status-pending-fg:#854d0e;
+    --status-skipped-bg:#e7e5e4; --status-skipped-fg:#57534e;
+    --status-read-bg:#dbeafe; --status-read-fg:#1e3a8a;
+    --shadow-sm:0 1px 2px rgba(15,15,15,0.04);
+    --shadow-md:0 1px 3px rgba(15,15,15,0.06),0 1px 2px rgba(15,15,15,0.04);
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-weight:400;line-height:1.55;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01";font-size:15px}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--ink);color:#fff}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  input,select{font-family:inherit;font-size:13px;color:var(--ink)}
+
+  .container{max-width:1320px;margin:0 auto;padding:0 40px}
+
+  /* TOPBAR (mesmo padrão site) */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(250,250,249,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;height:56px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:-0.01em;font-size:15px}
+  .brand .sq{width:18px;height:18px;background:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;font-family:var(--font-mono)}
+  .brand .sep{color:var(--muted-2);font-weight:400}
+  .brand .sub{color:var(--muted);font-weight:500}
+  .top-nav{display:flex;align-items:flex-end;gap:14px;font-size:13px}
+  .top-nav .nav-group{display:flex;flex-direction:column;gap:5px;position:relative}
+  .top-nav .nav-group + .nav-group::before{content:'';position:absolute;left:-7px;top:18px;bottom:4px;width:1px;background:var(--border)}
+  .top-nav .nav-label{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-weight:500;padding-left:12px;opacity:.7}
+  .top-nav .nav-items{display:flex;gap:2px}
+  .top-nav .nav-emphasis .nav-items{background:var(--bg-alt);border-radius:8px;padding:2px}
+  .top-nav a{padding:8px 12px;color:var(--muted);border-radius:6px;transition:all 0.15s;font-weight:500}
+  .top-nav a:hover{color:var(--ink);background:var(--bg-alt)}
+  .top-nav .nav-emphasis a:hover{background:#fff}
+  .top-nav a.active{background:var(--ink);color:#fff}
+
+  /* HERO */
+  .hero{padding:48px 0 32px;border-bottom:1px solid var(--border)}
+  .hero-row{display:flex;justify-content:space-between;align-items:end;gap:40px;flex-wrap:wrap}
+  .hero-l{flex:1;min-width:280px}
+  .hero-r{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .kicker{font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+  .kicker:before{content:'';width:20px;height:1px;background:var(--ink)}
+  .kicker .live{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;background:#dcfce7;color:#166534;border-radius:4px;font-size:10px;letter-spacing:0.1em}
+  .kicker .live .dot{width:6px;height:6px;background:#16a34a;border-radius:50%;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  .hero h1{font-size:clamp(32px,4vw,46px);font-weight:500;letter-spacing:-0.03em;line-height:1.05;color:var(--ink)}
+  .hero p.lead{margin-top:14px;font-size:16px;color:var(--ink-2);max-width:620px;line-height:1.55}
+  .hero-meta{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.04em}
+
+  /* FILTROS */
+  .filters{padding:24px 0;border-bottom:1px solid var(--border);background:var(--surface-2)}
+  .filters-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .seg{display:inline-flex;background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:3px;gap:2px}
+  .seg button{padding:6px 12px;font-size:12px;font-weight:500;color:var(--muted);border-radius:4px;letter-spacing:0.02em}
+  .seg button.on{background:var(--ink);color:#fff}
+  .seg button:hover:not(.on){background:var(--bg-alt);color:var(--ink)}
+  .ctrl{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:7px 12px;height:36px}
+  .ctrl label{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase}
+  .ctrl select,.ctrl input{border:none;outline:none;background:none;font-size:13px;color:var(--ink);min-width:0}
+  .ctrl input[type=text]{width:200px}
+  .ctrl select{cursor:pointer}
+  .filters-meta{margin-left:auto;font-family:var(--font-mono);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:14px}
+  .btn-clear{font-family:var(--font-mono);font-size:11px;color:var(--ink-2);text-decoration:underline;text-decoration-color:var(--border-strong);text-underline-offset:3px}
+  .btn-clear:hover{color:var(--ink)}
+
+  /* SECTION */
+  .section{padding:56px 0;border-bottom:1px solid var(--border)}
+  .section.alt{background:var(--surface-2)}
+  .section-head{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:32px;flex-wrap:wrap}
+  .section-head .left .num{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.12em;margin-bottom:8px}
+  .section-head .left h2{font-size:clamp(22px,2.6vw,30px);font-weight:500;letter-spacing:-0.018em;line-height:1.1;color:var(--ink)}
+  .section-head .right{color:var(--ink-2);font-size:13.5px;max-width:440px}
+
+  /* KPI GRID */
+  .kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+  .kpi{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden}
+  .kpi.featured{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .kpi .k-lbl{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .kpi.featured .k-lbl{color:#a8a29e}
+  .kpi .k-val{font-size:26px;font-weight:500;letter-spacing:-0.02em;line-height:1;color:var(--ink)}
+  .kpi.featured .k-val{color:#fff}
+  .kpi .k-val small{font-size:12px;color:var(--muted);font-weight:400;margin-left:4px;letter-spacing:0}
+  .kpi.featured .k-val small{color:#a8a29e}
+  .kpi .k-sub{margin-top:8px;font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:0.04em}
+  .kpi.featured .k-sub{color:#a8a29e}
+
+  /* FUNIL */
+  .funnel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:32px;box-shadow:var(--shadow-sm)}
+  .funnel-rows{display:flex;flex-direction:column;gap:12px}
+  .fu{display:grid;grid-template-columns:160px 1fr 90px 80px;gap:18px;align-items:center}
+  .fu .fu-lbl{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase}
+  .fu .fu-bar{height:36px;background:var(--bg-alt);border:1px solid var(--border);border-radius:6px;position:relative;overflow:hidden}
+  .fu .fu-bar-fill{height:100%;background:var(--ink);border-radius:6px;display:flex;align-items:center;padding:0 14px;color:#fff;font-weight:500;font-size:13px;transition:width 0.4s ease;min-width:36px}
+  .fu .fu-bar-fill.faded{background:var(--muted)}
+  .fu .fu-val{font-size:18px;font-weight:500;letter-spacing:-0.01em;color:var(--ink);text-align:right}
+  .fu .fu-pct{font-family:var(--font-mono);font-size:11px;color:var(--muted);text-align:right;letter-spacing:0.04em}
+
+  /* BREAKDOWN TABLE */
+  .table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow-sm)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  thead th{background:var(--surface-2);font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;text-align:left;padding:12px 16px;border-bottom:1px solid var(--border);font-weight:500}
+  thead th.right{text-align:right}
+  tbody td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--ink);vertical-align:middle}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:var(--surface-2)}
+  td.right{text-align:right;font-variant-numeric:tabular-nums}
+  td.mono{font-family:var(--font-mono);font-size:12px;color:var(--ink-2)}
+  td.muted{color:var(--muted)}
+  td.name{font-weight:500}
+  td.name .ph{font-family:var(--font-mono);font-size:11px;color:var(--muted);display:block;margin-top:2px}
+
+  .pill{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:4px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;font-weight:500}
+  .pill.sent{background:var(--status-sent-bg);color:var(--status-sent-fg)}
+  .pill.failed{background:var(--status-failed-bg);color:var(--status-failed-fg)}
+  .pill.pending{background:var(--status-pending-bg);color:var(--status-pending-fg)}
+  .pill.skipped_suppressed,.pill.skipped{background:var(--status-skipped-bg);color:var(--status-skipped-fg)}
+  .pill.read{background:var(--status-read-bg);color:var(--status-read-fg)}
+  .pill.approved{background:var(--status-sent-bg);color:var(--status-sent-fg)}
+  .pill.dot{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
+
+  .auto-tag{display:inline-flex;padding:3px 8px;border-radius:4px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.06em;background:var(--accent-soft);color:var(--ink);font-weight:500}
+
+  /* DUAL grid */
+  .dual{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-sm);overflow:hidden;display:flex;flex-direction:column}
+  .panel-head{padding:18px 22px;border-bottom:1px solid var(--border);background:var(--surface-2);display:flex;justify-content:space-between;align-items:center}
+  .panel-head h3{font-size:14px;font-weight:600;letter-spacing:-0.01em;display:flex;align-items:center;gap:10px}
+  .panel-head h3 .dot{width:7px;height:7px;background:var(--ink);border-radius:50%}
+  .panel-head .meta{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+  .panel-body{padding:0}
+  .panel-body.padded{padding:20px 22px}
+  .panel-empty{padding:40px 22px;text-align:center;color:var(--muted);font-size:13px}
+
+  .reason-list{display:flex;flex-direction:column}
+  .reason-list .row{display:grid;grid-template-columns:1fr auto;padding:12px 22px;border-bottom:1px solid var(--border);align-items:center;gap:14px;font-size:13px}
+  .reason-list .row:last-child{border-bottom:none}
+  .reason-list .row .rl-r{font-family:var(--font-mono);font-size:12px;color:var(--ink-2);overflow-wrap:anywhere}
+  .reason-list .row .rl-c{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;background:var(--bg-alt);padding:3px 10px;border-radius:4px;font-size:12px}
+
+  /* SKELETON */
+  .skel{background:linear-gradient(90deg,var(--bg-alt),var(--surface-2),var(--bg-alt));background-size:200% 100%;animation:skel 1.4s linear infinite;border-radius:4px;color:transparent !important}
+  @keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+  /* ALERT */
+  .alert{padding:14px 18px;border-radius:8px;font-size:13px;display:flex;align-items:flex-start;gap:12px;margin-bottom:24px}
+  .alert.warn{background:#fef3c7;border:1px solid #fde68a;color:#854d0e}
+  .alert.info{background:#dbeafe;border:1px solid #bfdbfe;color:#1e3a8a}
+  .alert.error{background:#fee2e2;border:1px solid #fecaca;color:#991b1b}
+  .alert b{font-weight:600}
+
+  /* FOOTER */
+  footer{padding:60px 0 40px;background:var(--ink);color:#fafaf9}
+  footer .fgrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px}
+  footer .f-brand h3{font-size:24px;font-weight:500;letter-spacing:-0.025em;margin-bottom:10px;color:#fff}
+  footer .f-brand p{color:#a8a29e;font-size:13.5px;max-width:360px;line-height:1.6}
+  footer .fcol .fl{font-family:var(--font-mono);font-size:10px;color:#78716c;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px}
+  footer .fcol ul{list-style:none}
+  footer .fcol ul li{padding:5px 0;color:#d6d3d1;font-size:13px}
+  footer .f-bot{margin-top:48px;padding-top:20px;border-top:1px solid #292524;display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:11px;color:#78716c;letter-spacing:0.06em}
+
+  /* ===== HEALTH BADGE ===== */
+  .health-badge{display:inline-flex;align-items:center;gap:10px;padding:6px 14px;border-radius:20px;font-family:var(--font-mono);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600}
+  .health-badge.SAUDAVEL{background:#dcfce7;color:#166534}
+  .health-badge.ATENCAO{background:#fef3c7;color:#854d0e}
+  .health-badge.CRITICO{background:#fee2e2;color:#991b1b}
+  .health-badge .hb-dot{width:8px;height:8px;border-radius:50%;background:currentColor;animation:pulse 2s infinite}
+  .health-badge .hb-score{font-size:13px;font-weight:700}
+
+  /* ===== HISTORY PANEL ===== */
+  .history-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .history-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-sm);overflow:hidden}
+  .history-card .hc-head{padding:16px 22px;background:var(--surface-2);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+  .history-card .hc-head h3{font-size:14px;font-weight:600;letter-spacing:-0.01em}
+  .history-card .hc-head .meta{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+  .history-card .hc-body{padding:0}
+  .history-row{display:grid;grid-template-columns:90px 90px 1fr;gap:12px;padding:12px 22px;border-bottom:1px solid var(--border);align-items:center;font-size:12px}
+  .history-row:last-child{border-bottom:none}
+  .history-row .hr-when{font-family:var(--font-mono);color:var(--muted);font-size:11px}
+  .history-row .hr-detail{color:var(--ink-2);font-size:12px;overflow-wrap:anywhere}
+  .history-row.empty{color:var(--muted);text-align:center;padding:24px;display:block}
+  .health-spark{display:flex;gap:2px;height:36px;align-items:flex-end;padding:8px 22px}
+  .health-spark .bar{flex:1;background:var(--ink);border-radius:2px;min-height:3px;transition:opacity 0.2s}
+  .health-spark .bar.warn{background:var(--amber)}
+  .health-spark .bar.fail{background:var(--red)}
+
+  /* ===== LIVE FEED ===== */
+  .live-feed{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;box-shadow:var(--shadow-sm);max-height:520px;overflow-y:auto}
+  .live-empty{padding:48px 0;text-align:center;color:var(--muted);font-size:13px}
+  .live-item{display:grid;grid-template-columns:90px 1fr auto;gap:16px;padding:14px 4px;border-bottom:1px solid var(--border);align-items:center;animation:fadeIn 0.4s ease}
+  .live-item:last-child{border-bottom:none}
+  .live-item.fresh{background:linear-gradient(90deg,#dcfce7 0%,transparent 60%);border-radius:6px}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+  .live-item .lt{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.04em}
+  .live-item .lc{display:flex;flex-direction:column;gap:2px}
+  .live-item .lc .lc-name{font-weight:500;font-size:14px;color:var(--ink)}
+  .live-item .lc .lc-meta{font-family:var(--font-mono);font-size:11px;color:var(--muted)}
+  .live-item .lc .lc-meta span{margin-right:8px}
+  .live-item .ls{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;font-weight:500}
+  .live-item .ls.sent{color:var(--status-sent-fg)}
+  .live-item .ls.failed{color:var(--status-failed-fg)}
+  .live-item .ls.pending{color:var(--status-pending-fg)}
+  .live-item .ls .ls-dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+  .live-item .ls .ls-dot.pulsing{animation:pulseDot 1.6s infinite}
+  @keyframes pulseDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:0.5}}
+
+  /* ===== CATÁLOGO 15 AUTOMAÇÕES ===== */
+  .families{display:flex;flex-direction:column;gap:32px}
+  .family{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow-sm)}
+  .fam-head{padding:18px 24px;background:var(--surface-2);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:16px}
+  .fam-head .fh-l{display:flex;align-items:center;gap:14px}
+  .fam-head .fh-letter{width:32px;height:32px;background:var(--ink);color:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:14px;font-weight:600}
+  .fam-head .fh-name{font-size:15px;font-weight:600;letter-spacing:-0.01em}
+  .fam-head .fh-sub{font-size:12px;color:var(--muted)}
+  .fam-head .fh-meta{font-family:var(--font-mono);font-size:11px;color:var(--muted)}
+  .auto-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border)}
+  .auto-card{background:var(--surface);padding:20px;display:flex;flex-direction:column;gap:12px;position:relative}
+  .auto-card .ac-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .auto-card .ac-code{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+  .auto-card .ac-name{font-size:14px;font-weight:600;color:var(--ink);letter-spacing:-0.01em;line-height:1.3;margin-top:4px}
+  .auto-card .ac-prio{padding:2px 8px;border-radius:4px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.08em;font-weight:500;flex-shrink:0}
+  .auto-card .ac-prio.P0{background:#fee2e2;color:#991b1b}
+  .auto-card .ac-prio.P1{background:#fef3c7;color:#854d0e}
+  .auto-card .ac-prio.P2{background:#e0e7ff;color:#3730a3}
+  .auto-card .ac-desc{font-size:12.5px;color:var(--ink-2);line-height:1.5}
+  .auto-card .ac-trigger{font-family:var(--font-mono);font-size:11px;color:var(--muted);background:var(--bg-alt);padding:6px 10px;border-radius:4px;letter-spacing:0.04em;overflow-wrap:anywhere}
+  .auto-card .ac-steps{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+  .auto-card .ac-step{display:grid;grid-template-columns:80px 70px 1fr auto;gap:10px;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;font-size:12px;align-items:center}
+  .auto-card .ac-step .as-when{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-2);letter-spacing:0.04em}
+  .auto-card .ac-step .as-label{font-family:var(--font-mono);font-size:9.5px;color:#fff;background:var(--ink);padding:2px 6px;border-radius:3px;letter-spacing:0.08em;text-transform:uppercase;text-align:center}
+  .auto-card .ac-step .as-tpl{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-2);overflow-wrap:anywhere}
+  .auto-card .ac-step .as-status{padding:2px 6px;border-radius:3px;font-family:var(--font-mono);font-size:9px;letter-spacing:0.06em;text-transform:uppercase;font-weight:500;flex-shrink:0}
+  .auto-card .ac-step .as-status.active{background:var(--status-sent-bg);color:var(--status-sent-fg)}
+  .auto-card .ac-step .as-status.pending_template{background:var(--status-pending-bg);color:var(--status-pending-fg)}
+  .auto-card .ac-step .as-status.pending_data{background:var(--status-failed-bg);color:var(--status-failed-fg)}
+  .auto-card .ac-step .as-status.free_text_window{background:#dbeafe;color:#1e3a8a}
+  .auto-card .ac-stats{display:flex;gap:14px;font-family:var(--font-mono);font-size:10.5px;color:var(--muted);letter-spacing:0.04em;padding-top:10px;border-top:1px dashed var(--border);margin-top:4px}
+  .auto-card .ac-stats span b{color:var(--ink);font-weight:600;margin-right:4px}
+  .auto-card .ac-aud{font-size:11.5px;color:var(--muted);font-style:italic}
+
+  /* ===== BASE DE CLIENTES ===== */
+  .base-grid{display:grid;grid-template-columns:1fr 2fr;gap:24px}
+  .base-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:28px;box-shadow:var(--shadow-sm)}
+  .base-card .bc-lbl{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .base-card .bc-val{font-size:42px;font-weight:500;letter-spacing:-0.025em;line-height:1;color:var(--ink)}
+  .base-card .bc-sub{margin-top:8px;font-size:12.5px;color:var(--muted)}
+  .base-card .bc-rows{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+  .base-card .bc-row{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .base-card .bc-row:last-child{border-bottom:none}
+  .base-card .bc-row .br-lbl{color:var(--ink-2);text-transform:capitalize}
+  .base-card .bc-row .br-val{font-family:var(--font-mono);font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+  .base-card .bc-row .br-pct{font-family:var(--font-mono);font-size:11px;color:var(--muted);min-width:46px;text-align:right}
+  .base-card .bc-bar{height:4px;background:var(--bg-alt);border-radius:2px;margin-top:14px;overflow:hidden;display:flex}
+  .base-card .bc-bar-seg{height:100%}
+  .base-card .bc-bar-seg.shopify{background:#15803d}
+  .base-card .bc-bar-seg.bling{background:#1e40af}
+  .base-card .bc-bar-seg.unknown{background:var(--muted-2)}
+  .base-card .bc-empty{font-size:13px;color:var(--red);background:#fee2e2;border:1px solid #fecaca;padding:8px 12px;border-radius:6px;margin-top:12px}
+
+  /* RESPONSIVE */
+  @media (max-width:1100px){
+    .kpi-grid{grid-template-columns:repeat(3,1fr)}
+    .dual{grid-template-columns:1fr}
+    .fu{grid-template-columns:120px 1fr 70px 60px;gap:10px}
+    .container{padding:0 24px}
+  }
+  @media (max-width:700px){
+    .kpi-grid{grid-template-columns:repeat(2,1fr)}
+    .filters-row{gap:8px}
+    .ctrl input[type=text]{width:140px}
+    .fu{grid-template-columns:1fr;gap:6px}
+    .fu .fu-lbl{font-size:10px}
+    table{font-size:12px}
+    thead th,tbody td{padding:10px 12px}
+    footer .fgrid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand">
+      <span class="sq">P</span>
+      <span>PRLS OS</span>
+      <span class="sep">/</span>
+      <span class="sub">Automação WhatsApp</span>
+    </div>
+    <nav class="top-nav" aria-label="Navegação principal">
+      <div class="nav-group">
+        <span class="nav-label">Estratégia</span>
+        <div class="nav-items">
+          <a href="./index.html#macro">Mapa</a>
+          <a href="./index.html#m08">Squad</a>
+          <a href="./index.html#m09">Benchmark</a>
+        </div>
+      </div>
+      <div class="nav-group nav-emphasis">
+        <span class="nav-label">Operação</span>
+        <div class="nav-items">
+          <a href="./index.html#m10">Playbook</a>
+          <a href="./index.html#m11">CRM</a>
+          <a href="./calendario.html">Calendário</a>
+          <a href="./rotina-vendas.html">Rotina</a>
+        </div>
+      </div>
+      <div class="nav-group">
+        <span class="nav-label">Suporte</span>
+        <div class="nav-items">
+          <a href="./financeiro.html">Financeiro</a>
+          <a href="#" class="active">Automação</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-row">
+      <div class="hero-l">
+        <div class="kicker">
+          <span>Dashboard de automação</span>
+          <span class="live"><span class="dot"></span>AO VIVO</span>
+        </div>
+        <h1>Recuperação de carrinho · Suri WhatsApp</h1>
+        <p class="lead">Pipeline Shopify → Supabase → Suri. Cada checkout abandonado vira uma run agendada. Dispatcher roda a cada 2min, respeitando horário comercial, ticket mínimo R$ 150 e order-check de 60min.</p>
+      </div>
+      <div class="hero-r">
+        <div id="health-badge-container"></div>
+        <div class="hero-meta">Atualizado em <span id="last-updated" class="skel">__:__:__</span></div>
+        <div style="display:flex;gap:6px">
+          <button id="refresh-btn" class="ctrl" title="Atualizar dashboard agora" style="cursor:pointer">
+            <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.06em">↻ ATUALIZAR</span>
+          </button>
+          <button id="run-dispatcher-btn" class="ctrl" title="Disparar fila pendente agora (bypass horário)" style="cursor:pointer">
+            <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.06em">▶ DISPATCHER</span>
+          </button>
+          <button id="run-health-btn" class="ctrl" title="Rodar health-check agora" style="cursor:pointer">
+            <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.06em">♥ HEALTH</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTROS -->
+<section class="filters">
+  <div class="container">
+    <div class="filters-row">
+      <div class="seg" id="range-seg" data-filter="range">
+        <button data-val="24h" class="on">24H</button>
+        <button data-val="7d">7D</button>
+        <button data-val="30d">30D</button>
+        <button data-val="all">TUDO</button>
+      </div>
+      <div class="ctrl">
+        <label for="f-automation">Automação</label>
+        <select id="f-automation">
+          <option value="">Todas</option>
+          <option value="a01_carrinho_aberto">a01 carrinho aberto</option>
+          <option value="a02_checkout_pendente">a02 checkout pendente</option>
+          <option value="a03_pix_pendente">a03 pix pendente</option>
+          <option value="a06_pedido_pago">a06 pedido pago</option>
+          <option value="a08_enviado_rastreio">a08 enviado rastreio</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label for="f-status">Status</label>
+        <select id="f-status">
+          <option value="">Todos</option>
+          <option value="sent">Enviadas</option>
+          <option value="pending">Pendentes</option>
+          <option value="failed">Falhas</option>
+          <option value="skipped_suppressed">Puladas</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label for="f-search">Busca</label>
+        <input type="text" id="f-search" placeholder="nome ou telefone…" />
+      </div>
+      <button class="btn-clear" id="clear-filters">limpar filtros</button>
+      <div class="filters-meta" id="filters-meta">—</div>
+    </div>
+  </div>
+</section>
+
+<!-- ALERTA STATUS -->
+<div class="container" style="margin-top:24px" id="alerts-container"></div>
+
+<!-- KPI GRID -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="left">
+        <div class="num">[01]</div>
+        <h2>Indicadores principais</h2>
+      </div>
+      <div class="right">Métricas no período selecionado. Conversões = pedidos pagos cujo telefone recebeu mensagem nas últimas 24h.</div>
+    </div>
+    <div class="kpi-grid" id="kpi-grid">
+      <!-- preenchido via JS -->
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE AO VIVO -->
+<section class="section alt">
+  <div class="container">
+    <div class="section-head">
+      <div class="left">
+        <div class="num">[02]</div>
+        <h2>Disparos ao vivo · última hora</h2>
+      </div>
+      <div class="right">Feed em tempo real das mensagens disparadas pela Suri. Atualiza a cada 60s. Cards verdes = enviadas nos últimos 5min.</div>
+    </div>
+    <div class="live-feed" id="live-feed">
+      <div class="live-empty">Carregando feed…</div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNIL -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="left">
+        <div class="num">[03]</div>
+        <h2>Funil de recuperação</h2>
+      </div>
+      <div class="right"><b>Atenção:</b> "entregues / lidas / respondidas" dependem do webhook da Suri atualizar status. Se zerados com mensagens reais entregues, o callback de status ainda não está chegando.</div>
+    </div>
+    <div class="funnel">
+      <div class="funnel-rows" id="funnel"></div>
+    </div>
+  </div>
+</section>
+
+<!-- BREAKDOWN POR AUTOMAÇÃO -->
+<section class="section alt">
+  <div class="container">
+    <div class="section-head">
+      <div class="left">
+        <div class="num">[04]</div>
+        <h2>Breakdown por automação</h2>
+      </div>
+      <div class="right">Comparativo de cada gatilho. Skip alto em a02 normalmente é cliente que pagou nos 60min seguintes.</div>
+    </div>
+    <div class="table-wrap">
+      <table id="breakdown-table">
+        <thead>
+          <tr>
+            <th>Automação</th>
+            <th class="right">Total</th>
+            <th class="right">Enviadas</th>
+            <th class="right">Lidas</th>
+            <th class="right">Respondidas</th>
+            <th class="right">Falhas</th>
+            <th class="right">Pendentes</th>
+            <th class="right">Puladas</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- RUNS RECENTES -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="left">
+        <div class="num">[05]</div>
+        <h2>Runs recentes</h2>
+      </div>
+      <div class="right">Lista detalhada das execuções no período. Telefone parcialmente mascarado por LGPD.</div>
+    </div>
+    <div class="table-wrap">
+      <table id="runs-table">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Automação</th>
+            <th>Template</th>
+            <th>Status</th>
+            <th>Quando</th>
+            <th>Motivo</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- DUAL: PRÓXIMOS DISPAROS + FALHAS -->
+<section class="section alt">
+  <div class="container">
+    <div class="section-head">
+      <div class="left">
+        <div class="num">[06]</div>
+        <h2>Próximos disparos & motivos de falha/skip</h2>
+      </div>
+      <div class="right">O que está agendado pro próximo cron run e por que execuções estão sendo puladas ou falhando.</div>
+    </div>
+    <div class="dual">
+      <div class="panel">
+        <div class="panel-head">
+          <h3><span class="dot"></span>Próximos disparos</h3>
+          <span class="meta" id="next-meta">—</span>
+        </div>
+        <div class="panel-body" id="next-body"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <h3><span class="dot"></span>Motivos de falha</h3>
+          <span class="meta" id="failures-meta">—</span>
+        </div>
+        <div class="panel-body" id="failures-body"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <h3><span class="dot"></span>Motivos de skip</h3>
+          <span class="meta" id="skips-meta">—</span>
+        </div>
+        <div class="panel-body" id="skips-body"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <h3><span class="dot"></span>Templates registrados</h3>
+          <span class="meta" id="templates-meta">—</span>
+        </div>
+        <div class="panel-body" id="templates-body"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTÓRICO: SAÚDE + DAILY REPORTS -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="left">
+        <div class="num">[06b]</div>
+        <h2>Saúde do sistema & histórico de relatórios</h2>
+      </div>
+      <div class="right">Health-check roda a cada hora. Daily report dispara 11h BRT diário pra teu WhatsApp com veredito SUCESSO/ATENÇÃO/FALHA.</div>
+    </div>
+    <div class="history-grid">
+      <div class="history-card">
+        <div class="hc-head">
+          <h3><span style="display:inline-block;width:7px;height:7px;background:var(--ink);border-radius:50%;margin-right:8px"></span>Health-check (últimas 24 leituras)</h3>
+          <span class="meta" id="health-meta">—</span>
+        </div>
+        <div class="health-spark" id="health-spark"></div>
+        <div class="hc-body" id="health-body"></div>
+      </div>
+      <div class="history-card">
+        <div class="hc-head">
+          <h3><span style="display:inline-block;width:7px;height:7px;background:var(--ink);border-radius:50%;margin-right:8px"></span>Daily reports enviados (últimos 7)</h3>
+          <span class="meta" id="report-meta">—</span>
+        </div>
+        <div class="hc-body" id="report-body"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATÁLOGO 15 AUTOMAÇÕES -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="left">
+        <div class="num">[07]</div>
+        <h2>Catálogo das 15 automações</h2>
+      </div>
+      <div class="right">Cada automação tem sequência <b>begin → middle → end</b>. Status do template indica se a Suri pode disparar agora ou se aguarda aprovação Meta.</div>
+    </div>
+    <div id="catalog-summary" style="margin-bottom:24px"></div>
+    <div class="families" id="catalog-families"></div>
+  </div>
+</section>
+
+<!-- BASE DE CLIENTES (Shopify + Bling) -->
+<section class="section alt">
+  <div class="container">
+    <div class="section-head">
+      <div class="left">
+        <div class="num">[08]</div>
+        <h2>Base de clientes · Shopify + Bling</h2>
+      </div>
+      <div class="right">União das duas fontes. Bling sincronizado via edge function <code>bling-importer</code>. Aniversário precisa ser populado pra automação a11 rodar.</div>
+    </div>
+    <div class="base-grid">
+      <div class="base-card">
+        <div class="bc-lbl">Total na base</div>
+        <div class="bc-val" id="base-total">—</div>
+        <div class="bc-sub" id="base-sub">—</div>
+        <div class="bc-bar" id="base-bar"></div>
+      </div>
+      <div class="base-card">
+        <div class="bc-lbl">Distribuição</div>
+        <div id="base-rows" class="bc-rows"></div>
+        <div id="base-alert"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="fgrid">
+      <div class="f-brand">
+        <h3>PRLS OS · Automação</h3>
+        <p>Pipeline Shopify → Supabase → Suri. Auditável ponta a ponta. Cada mensagem gravada, cada falha rastreada.</p>
+      </div>
+      <div class="fcol">
+        <div class="fl">Stack</div>
+        <ul>
+          <li>Shopify Webhooks</li>
+          <li>Supabase Edge Functions</li>
+          <li>pg_cron 2min / dispatcher</li>
+          <li>Suri WhatsApp API</li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <div class="fl">Safeguards ativos</div>
+        <ul>
+          <li>Horário 9h–21h BRT</li>
+          <li>Ticket floor R$ 150</li>
+          <li>Order-check 60min</li>
+          <li>Suppression 7 dias</li>
+        </ul>
+      </div>
+    </div>
+    <div class="f-bot">
+      <span>PRLS OS · v1.0</span>
+      <span>Edge: prls-dashboard-data</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const ENDPOINT = "https://qysuiqrqfcanusyfwuri.supabase.co/functions/v1/prls-dashboard-data";
+
+  const state = { range:"24h", automation:"", status:"", search:"" };
+  let refreshTimer = null;
+
+  function fmtBRL(v){ return (v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"}); }
+  function fmtNum(v){ return (v||0).toLocaleString("pt-BR"); }
+  function fmtPct(v){ return (v||0).toFixed(1) + "%"; }
+  function escapeHtml(s){ if(s==null) return ""; return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
+
+  function fmtDate(iso){
+    if(!iso) return "—";
+    const d = new Date(iso);
+    const now = new Date();
+    const diffMs = d.getTime() - now.getTime();
+    const diffMin = Math.round(diffMs / 60000);
+    const abs = Math.abs(diffMin);
+    if(abs < 1) return diffMin >= 0 ? "agora" : "agora";
+    if(abs < 60){ return diffMin < 0 ? `há ${abs}min` : `em ${abs}min`; }
+    if(abs < 1440){ const h = Math.round(abs/60); return diffMin < 0 ? `há ${h}h` : `em ${h}h`; }
+    const day = String(d.getDate()).padStart(2,"0");
+    const mo = String(d.getMonth()+1).padStart(2,"0");
+    const hh = String(d.getHours()).padStart(2,"0");
+    const mm = String(d.getMinutes()).padStart(2,"0");
+    return `${day}/${mo} ${hh}:${mm}`;
+  }
+
+  function fmtTime(iso){
+    if(!iso) return "—";
+    const d = new Date(iso);
+    return `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}:${String(d.getSeconds()).padStart(2,"0")}`;
+  }
+
+  function buildUrl(){
+    const u = new URL(ENDPOINT);
+    u.searchParams.set("range", state.range);
+    if(state.automation) u.searchParams.set("automation", state.automation);
+    if(state.status) u.searchParams.set("status", state.status);
+    if(state.search) u.searchParams.set("search", state.search);
+    u.searchParams.set("limit", "100");
+    return u.toString();
+  }
+
+  async function fetchData(){
+    setLoading(true);
+    try {
+      const res = await fetch(buildUrl(), { cache: "no-store" });
+      const data = await res.json();
+      if(!data.ok) throw new Error(data.error || "erro desconhecido");
+      render(data);
+    } catch(err){
+      renderError(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function setLoading(loading){
+    const lu = document.getElementById("last-updated");
+    if(loading) lu.classList.add("skel"); else lu.classList.remove("skel");
+  }
+
+  function renderError(err){
+    const c = document.getElementById("alerts-container");
+    c.innerHTML = `<div class="alert error"><div><b>Falha ao carregar dados.</b> ${escapeHtml(err.message||err)}</div></div>`;
+  }
+
+  function render(d){
+    document.getElementById("last-updated").textContent = fmtTime(d.last_updated);
+    document.getElementById("filters-meta").textContent = `${d.summary.total_runs} runs · período ${d.summary.range}`;
+
+    // Alertas inteligentes
+    renderAlerts(d);
+
+    // KPIs
+    const k = d.summary;
+    const kpis = [
+      { lbl:"Carrinhos", val:fmtNum(k.carrinhos), sub:"recebidos via webhook" },
+      { lbl:"Enviadas", val:fmtNum(k.enviadas), sub:"WhatsApp disparado" },
+      { lbl:"Conversões", val:fmtNum(k.conversoes), sub:fmtPct(k.taxa_conversao)+" das enviadas" },
+      { lbl:"Receita recuperada", val:fmtBRL(k.receita_brl), sub:k.conversoes ? `${fmtBRL(k.receita_brl/k.conversoes)} / pedido` : "—", featured:true },
+      { lbl:"Pendentes", val:fmtNum(k.pendentes), sub:"agendadas" },
+      { lbl:"Falhas", val:fmtNum(k.falhas), sub:"após 3 tentativas" },
+    ];
+    document.getElementById("kpi-grid").innerHTML = kpis.map(k=>`
+      <div class="kpi ${k.featured?'featured':''}">
+        <div class="k-lbl">${k.lbl}</div>
+        <div class="k-val">${k.val}</div>
+        <div class="k-sub">${k.sub}</div>
+      </div>`).join("");
+
+    // Funil
+    const f = d.funnel;
+    const fmax = Math.max(f.carrinhos, f.enviadas, 1);
+    const steps = [
+      { lbl:"Carrinhos abandonados", val:f.carrinhos, base:f.carrinhos },
+      { lbl:"Mensagens enviadas", val:f.enviadas, base:f.carrinhos },
+      { lbl:"Entregues", val:f.entregues, base:f.enviadas, faded:true },
+      { lbl:"Lidas", val:f.lidas, base:f.enviadas, faded:true },
+      { lbl:"Respondidas", val:f.respondidas, base:f.enviadas, faded:true },
+      { lbl:"Conversões (pago)", val:f.conversoes, base:f.enviadas },
+    ];
+    document.getElementById("funnel").innerHTML = steps.map(s=>{
+      const w = fmax > 0 ? Math.max((s.val/fmax)*100, 2) : 2;
+      const pct = s.base > 0 ? ((s.val/s.base)*100).toFixed(1)+"%" : "—";
+      return `
+        <div class="fu">
+          <div class="fu-lbl">${s.lbl}</div>
+          <div class="fu-bar"><div class="fu-bar-fill ${s.faded?'faded':''}" style="width:${w}%">${s.val>0?fmtNum(s.val):''}</div></div>
+          <div class="fu-val">${fmtNum(s.val)}</div>
+          <div class="fu-pct">${pct}</div>
+        </div>`;
+    }).join("");
+
+    // Breakdown
+    const tbody = document.querySelector("#breakdown-table tbody");
+    if(d.breakdown.length === 0){
+      tbody.innerHTML = `<tr><td colspan="8" class="muted" style="text-align:center;padding:32px">Sem dados no período.</td></tr>`;
+    } else {
+      tbody.innerHTML = d.breakdown.map(b=>`
+        <tr>
+          <td><span class="auto-tag">${escapeHtml(b.automation)}</span></td>
+          <td class="right">${fmtNum(b.total)}</td>
+          <td class="right">${fmtNum(b.sent)}</td>
+          <td class="right">${fmtNum(b.read)}</td>
+          <td class="right">${fmtNum(b.answered)}</td>
+          <td class="right" ${b.failed>0?'style="color:var(--red);font-weight:500"':''}>${fmtNum(b.failed)}</td>
+          <td class="right">${fmtNum(b.pending)}</td>
+          <td class="right muted">${fmtNum(b.skipped)}</td>
+        </tr>`).join("");
+    }
+
+    // Runs
+    const rtbody = document.querySelector("#runs-table tbody");
+    if(d.recent.length === 0){
+      rtbody.innerHTML = `<tr><td colspan="6" class="muted" style="text-align:center;padding:32px">Nenhuma run encontrada com esses filtros.</td></tr>`;
+    } else {
+      rtbody.innerHTML = d.recent.map(r=>{
+        const motivo = r.failure_reason || r.status_reason || "";
+        const when = r.dispatched_at || r.scheduled_for || r.created_at;
+        return `
+          <tr>
+            <td class="name">${escapeHtml(r.full_name || r.nome)}<span class="ph">${escapeHtml(r.telefone)}</span></td>
+            <td><span class="auto-tag">${escapeHtml(r.automation || '—')}</span></td>
+            <td class="mono">${escapeHtml(r.template || '—')}</td>
+            <td><span class="pill ${r.status}">${escapeHtml(r.status)}</span></td>
+            <td class="mono">${fmtDate(when)}</td>
+            <td class="muted" style="font-size:12px;max-width:280px">${escapeHtml(motivo) || '—'}</td>
+          </tr>`;
+      }).join("");
+    }
+
+    // Próximos disparos
+    const nextBody = document.getElementById("next-body");
+    document.getElementById("next-meta").textContent = `${d.next_runs.length} agendadas`;
+    if(d.next_runs.length === 0){
+      nextBody.innerHTML = `<div class="panel-empty">Nenhuma run pendente.</div>`;
+    } else {
+      nextBody.innerHTML = `<table><thead><tr><th>Cliente</th><th>Automação</th><th class="right">Quando</th></tr></thead><tbody>${
+        d.next_runs.map(r=>`<tr>
+          <td class="name">${escapeHtml(r.nome)}<span class="ph">${escapeHtml(r.telefone)}</span></td>
+          <td><span class="auto-tag">${escapeHtml(r.automation || '—')}</span></td>
+          <td class="right mono">${fmtDate(r.scheduled_for)}</td>
+        </tr>`).join("")
+      }</tbody></table>`;
+    }
+
+    // Falhas
+    const failBody = document.getElementById("failures-body");
+    document.getElementById("failures-meta").textContent = `${d.failures.length} motivos`;
+    if(d.failures.length === 0){
+      failBody.innerHTML = `<div class="panel-empty">Sem falhas no período. ✓</div>`;
+    } else {
+      failBody.innerHTML = `<div class="reason-list">${
+        d.failures.map(f=>`<div class="row"><div class="rl-r">${escapeHtml(f.reason)}</div><div class="rl-c">${f.count}</div></div>`).join("")
+      }</div>`;
+    }
+
+    // Skips
+    const skipBody = document.getElementById("skips-body");
+    document.getElementById("skips-meta").textContent = `${d.skip_reasons.length} motivos`;
+    if(d.skip_reasons.length === 0){
+      skipBody.innerHTML = `<div class="panel-empty">Nenhum skip no período.</div>`;
+    } else {
+      skipBody.innerHTML = `<div class="reason-list">${
+        d.skip_reasons.map(s=>`<div class="row"><div class="rl-r">${escapeHtml(s.reason)}</div><div class="rl-c">${s.count}</div></div>`).join("")
+      }</div>`;
+    }
+
+    // Templates
+    const tplBody = document.getElementById("templates-body");
+    const approved = d.templates.filter(t=>t.status==="approved").length;
+    const pending = d.templates.filter(t=>t.status==="pending").length;
+    document.getElementById("templates-meta").textContent = `${approved} aprovados · ${pending} pendentes`;
+    tplBody.innerHTML = `<table><thead><tr><th>Template</th><th>Status</th><th class="right">Params</th><th>Categ.</th></tr></thead><tbody>${
+      d.templates.map(t=>`<tr>
+        <td class="mono">${escapeHtml(t.template_name)}</td>
+        <td><span class="pill ${t.status==='approved'?'sent':'pending'}">${escapeHtml(t.status)}</span></td>
+        <td class="right">${t.parameters||0}</td>
+        <td class="muted" style="font-size:11px">${escapeHtml(t.category||'')}</td>
+      </tr>`).join("")
+    }</tbody></table>`;
+
+    // Live feed
+    renderLiveFeed(d.live_feed || []);
+    // Catálogo
+    renderCatalog(d.catalog || [], d.catalog_summary || {});
+    // Base
+    renderBase(d.base_clientes || {});
+    // Saúde + histórico
+    renderHealthBadge(d.health || {});
+    renderHealthHistory(d.health || {});
+    renderReportHistory(d.daily_report_history || []);
+  }
+
+  function renderHealthBadge(health){
+    const c = document.getElementById("health-badge-container");
+    const last = health?.last;
+    if(!last){ c.innerHTML = ""; return; }
+    const v = last.veredito || "ATENCAO";
+    c.innerHTML = `<div class="health-badge ${escapeHtml(v)}">
+      <span class="hb-dot"></span>
+      <span>SAÚDE</span>
+      <span class="hb-score">${last.score ?? '?'}/100</span>
+      <span>${escapeHtml(v)}</span>
+    </div>`;
+  }
+
+  function renderHealthHistory(health){
+    const history = health?.history || [];
+    const meta = document.getElementById("health-meta");
+    const spark = document.getElementById("health-spark");
+    const body = document.getElementById("health-body");
+    if(!history.length){
+      meta.textContent = "sem dados";
+      spark.innerHTML = "";
+      body.innerHTML = `<div class="history-row empty">Nenhum health-check registrado ainda. Cron roda a cada hora.</div>`;
+      return;
+    }
+    meta.textContent = `${history.length} leituras · última: ${escapeHtml(history[0]?.veredito || '?')}`;
+    // Sparkline (mais antiga à esquerda, mais nova à direita)
+    const reversed = [...history].reverse();
+    spark.innerHTML = reversed.map(h => {
+      const s = h.score ?? 0;
+      const cls = s >= 85 ? '' : s >= 60 ? 'warn' : 'fail';
+      return `<div class="bar ${cls}" style="height:${Math.max(3, s)}%" title="${escapeHtml(h.veredito || '?')} ${s}/100 - ${fmtDate(h.checked_at)}"></div>`;
+    }).join("");
+    body.innerHTML = history.slice(0, 5).map(h => `
+      <div class="history-row">
+        <div class="hr-when">${fmtDate(h.checked_at)}</div>
+        <div><span class="pill ${h.veredito === 'SAUDAVEL' ? 'sent' : h.veredito === 'ATENCAO' ? 'pending' : 'failed'}">${escapeHtml(h.veredito || '?')} ${h.score ?? '?'}/100</span></div>
+        <div class="hr-detail">${(h.issues || []).slice(0, 2).map(escapeHtml).join(' · ') || 'tudo ok'}</div>
+      </div>`).join("");
+  }
+
+  function renderReportHistory(reports){
+    const meta = document.getElementById("report-meta");
+    const body = document.getElementById("report-body");
+    if(!reports.length){
+      meta.textContent = "sem dados";
+      body.innerHTML = `<div class="history-row empty">Nenhum daily report registrado ainda. Cron dispara 11h BRT diário.</div>`;
+      return;
+    }
+    meta.textContent = `${reports.length} envios`;
+    body.innerHTML = reports.slice(0, 7).map(r => `
+      <div class="history-row">
+        <div class="hr-when">${fmtDate(r.ran_at)}</div>
+        <div><span class="pill ${r.veredito === 'SUCESSO' ? 'sent' : r.veredito === 'ATENCAO' ? 'pending' : 'failed'}">${escapeHtml(r.veredito || '?')}</span></div>
+        <div class="hr-detail" title="${escapeHtml(r.resumo || '')}">${r.sent_ok ? '✓ entregue WhatsApp' : '✗ falhou envio'}${r.wamid ? ' · ' + r.wamid.slice(-12) : ''}</div>
+      </div>`).join("");
+  }
+
+  function renderLiveFeed(items){
+    const el = document.getElementById("live-feed");
+    if(!items.length){
+      el.innerHTML = `<div class="live-empty">Nenhum disparo na última hora. Cron roda a cada 2min em horário comercial (9h–21h BRT).</div>`;
+      return;
+    }
+    const now = Date.now();
+    el.innerHTML = items.map(it=>{
+      const t = new Date(it.timestamp).getTime();
+      const ageMin = Math.round((now - t)/60000);
+      const fresh = ageMin < 5;
+      const when = ageMin < 1 ? "agora" : ageMin === 1 ? "1min atrás" : `${ageMin}min atrás`;
+      const stCls = it.status === 'sent' ? 'sent' : it.status === 'failed' ? 'failed' : 'pending';
+      const pulsing = it.status === 'pending' ? 'pulsing' : '';
+      return `
+        <div class="live-item ${fresh?'fresh':''}">
+          <div class="lt">${when}</div>
+          <div class="lc">
+            <div class="lc-name">${escapeHtml(it.full_name || it.nome)} <span style="color:var(--muted);font-weight:400;font-family:var(--font-mono);font-size:11px">${escapeHtml(it.telefone)}</span></div>
+            <div class="lc-meta"><span>↳ ${escapeHtml(it.automation || '—')}</span><span>· ${escapeHtml(it.template || '—')}</span></div>
+          </div>
+          <div class="ls ${stCls}"><span class="ls-dot ${pulsing}"></span>${escapeHtml(it.status)}</div>
+        </div>`;
+    }).join("");
+  }
+
+  function renderCatalog(catalog, summary){
+    const sumEl = document.getElementById("catalog-summary");
+    const a = summary.active||0, pt = summary.pending_template||0, pd = summary.pending_data||0;
+    sumEl.innerHTML = `
+      <div style="display:flex;gap:10px;flex-wrap:wrap;font-family:var(--font-mono);font-size:11px;letter-spacing:0.04em">
+        <span style="padding:6px 12px;background:var(--ink);color:#fff;border-radius:6px">${summary.total||0} AUTOMAÇÕES</span>
+        <span style="padding:6px 12px;background:var(--status-sent-bg);color:var(--status-sent-fg);border-radius:6px">${a} ATIVAS</span>
+        <span style="padding:6px 12px;background:var(--status-pending-bg);color:var(--status-pending-fg);border-radius:6px">${pt} STEPS PENDENTES TEMPLATE META</span>
+        ${pd>0?`<span style="padding:6px 12px;background:var(--status-failed-bg);color:var(--status-failed-fg);border-radius:6px">${pd} STEPS PENDENTES DATA</span>`:''}
+      </div>`;
+
+    const FAMILY_LABELS = {
+      'A_recuperacao': { letter:'A', name:'Recuperação de venda', sub:'Carrinho, checkout, Pix, boleto' },
+      'B_pedido': { letter:'B', name:'Ciclo do pedido', sub:'Confirmação, envio, entrega' },
+      'C_recompra': { letter:'C', name:'Recompra & upsell', sub:'Cross-sell, novidades, aniversários, winback' },
+      'D_reativacao': { letter:'D', name:'Reativação & crescimento', sub:'Inativos 120d+, restock, indicação' },
+    };
+    const families = {};
+    for(const c of catalog){
+      if(!families[c.family]) families[c.family] = [];
+      families[c.family].push(c);
+    }
+
+    const famsEl = document.getElementById("catalog-families");
+    famsEl.innerHTML = Object.keys(families).map(famKey=>{
+      const fam = FAMILY_LABELS[famKey] || { letter:'?', name:famKey, sub:'' };
+      const items = families[famKey];
+      return `
+        <div class="family">
+          <div class="fam-head">
+            <div class="fh-l">
+              <div class="fh-letter">${fam.letter}</div>
+              <div>
+                <div class="fh-name">${fam.name}</div>
+                <div class="fh-sub">${fam.sub}</div>
+              </div>
+            </div>
+            <div class="fh-meta">${items.length} automações</div>
+          </div>
+          <div class="auto-grid">
+            ${items.map(c=>renderAutoCard(c)).join("")}
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  function renderAutoCard(c){
+    const trig = `${c.trigger_type}${c.trigger_config && Object.keys(c.trigger_config).length ? ' ' + JSON.stringify(c.trigger_config) : ''}`;
+    return `
+      <div class="auto-card">
+        <div class="ac-head">
+          <div>
+            <div class="ac-code">${escapeHtml(c.automation_code)}</div>
+            <div class="ac-name">${escapeHtml(c.name)}</div>
+          </div>
+          <span class="ac-prio ${c.priority||'P1'}">${escapeHtml(c.priority||'P1')}</span>
+        </div>
+        <div class="ac-desc">${escapeHtml(c.description||'')}</div>
+        <div class="ac-trigger">${escapeHtml(trig)}</div>
+        ${c.audience ? `<div class="ac-aud">Audiência: ${escapeHtml(c.audience)}</div>` : ''}
+        <div class="ac-steps">
+          ${(c.steps||[]).map(s=>{
+            const when = s.delay_minutes === 0 ? 'Imediato' :
+              s.delay_minutes < 60 ? `T+${s.delay_minutes}min` :
+              s.delay_minutes < 1440 ? `T+${Math.round(s.delay_minutes/60)}h` :
+              `T+${Math.round(s.delay_minutes/1440)}d`;
+            return `
+              <div class="ac-step">
+                <span class="as-when">${when}</span>
+                <span class="as-label">${escapeHtml(s.step_label)}</span>
+                <span class="as-tpl" title="${escapeHtml(s.message_preview||'')}">${escapeHtml(s.template_name||'(texto livre)')}</span>
+                <span class="as-status ${s.template_status}">${escapeHtml(s.template_status.replace('_',' '))}</span>
+              </div>`;
+          }).join("")}
+        </div>
+        <div class="ac-stats">
+          <span><b>${fmtNum(c.stats?.sent||0)}</b>enviadas</span>
+          <span><b>${fmtNum(c.stats?.pending||0)}</b>pendentes</span>
+          <span><b>${fmtNum(c.stats?.failed||0)}</b>falhas</span>
+          <span><b>${fmtNum(c.stats?.skipped||0)}</b>puladas</span>
+        </div>
+      </div>`;
+  }
+
+  function renderBase(b){
+    const total = b.total||0;
+    document.getElementById("base-total").textContent = fmtNum(total);
+    document.getElementById("base-sub").textContent = `${fmtNum(b.com_telefone||0)} com telefone (${total>0?Math.round((b.com_telefone/total)*1000)/10:0}%) · ${fmtNum(b.com_aniversario||0)} com data de nascimento`;
+
+    const origens = b.por_origem || {};
+    const shopify = origens.shopify || 0;
+    const bling = origens.bling || 0;
+    const otherTotal = total - shopify - bling;
+    document.getElementById("base-bar").innerHTML = total > 0 ? `
+      <div class="bc-bar-seg shopify" style="width:${(shopify/total)*100}%"></div>
+      <div class="bc-bar-seg bling" style="width:${(bling/total)*100}%"></div>
+      <div class="bc-bar-seg unknown" style="width:${(otherTotal/total)*100}%"></div>` : '';
+
+    const rfm = b.por_rfm || {};
+    const rfmOrder = ['fiel','potencial','em_risco','inativo'];
+    const rows = [
+      { lbl:'Shopify', val:shopify, color:'#15803d' },
+      { lbl:'Bling', val:bling, color:'#1e40af' },
+      ...rfmOrder.map(k => ({ lbl:`RFM · ${k.replace('_',' ')}`, val:rfm[k]||0, color:'var(--muted)' })),
+    ];
+    document.getElementById("base-rows").innerHTML = rows.map(r=>{
+      const pct = total > 0 ? ((r.val/total)*100).toFixed(1)+'%' : '—';
+      return `<div class="bc-row">
+        <div class="br-lbl">${escapeHtml(r.lbl)}</div>
+        <div class="br-val">${fmtNum(r.val)}</div>
+        <div class="br-pct">${pct}</div>
+      </div>`;
+    }).join("");
+
+    const alertEl = document.getElementById("base-alert");
+    const alerts = [];
+    if(bling === 0){
+      alerts.push(`<div class="bc-empty"><b>Bling não sincronizado.</b> Edge function <code>bling-importer</code> está deployada mas precisa do token Bling no Vault. Sem isso, base = só Shopify.</div>`);
+    }
+    if(b.com_aniversario === 0){
+      alerts.push(`<div class="bc-empty" style="margin-top:8px"><b>0 datas de nascimento.</b> Automação a11 (aniversário do cliente) não roda sem isso. Coletar via pergunta na automação a07 (pós-entrega).</div>`);
+    }
+    alertEl.innerHTML = alerts.join("");
+  }
+
+  function renderAlerts(d){
+    const c = document.getElementById("alerts-container");
+    const a = [];
+    const k = d.summary;
+
+    // Falha alta
+    if(k.enviadas > 0 && k.falhas / (k.falhas + k.enviadas) > 0.3){
+      a.push(`<div class="alert error"><div><b>Taxa de falha alta:</b> ${k.falhas} falhas vs ${k.enviadas} enviadas. Verifique a aba "motivos de falha" abaixo.</div></div>`);
+    }
+    // Webhook callback ausente
+    if(k.enviadas > 0 && k.entregues === 0){
+      a.push(`<div class="alert warn"><div><b>Sem callback de status da Suri:</b> ${k.enviadas} mensagens enviadas mas 0 com status "entregue/lida/respondida". O webhook <code>suri-webhook</code> provavelmente não está recebendo callbacks. Mensagens podem estar chegando mesmo assim.</div></div>`);
+    }
+    // Pendentes acumuladas
+    if(k.pendentes > 10){
+      a.push(`<div class="alert info"><div><b>${k.pendentes} runs pendentes</b> aguardando despacho. Próxima janela: 9h–21h BRT.</div></div>`);
+    }
+    c.innerHTML = a.join("");
+  }
+
+  // Filtros
+  document.getElementById("range-seg").addEventListener("click", e=>{
+    if(e.target.tagName !== "BUTTON") return;
+    document.querySelectorAll("#range-seg button").forEach(b=>b.classList.remove("on"));
+    e.target.classList.add("on");
+    state.range = e.target.dataset.val;
+    fetchData();
+  });
+  document.getElementById("f-automation").addEventListener("change", e=>{ state.automation = e.target.value; fetchData(); });
+  document.getElementById("f-status").addEventListener("change", e=>{ state.status = e.target.value; fetchData(); });
+  let searchTimer;
+  document.getElementById("f-search").addEventListener("input", e=>{
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(()=>{ state.search = e.target.value.trim(); fetchData(); }, 350);
+  });
+  document.getElementById("clear-filters").addEventListener("click", ()=>{
+    state.automation = ""; state.status = ""; state.search = "";
+    document.getElementById("f-automation").value = "";
+    document.getElementById("f-status").value = "";
+    document.getElementById("f-search").value = "";
+    fetchData();
+  });
+  document.getElementById("refresh-btn").addEventListener("click", fetchData);
+
+  document.getElementById("run-dispatcher-btn").addEventListener("click", async ()=>{
+    const btn = document.getElementById("run-dispatcher-btn");
+    btn.disabled = true; btn.innerHTML = '<span style="font-family:var(--font-mono);font-size:11px">⏳ rodando...</span>';
+    try {
+      const r = await fetch("https://qysuiqrqfcanusyfwuri.supabase.co/functions/v1/suri-dispatcher?force=1", {method:"POST", headers:{"Content-Type":"application/json"}, body:"{}"});
+      const j = await r.json();
+      const sent = (j.results||[]).filter(x=>x.result==="sent").length;
+      const skipped = (j.results||[]).filter(x=>x.result?.includes("skipped")).length;
+      const failed = (j.results||[]).filter(x=>x.result?.includes("failed")||x.result?.includes("retry")).length;
+      alert(`Dispatcher rodou: ${j.processed||0} runs processados\n✓ ${sent} enviadas\n⊘ ${skipped} puladas\n✗ ${failed} falhas/retry`);
+      fetchData();
+    } catch(e){ alert("Erro: "+e.message); }
+    finally { btn.disabled = false; btn.innerHTML = '<span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.06em">▶ DISPATCHER</span>'; }
+  });
+
+  document.getElementById("run-health-btn").addEventListener("click", async ()=>{
+    const btn = document.getElementById("run-health-btn");
+    btn.disabled = true; btn.innerHTML = '<span style="font-family:var(--font-mono);font-size:11px">⏳ checando...</span>';
+    try {
+      const r = await fetch("https://qysuiqrqfcanusyfwuri.supabase.co/functions/v1/prls-health-check");
+      const j = await r.json();
+      alert(`Health-check: ${j.veredito} ${j.score}/100\n\n${(j.issues||[]).join('\\n') || 'Tudo verde ✓'}`);
+      fetchData();
+    } catch(e){ alert("Erro: "+e.message); }
+    finally { btn.disabled = false; btn.innerHTML = '<span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.06em">♥ HEALTH</span>'; }
+  });
+
+  // Auto-refresh a cada 60s
+  function startAutoRefresh(){
+    if(refreshTimer) clearInterval(refreshTimer);
+    refreshTimer = setInterval(fetchData, 60000);
+  }
+
+  // Boot
+  fetchData();
+  startAutoRefresh();
+})();
+</script>
+
+</body>
+</html>

@@ -70,10 +70,16 @@
   .brand .sq{width:18px;height:18px;background:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;font-family:var(--font-mono)}
   .brand .sep{color:var(--muted-2);font-weight:400}
   .brand .sub{color:var(--muted);font-weight:500}
-  .top-nav{display:flex;gap:4px;font-size:13px}
+  .top-nav{display:flex;align-items:flex-end;gap:14px;font-size:13px}
+  .top-nav .nav-group{display:flex;flex-direction:column;gap:5px;position:relative}
+  .top-nav .nav-group + .nav-group::before{content:'';position:absolute;left:-7px;top:18px;bottom:4px;width:1px;background:var(--border)}
+  .top-nav .nav-label{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-weight:500;padding-left:12px;opacity:.7}
+  .top-nav .nav-items{display:flex;gap:2px}
+  .top-nav .nav-emphasis .nav-items{background:var(--bg-alt);border-radius:8px;padding:2px}
   .top-nav a{padding:8px 12px;color:var(--muted);border-radius:6px;transition:all 0.15s;font-weight:500}
   .top-nav a:hover{color:var(--ink);background:var(--bg-alt)}
-  .top-nav a.active{color:var(--ink);background:var(--bg-alt)}
+  .top-nav .nav-emphasis a:hover{background:#fff}
+  .top-nav a.active{background:var(--ink);color:#fff}
   .top-meta{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.02em}
 
   /* HERO */
@@ -234,14 +240,31 @@
       <span class="sep">/</span>
       <span class="sub">Calendário 2026</span>
     </div>
-    <nav class="top-nav">
-      <a href="./index.html">Mapa</a>
-      <a href="./index.html#m08">Squad</a>
-      <a href="./index.html#m09">Benchmark</a>
-      <a href="./index.html#m10">Playbook</a>
-      <a href="./index.html#m11">CRM</a>
-      <a href="#" class="active">Calendário</a>
-      <a href="./rotina-vendas.html" style="background:var(--ink);color:#fff">Rotina</a>
+    <nav class="top-nav" aria-label="Navegação principal">
+      <div class="nav-group">
+        <span class="nav-label">Estratégia</span>
+        <div class="nav-items">
+          <a href="./index.html#macro">Mapa</a>
+          <a href="./index.html#m08">Squad</a>
+          <a href="./index.html#m09">Benchmark</a>
+        </div>
+      </div>
+      <div class="nav-group nav-emphasis">
+        <span class="nav-label">Operação</span>
+        <div class="nav-items">
+          <a href="./index.html#m10">Playbook</a>
+          <a href="./index.html#m11">CRM</a>
+          <a href="#" class="active">Calendário</a>
+          <a href="./rotina-vendas.html">Rotina</a>
+        </div>
+      </div>
+      <div class="nav-group">
+        <span class="nav-label">Suporte</span>
+        <div class="nav-items">
+          <a href="./financeiro.html">Financeiro</a>
+          <a href="./automacao.html">Automação</a>
+        </div>
+      </div>
     </nav>
     <div class="top-meta">v1.1 · 2026</div>
   </div>

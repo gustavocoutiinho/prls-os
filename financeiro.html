@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PRLS OS · Financeiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fafaf9;
+    --bg-alt:#f5f5f4;
+    --surface:#ffffff;
+    --surface-2:#f9f9f8;
+    --border:#e7e5e4;
+    --border-strong:#d6d3d1;
+    --ink:#18181b;
+    --ink-soft:#3f3f46;
+    --ink-2:#52525b;
+    --muted:#78716c;
+    --muted-2:#a8a29e;
+    --accent:#18181b;
+    --accent-soft:#f4f1ee;
+    --blue:#1e40af;
+    --green:#15803d;
+    --amber:#b45309;
+    --red:#b91c1c;
+    --green-bg:#dcfce7;
+    --red-bg:#fee2e2;
+    --amber-bg:#fef3c7;
+    --blue-bg:#dbeafe;
+    --shadow-sm:0 1px 2px rgba(15,15,15,0.04);
+    --shadow-md:0 1px 3px rgba(15,15,15,0.06),0 1px 2px rgba(15,15,15,0.04);
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-weight:400;line-height:1.55;-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01";font-size:15px}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--ink);color:#fff}
+
+  .container{max-width:1320px;margin:0 auto;padding:0 40px}
+
+  /* ============ TOPBAR ============ */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(250,250,249,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;height:56px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:-0.01em;font-size:15px}
+  .brand .sq{width:18px;height:18px;background:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;font-family:var(--font-mono)}
+  .brand .sep{color:var(--muted-2);font-weight:400}
+  .brand .sub{color:var(--muted);font-weight:500}
+  .top-nav{display:flex;align-items:flex-end;gap:14px;font-size:13px}
+  .top-nav .nav-group{display:flex;flex-direction:column;gap:5px;position:relative}
+  .top-nav .nav-group + .nav-group::before{content:'';position:absolute;left:-7px;top:18px;bottom:4px;width:1px;background:var(--border)}
+  .top-nav .nav-label{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-weight:500;padding-left:12px;opacity:.7}
+  .top-nav .nav-items{display:flex;gap:2px}
+  .top-nav .nav-emphasis .nav-items{background:var(--bg-alt);border-radius:8px;padding:2px}
+  .top-nav a{padding:8px 12px;color:var(--muted);border-radius:6px;transition:all 0.15s;font-weight:500}
+  .top-nav a:hover{color:var(--ink);background:var(--bg-alt)}
+  .top-nav .nav-emphasis a:hover{background:#fff}
+  .top-nav a.active{background:var(--ink);color:#fff}
+  .top-meta{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.02em}
+
+  /* ============ HERO ============ */
+  .hero{padding:72px 0 48px;border-bottom:1px solid var(--border)}
+  .hero-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:80px;align-items:end}
+  .kicker{font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+  .kicker:before{content:'';width:20px;height:1px;background:var(--ink)}
+  .hero h1{font-size:clamp(36px,4.5vw,56px);font-weight:500;letter-spacing:-0.035em;line-height:1.04;margin-bottom:24px;color:var(--ink)}
+  .hero p.lead{font-size:17px;color:var(--ink-2);max-width:620px;line-height:1.55}
+  .hero-side{border-left:1px solid var(--border);padding-left:40px}
+  .hero-side .lbl{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:18px}
+  .hero-side dl{display:grid;gap:14px}
+  .hero-side dl div{display:flex;justify-content:space-between;gap:20px;padding-bottom:14px;border-bottom:1px solid var(--border);font-size:13px}
+  .hero-side dl div:last-child{border-bottom:none}
+  .hero-side dt{color:var(--muted)}
+  .hero-side dd{color:var(--ink);font-weight:500;text-align:right}
+
+  /* ============ KPIS ============ */
+  .kpis{padding:56px 0;background:var(--surface-2);border-bottom:1px solid var(--border)}
+  .section-title{margin-bottom:40px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end}
+  .section-title .left .num{font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:0.12em;margin-bottom:12px}
+  .section-title .left h2{font-size:clamp(26px,3vw,36px);font-weight:500;letter-spacing:-0.02em;line-height:1.1;color:var(--ink)}
+  .section-title .right{color:var(--ink-2);font-size:14.5px;max-width:440px;padding-bottom:6px}
+
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .kpi{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:22px 20px;box-shadow:var(--shadow-sm)}
+  .kpi .lbl{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:12px}
+  .kpi .val{font-size:28px;font-weight:500;letter-spacing:-0.02em;color:var(--ink);line-height:1.1}
+  .kpi .sub{font-size:12px;color:var(--ink-2);margin-top:8px}
+  .kpi.red .val{color:var(--red)}
+  .kpi.green .val{color:var(--green)}
+  .kpi.amber .val{color:var(--amber)}
+
+  /* ============ MODULES (sections) ============ */
+  .module{padding:80px 0;border-bottom:1px solid var(--border)}
+  .module.alt{background:var(--surface-2)}
+  .mod-header{display:grid;grid-template-columns:80px 1fr auto;gap:40px;margin-bottom:48px;align-items:start}
+  .mod-ref{font-family:var(--font-mono);font-size:12px;color:var(--muted);letter-spacing:0.14em;padding-top:6px}
+  .mod-title h2{font-size:clamp(24px,2.6vw,32px);font-weight:500;letter-spacing:-0.02em;color:var(--ink);margin-bottom:10px;line-height:1.15}
+  .mod-title p{color:var(--ink-2);font-size:15px;max-width:720px}
+  .mod-meta{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+  .mm-chip{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+  .mm-chip b{color:var(--ink);font-weight:600;margin-left:4px}
+
+  /* ============ TABELAS ============ */
+  .tbl{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .tbl table{width:100%;border-collapse:collapse;font-size:13px}
+  .tbl th, .tbl td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--border)}
+  .tbl th{background:var(--bg-alt);font-family:var(--font-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .tbl td{color:var(--ink-2)}
+  .tbl td.num{font-family:var(--font-mono);text-align:right;color:var(--ink)}
+  .tbl tr.total td{background:var(--bg-alt);font-weight:600;color:var(--ink);border-bottom:2px solid var(--border-strong)}
+  .tbl tr.sub td{padding-left:32px;color:var(--muted)}
+  .tbl tr.alert td{background:var(--red-bg)}
+  .tbl tr.warn td{background:var(--amber-bg)}
+  .tbl tr.ok td{background:var(--green-bg)}
+
+  .pos{color:var(--green);font-weight:500}
+  .neg{color:var(--red);font-weight:500}
+
+  /* ============ CARDS ============ */
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:28px;box-shadow:var(--shadow-sm)}
+  .card h3{font-size:17px;font-weight:600;letter-spacing:-0.01em;margin-bottom:12px;color:var(--ink)}
+  .card p{color:var(--ink-2);font-size:14px;line-height:1.55}
+  .card.alert{background:var(--red-bg);border-color:#fecaca}
+  .card.amber{background:var(--amber-bg);border-color:#fde68a}
+  .card.ok{background:var(--green-bg);border-color:#bbf7d0}
+
+  /* ============ CALCULADORA ============ */
+  .calc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:32px;box-shadow:var(--shadow-md)}
+  .calc-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:40px}
+  .calc-inputs label{display:block;font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;margin-top:18px}
+  .calc-inputs label:first-child{margin-top:0}
+  .calc-inputs input[type="number"]{width:100%;padding:12px 14px;background:var(--bg);border:1px solid var(--border-strong);border-radius:6px;font-family:var(--font-mono);font-size:14px;color:var(--ink);transition:border 0.15s}
+  .calc-inputs input[type="number"]:focus{outline:none;border-color:var(--ink)}
+  .calc-inputs .hint{font-size:11px;color:var(--muted);margin-top:4px;font-family:var(--font-sans);letter-spacing:0}
+
+  .calc-out{background:var(--bg-alt);border:1px solid var(--border);border-radius:8px;padding:28px;display:flex;flex-direction:column;gap:18px}
+  .calc-out .row{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:1px dashed var(--border)}
+  .calc-out .row:last-child{border-bottom:none;padding-bottom:0}
+  .calc-out .row .k{font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase}
+  .calc-out .row .v{font-family:var(--font-mono);font-size:18px;color:var(--ink);font-weight:500}
+  .calc-out .row.hero .k{color:var(--ink);font-weight:600}
+  .calc-out .row.hero .v{font-size:24px;font-weight:600}
+  .calc-out .row.pos .v{color:var(--green)}
+  .calc-out .row.neg .v{color:var(--red)}
+
+  /* ============ META / PROGRESS ============ */
+  .meta-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px}
+  .meta-title{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+  .meta-title h4{font-size:14px;font-weight:600;color:var(--ink)}
+  .meta-title .val{font-family:var(--font-mono);font-size:13px;color:var(--ink-2)}
+  .bar{height:8px;background:var(--bg-alt);border-radius:4px;overflow:hidden}
+  .bar .fill{height:100%;background:var(--ink);transition:width 0.4s}
+  .bar .fill.green{background:var(--green)}
+  .bar .fill.amber{background:var(--amber)}
+  .bar .fill.red{background:var(--red)}
+  .meta-foot{display:flex;justify-content:space-between;margin-top:10px;font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+
+  /* ============ PROCESS DECISION ============ */
+  .decision-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:24px;position:relative}
+  .step{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;display:flex;flex-direction:column;gap:10px;position:relative}
+  .step .step-ref{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.1em}
+  .step .step-title{font-size:14px;font-weight:600;color:var(--ink);letter-spacing:-0.01em}
+  .step .step-desc{font-size:12.5px;color:var(--ink-2);line-height:1.5}
+  .step .step-foot{margin-top:auto;padding-top:10px;border-top:1px dashed var(--border);font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase}
+
+  /* ============ ALERT BADGE ============ */
+  .alert-row{display:grid;grid-template-columns:60px 2fr 2.5fr 2.5fr 1.5fr;gap:16px;padding:20px 24px;border-bottom:1px solid var(--border);align-items:start}
+  .alert-row:last-child{border-bottom:none}
+  .prio{display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:0.1em;padding:4px 10px;border-radius:4px}
+  .prio.p0{background:var(--red);color:#fff}
+  .prio.p1{background:var(--amber);color:#fff}
+  .prio.p2{background:var(--blue);color:#fff}
+  .alert-row .col-title{font-weight:600;font-size:14px;color:var(--ink);line-height:1.4}
+  .alert-row .col-text{font-size:13px;color:var(--ink-2);line-height:1.55}
+  .alert-row .col-resp{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.04em}
+
+  /* ============ LINK DOWNLOAD ============ */
+  .download{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:var(--ink);color:#fff;border-radius:6px;font-size:13px;font-weight:500;margin-top:16px}
+  .download:hover{background:var(--ink-soft)}
+
+  /* ============ FOOTER ============ */
+  footer{padding:48px 0;color:var(--muted);font-size:12px;font-family:var(--font-mono);letter-spacing:0.04em}
+  footer .container{display:flex;justify-content:space-between}
+
+  @media (max-width: 1024px){
+    .hero-grid{grid-template-columns:1fr;gap:40px}
+    .hero-side{border-left:none;border-top:1px solid var(--border);padding:40px 0 0}
+    .section-title{grid-template-columns:1fr;gap:24px}
+    .kpi-grid{grid-template-columns:repeat(2,1fr)}
+    .grid-2{grid-template-columns:1fr}
+    .grid-3{grid-template-columns:1fr}
+    .calc-grid{grid-template-columns:1fr}
+    .decision-steps{grid-template-columns:1fr}
+    .alert-row{grid-template-columns:1fr;gap:8px}
+    .top-nav{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- =============== TOPBAR =============== -->
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand">
+      <span class="sq">P</span>
+      <span>PRLS OS</span>
+      <span class="sep">/</span>
+      <span class="sub">Financeiro</span>
+    </div>
+    <nav class="top-nav" aria-label="Navegação principal">
+      <div class="nav-group">
+        <span class="nav-label">Estratégia</span>
+        <div class="nav-items">
+          <a href="./index.html#macro">Mapa</a>
+          <a href="./index.html#m08">Squad</a>
+          <a href="./index.html#m09">Benchmark</a>
+        </div>
+      </div>
+      <div class="nav-group nav-emphasis">
+        <span class="nav-label">Operação</span>
+        <div class="nav-items">
+          <a href="./index.html#m10">Playbook</a>
+          <a href="./index.html#m11">CRM</a>
+          <a href="./calendario.html">Calendário</a>
+          <a href="./rotina-vendas.html">Rotina</a>
+        </div>
+      </div>
+      <div class="nav-group">
+        <span class="nav-label">Suporte</span>
+        <div class="nav-items">
+          <a href="#" class="active">Financeiro</a>
+          <a href="./automacao.html">Automação</a>
+        </div>
+      </div>
+    </nav>
+    <div class="top-meta">v1.0 · 04/2026</div>
+  </div>
+</header>
+
+<!-- =============== HERO =============== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="kicker">Financeiro · Leitura Set a Nov 2025</div>
+        <h1>DRE, DFC e decisão de margem no mesmo lugar.</h1>
+        <p class="lead">A leitura financeira da PRLS ancorada na operação real. Cada número aqui tem origem na DRE, no DFC, na tabela de precificação e está conectado com os processos do mapa. O objetivo não é entender contabilidade. É decidir com método.</p>
+      </div>
+      <div class="hero-side">
+        <div class="lbl">Status Trimestre</div>
+        <dl>
+          <div><dt>Faturamento bruto</dt><dd>R$ 656.137</dd></div>
+          <div><dt>Receita líquida</dt><dd>R$ 419.594</dd></div>
+          <div><dt>Lucro líquido</dt><dd>R$ 116.200</dd></div>
+          <div><dt>Margem líquida</dt><dd>17,7%</dd></div>
+          <div><dt>Caixa gerado</dt><dd style="color:var(--red)">R$ 14.541 (queima)</dd></div>
+          <div><dt>Saldo caixa atual</dt><dd style="color:var(--red)">R$ 3.349</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== KPIS =============== -->
+<section class="kpis">
+  <div class="container">
+    <div class="section-title">
+      <div class="left">
+        <div class="num">01 · INDICADORES CHAVE</div>
+        <h2>O que precisa estar no olhar diário.</h2>
+      </div>
+      <div class="right">Os oito números que resumem a saúde financeira da PRLS hoje. Leitura mensal. Toda decisão passa por aqui antes de ir para ação.</div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="lbl">Faturamento mês (Nov)</div><div class="val">R$ 234 mil</div><div class="sub">+15,4% vs Out. Média trimestre R$ 218k</div></div>
+      <div class="kpi"><div class="lbl">Margem líquida (Nov)</div><div class="val amber">15,7%</div><div class="sub">Caindo. Set 18,0% · Out 19,6% · Nov 15,7%</div></div>
+      <div class="kpi"><div class="lbl">Ponto de equilíbrio (Nov)</div><div class="val">R$ 117 mil</div><div class="sub">Faturamento mínimo para zerar resultado</div></div>
+      <div class="kpi"><div class="lbl">Cobertura do PE (Nov)</div><div class="val green">2,0x</div><div class="sub">Está 100% acima do ponto de equilíbrio</div></div>
+      <div class="kpi"><div class="lbl">Caixa em conta</div><div class="val red">R$ 3,3 mil</div><div class="sub">Caiu de R$ 52k (Set) para R$ 3,3k (Nov)</div></div>
+      <div class="kpi"><div class="lbl">Estoque parado (3M)</div><div class="val red">R$ 107 mil</div><div class="sub">Comprou R$ 267k, vendeu custo R$ 160k</div></div>
+      <div class="kpi"><div class="lbl">Descontos efetivos</div><div class="val red">25,2%</div><div class="sub">Planejado era 15%. Gap de 10 pontos</div></div>
+      <div class="kpi"><div class="lbl">SKUs deficitários</div><div class="val red">13</div><div class="sub">Produtos vendidos abaixo do custo total</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== FATURAMENTO ANUAL =============== -->
+<section class="module alt" id="faturamento">
+  <div class="container">
+    <div class="mod-header">
+      <div class="mod-ref">F00</div>
+      <div class="mod-title">
+        <h2>Faturamento Anual · 2024 → 2026</h2>
+        <p>Leitura mês a mês com crescimento ano contra ano. Verde indica crescimento, vermelho retração. 2026 ainda parcial até abril.</p>
+      </div>
+      <div class="mod-meta">
+        <div class="mm-chip">Período: <b>3 anos</b></div>
+        <div class="mm-chip">YTD 26 vs 25: <b class="pos">+151,0%</b></div>
+      </div>
+    </div>
+
+    <div class="tbl">
+      <table>
+        <thead>
+          <tr>
+            <th>Mês</th>
+            <th style="text-align:right">2024</th>
+            <th style="text-align:right">2025</th>
+            <th style="text-align:right">Δ 25 vs 24</th>
+            <th style="text-align:right">2026</th>
+            <th style="text-align:right">Δ 26 vs 25</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Janeiro</td><td class="num">35.215,98</td><td class="num">22.259,22</td><td class="num neg">-36,8%</td><td class="num">65.554,37</td><td class="num pos">+194,5%</td></tr>
+          <tr><td>Fevereiro</td><td class="num">29.212,70</td><td class="num">29.769,58</td><td class="num pos">+1,9%</td><td class="num">69.605,18</td><td class="num pos">+133,8%</td></tr>
+          <tr><td>Março</td><td class="num">28.935,77</td><td class="num">34.452,29</td><td class="num pos">+19,1%</td><td class="num">89.786,72</td><td class="num pos">+160,6%</td></tr>
+          <tr><td>Abril</td><td class="num">13.409,91</td><td class="num">39.476,39</td><td class="num pos">+194,4%</td><td class="num">91.268,32</td><td class="num pos">+131,2%</td></tr>
+          <tr class="total"><td>YTD Jan–Abr</td><td class="num">106.774,36</td><td class="num">125.957,48</td><td class="num pos">+18,0%</td><td class="num">316.214,59</td><td class="num pos">+151,0%</td></tr>
+          <tr><td>Maio</td><td class="num">8.970,75</td><td class="num">38.263,49</td><td class="num pos">+326,5%</td><td class="num" style="color:var(--muted)">—</td><td class="num" style="color:var(--muted)">—</td></tr>
+          <tr><td>Junho</td><td class="num">22.819,31</td><td class="num">61.683,90</td><td class="num pos">+170,3%</td><td class="num" style="color:var(--muted)">—</td><td class="num" style="color:var(--muted)">—</td></tr>
+          <tr><td>Julho</td><td class="num">95.926,66</td><td class="num">151.331,11</td><td class="num pos">+57,8%</td><td class="num" style="color:var(--muted)">—</td><td class="num" style="color:var(--muted)">—</td></tr>
+          <tr><td>Agosto</td><td class="num">43.248,52</td><td class="num">155.216,34</td><td class="num pos">+258,9%</td><td class="num" style="color:var(--muted)">—</td><td class="num" style="color:var(--muted)">—</td></tr>
+          <tr><td>Setembro</td><td class="num">34.785,80</td><td class="num">156.212,82</td><td class="num pos">+349,1%</td><td class="num" style="color:var(--muted)">—</td><td class="num" style="color:var(--muted)">—</td></tr>
+          <tr><td>Outubro</td><td class="num">42.942,66</td><td class="num">157.554,59</td><td class="num pos">+266,9%</td><td class="num" style="color:var(--muted)">—</td><td class="num" style="color:var(--muted)">—</td></tr>
+          <tr><td>Novembro</td><td class="num">58.779,04</td><td class="num">180.456,62</td><td class="num pos">+207,0%</td><td class="num" style="color:var(--muted)">—</td><td class="num" style="color:var(--muted)">—</td></tr>
+          <tr><td>Dezembro</td><td class="num">72.678,78</td><td class="num">138.822,16</td><td class="num pos">+91,0%</td><td class="num" style="color:var(--muted)">—</td><td class="num" style="color:var(--muted)">—</td></tr>
+          <tr class="total"><td>Total ano</td><td class="num">486.925,88</td><td class="num">1.165.498,51</td><td class="num pos">+139,4%</td><td class="num">316.214,59 <span style="color:var(--muted);font-weight:400">(parc.)</span></td><td class="num" style="color:var(--muted)">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- =============== DRE =============== -->
+<section class="module" id="dre">
+  <div class="container">
+    <div class="mod-header">
+      <div class="mod-ref">F01</div>
+      <div class="mod-title">
+        <h2>DRE · Demonstração do Resultado</h2>
+        <p>O que a empresa ganhou no papel. Leitura mensal lado a lado para Set, Out e Nov de 2025. Toda linha tem referência direta nos arquivos da contabilidade da PRLS.</p>
+      </div>
+      <div class="mod-meta">
+        <div class="mm-chip">Frequência: <b>Mensal</b></div>
+        <div class="mm-chip">Dono: <b>Júlio + Miner</b></div>
+      </div>
+    </div>
+
+    <div class="tbl">
+      <table>
+        <thead>
+          <tr>
+            <th>Linha</th>
+            <th style="text-align:right">Setembro</th>
+            <th style="text-align:right">Outubro</th>
+            <th style="text-align:right">Novembro</th>
+            <th style="text-align:right">Trimestre</th>
+            <th style="text-align:right">% Fat Nov</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="total"><td>FATURAMENTO BRUTO</td><td class="num">218.263</td><td class="num">203.322</td><td class="num">234.552</td><td class="num">656.137</td><td class="num">100,0%</td></tr>
+          <tr class="sub"><td>Site (Shopify)</td><td class="num">29.529</td><td class="num">19.539</td><td class="num">43.597</td><td class="num">92.665</td><td class="num">18,6%</td></tr>
+          <tr class="sub"><td>Atendimento (WhatsApp)</td><td class="num">127.575</td><td class="num">149.791</td><td class="num">137.042</td><td class="num">414.409</td><td class="num">58,4%</td></tr>
+          <tr class="sub"><td>Pontos de venda</td><td class="num">2.272</td><td class="num">2.660</td><td class="num">2.453</td><td class="num">7.385</td><td class="num">1,0%</td></tr>
+          <tr class="sub"><td>Atacado</td><td class="num">58.887</td><td class="num">31.331</td><td class="num">51.460</td><td class="num">141.678</td><td class="num">21,9%</td></tr>
+          <tr class="total"><td>IMPOSTOS E DEDUÇÕES</td><td class="num neg">-82.630</td><td class="num neg">-72.297</td><td class="num neg">-81.616</td><td class="num neg">-236.544</td><td class="num">-34,8%</td></tr>
+          <tr class="alert"><td style="padding-left:32px">Descontos (alerta)</td><td class="num neg">-58.318</td><td class="num neg">-49.575</td><td class="num neg">-57.599</td><td class="num neg">-165.492</td><td class="num">-24,6%</td></tr>
+          <tr class="sub"><td>Simples Nacional + ICMS</td><td class="num neg">-6.468</td><td class="num neg">-13.319</td><td class="num neg">-8.663</td><td class="num neg">-28.450</td><td class="num">-3,7%</td></tr>
+          <tr class="sub"><td>Trocas e devoluções</td><td class="num neg">-9.160</td><td class="num neg">-1.217</td><td class="num neg">-5.011</td><td class="num neg">-15.387</td><td class="num">-2,1%</td></tr>
+          <tr class="sub"><td>Taxas e repasses</td><td class="num neg">-8.684</td><td class="num neg">-8.188</td><td class="num neg">-10.343</td><td class="num neg">-27.214</td><td class="num">-4,4%</td></tr>
+          <tr class="total"><td>RECEITA LÍQUIDA</td><td class="num">135.633</td><td class="num">131.024</td><td class="num">152.937</td><td class="num">419.594</td><td class="num">65,2%</td></tr>
+          <tr class="total"><td>CMV</td><td class="num neg">-54.592</td><td class="num neg">-46.925</td><td class="num neg">-59.067</td><td class="num neg">-160.584</td><td class="num">-25,2%</td></tr>
+          <tr class="total"><td>DESPESAS VARIÁVEIS</td><td class="num neg">-16.425</td><td class="num neg">-15.471</td><td class="num neg">-19.262</td><td class="num neg">-51.159</td><td class="num">-8,2%</td></tr>
+          <tr class="total"><td>LUCRO BRUTO</td><td class="num">64.615</td><td class="num">68.628</td><td class="num">74.608</td><td class="num">207.851</td><td class="num">31,8%</td></tr>
+          <tr class="total"><td>DESPESAS OPERACIONAIS</td><td class="num neg">-25.105</td><td class="num neg">-28.410</td><td class="num neg">-37.368</td><td class="num neg">-90.883</td><td class="num">-15,9%</td></tr>
+          <tr class="sub"><td>Administrativas</td><td class="num neg">-7.643</td><td class="num neg">-5.267</td><td class="num neg">-6.136</td><td class="num neg">-19.047</td><td class="num">-2,6%</td></tr>
+          <tr class="warn"><td style="padding-left:32px">Pessoal (subindo forte)</td><td class="num neg">-7.452</td><td class="num neg">-9.700</td><td class="num neg">-12.164</td><td class="num neg">-29.317</td><td class="num">-5,2%</td></tr>
+          <tr class="warn"><td style="padding-left:32px">Marketing (subindo forte)</td><td class="num neg">-7.080</td><td class="num neg">-10.443</td><td class="num neg">-16.080</td><td class="num neg">-33.603</td><td class="num">-6,9%</td></tr>
+          <tr class="sub"><td>Serviços de terceiros</td><td class="num neg">-2.930</td><td class="num neg">-3.000</td><td class="num neg">-2.988</td><td class="num neg">-8.918</td><td class="num">-1,3%</td></tr>
+          <tr class="total"><td>EBITDA</td><td class="num">39.510</td><td class="num">40.218</td><td class="num">37.240</td><td class="num">116.968</td><td class="num">15,9%</td></tr>
+          <tr class="total"><td>LUCRO LÍQUIDO</td><td class="num">39.341</td><td class="num">39.921</td><td class="num">36.938</td><td class="num">116.200</td><td class="num">15,7%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- =============== DFC =============== -->
+<section class="module alt" id="dfc">
+  <div class="container">
+    <div class="mod-header">
+      <div class="mod-ref">F02</div>
+      <div class="mod-title">
+        <h2>DFC · O paradoxo do caixa</h2>
+        <p>A DRE diz que a empresa lucrou R$ 116 mil. O caixa diz que queimou R$ 14,5 mil. A diferença é estoque parado. Essa seção conecta os dois e mostra exatamente onde o dinheiro foi.</p>
+      </div>
+      <div class="mod-meta">
+        <div class="mm-chip">Frequência: <b>Mensal</b></div>
+        <div class="mm-chip">Dono: <b>Júlio</b></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Movimentação de caixa do trimestre</h3>
+        <div class="tbl" style="margin-top:14px">
+          <table>
+            <tbody>
+              <tr><td>Entradas de caixa</td><td class="num pos">+436.493</td></tr>
+              <tr><td>Saídas de caixa</td><td class="num neg">-432.990</td></tr>
+              <tr class="total"><td>Caixa operacional</td><td class="num">+3.503</td></tr>
+              <tr><td>Distribuição de lucros</td><td class="num neg">-18.051</td></tr>
+              <tr><td>Rendimentos aplicação</td><td class="num pos">+7</td></tr>
+              <tr class="total alert"><td>Queima total do trimestre</td><td class="num neg">-14.541</td></tr>
+              <tr><td>Saldo inicial (01/Set)</td><td class="num">~17.890</td></tr>
+              <tr class="total"><td>Saldo final (30/Nov)</td><td class="num neg">3.349</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Reconciliação DRE x DFC</h3>
+        <p style="margin-bottom:16px">Por que a empresa deu lucro e ainda assim queimou caixa:</p>
+        <div class="tbl">
+          <table>
+            <tbody>
+              <tr><td>Lucro líquido DRE (trimestre)</td><td class="num pos">+116.200</td></tr>
+              <tr class="alert"><td>(-) Produto comprado que virou estoque</td><td class="num neg">-107.166</td></tr>
+              <tr><td>(-) Caução Outubro (não recorrente)</td><td class="num neg">-12.000</td></tr>
+              <tr><td>(-) Distribuição de lucro</td><td class="num neg">-18.051</td></tr>
+              <tr><td>(+) Variação de contas a pagar</td><td class="num pos">+6.476</td></tr>
+              <tr class="total"><td>Queima de caixa real</td><td class="num neg">-14.541</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:14px;font-size:13px;color:var(--muted)">O principal dreno é a sobrecompra. Enquanto o estoque girar abaixo do ritmo de compra, o caixa continua caindo mesmo com DRE positiva.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== PONTO DE EQUILÍBRIO =============== -->
+<section class="module" id="pe">
+  <div class="container">
+    <div class="mod-header">
+      <div class="mod-ref">F03</div>
+      <div class="mod-title">
+        <h2>Ponto de Equilíbrio · Simulador</h2>
+        <p>O faturamento mínimo para a empresa não dar prejuízo. Abaixo dele, prejuízo. Acima dele, lucro. Use a calculadora para simular cenários em tempo real mudando custos fixos, margem de contribuição e despesas.</p>
+      </div>
+      <div class="mod-meta">
+        <div class="mm-chip">Referência Nov: <b>R$ 117 mil</b></div>
+        <div class="mm-chip">Cobertura atual: <b>2,0x</b></div>
+      </div>
+    </div>
+
+    <div class="calc">
+      <div class="calc-grid">
+        <div class="calc-inputs">
+          <label>Despesas fixas mensais (R$)</label>
+          <input type="number" id="peFixos" value="37368" step="500">
+          <div class="hint">Pessoal + admin + marketing + terceiros + financeiras. Nov = R$ 37.368</div>
+
+          <label>Margem de contribuição (%)</label>
+          <input type="number" id="peMC" value="31.8" step="0.5">
+          <div class="hint">Lucro bruto sobre faturamento. Hoje em 31,8%</div>
+
+          <label>Cenário de faturamento desejado (R$)</label>
+          <input type="number" id="peFat" value="234552" step="5000">
+          <div class="hint">Entre com o faturamento para simular lucro esperado</div>
+
+          <label>Meta de margem líquida (%)</label>
+          <input type="number" id="peMetaMargin" value="20" step="1">
+          <div class="hint">Define o faturamento necessário para a meta</div>
+        </div>
+
+        <div class="calc-out">
+          <div class="row hero"><div class="k">Ponto de Equilíbrio</div><div class="v" id="peValor">R$ 117.509</div></div>
+          <div class="row"><div class="k">Cobertura atual</div><div class="v" id="peCobertura">2,0x</div></div>
+          <div class="row"><div class="k">Lucro no cenário</div><div class="v pos" id="peLucro">R$ 37.240</div></div>
+          <div class="row"><div class="k">Margem no cenário</div><div class="v" id="peMargemCen">15,9%</div></div>
+          <div class="row"><div class="k">Faturamento p/ atingir meta de margem</div><div class="v" id="peFatMeta">R$ 314.186</div></div>
+          <div class="row"><div class="k">Gap para meta</div><div class="v amber" id="peGap">R$ 79.634</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-top:24px">
+      <div class="meta-card">
+        <div class="meta-title"><h4>Setembro</h4><span class="val">R$ 218k · PE R$ 79k</span></div>
+        <div class="bar"><div class="fill green" style="width:100%"></div></div>
+        <div class="meta-foot"><span>Cobertura 2,8x</span><span>Lucro R$ 39k</span></div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-title"><h4>Outubro</h4><span class="val">R$ 203k · PE R$ 88k</span></div>
+        <div class="bar"><div class="fill green" style="width:100%"></div></div>
+        <div class="meta-foot"><span>Cobertura 2,3x</span><span>Lucro R$ 40k</span></div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-title"><h4>Novembro</h4><span class="val">R$ 234k · PE R$ 117k</span></div>
+        <div class="bar"><div class="fill amber" style="width:100%"></div></div>
+        <div class="meta-foot"><span>Cobertura 2,0x</span><span>Lucro R$ 37k</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== METAS =============== -->
+<section class="module alt" id="metas">
+  <div class="container">
+    <div class="mod-header">
+      <div class="mod-ref">F04</div>
+      <div class="mod-title">
+        <h2>Metas · Compromissos mensais</h2>
+        <p>O que a operação precisa entregar em cada mês. As metas estão calibradas com a realidade de Set a Nov e com os próximos passos do plano operacional.</p>
+      </div>
+      <div class="mod-meta">
+        <div class="mm-chip">Revisão: <b>Mensal</b></div>
+        <div class="mm-chip">Dono: <b>Gustavo</b></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="meta-card">
+        <div class="meta-title"><h4>Faturamento bruto</h4><span class="val">R$ 234k / R$ 280k</span></div>
+        <div class="bar"><div class="fill amber" style="width:83.6%"></div></div>
+        <div class="meta-foot"><span>83,6% da meta</span><span>Dec 2025</span></div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-title"><h4>Margem líquida</h4><span class="val">15,7% / 20,0%</span></div>
+        <div class="bar"><div class="fill red" style="width:78.5%"></div></div>
+        <div class="meta-foot"><span>Abaixo da meta</span><span>Meta Dez</span></div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-title"><h4>Reserva de caixa</h4><span class="val">R$ 3,3k / R$ 60k</span></div>
+        <div class="bar"><div class="fill red" style="width:5.5%"></div></div>
+        <div class="meta-foot"><span>Crítico</span><span>2 meses de despesa fixa</span></div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-title"><h4>Descontos efetivos</h4><span class="val">25,2% / 15,0%</span></div>
+        <div class="bar"><div class="fill red" style="width:100%"></div></div>
+        <div class="meta-foot"><span>Acima do limite</span><span>Gap 10 pontos</span></div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-title"><h4>Faturamento site Shopify</h4><span class="val">R$ 43k / R$ 80k</span></div>
+        <div class="bar"><div class="fill red" style="width:54.5%"></div></div>
+        <div class="meta-foot"><span>54% da meta</span><span>Cresceu 123% em Nov</span></div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-title"><h4>Sell-through estoque</h4><span class="val">60% / 85%</span></div>
+        <div class="bar"><div class="fill amber" style="width:70.6%"></div></div>
+        <div class="meta-foot"><span>Giro baixo</span><span>Meta 85%</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== SIMULADOR PRECIFICAÇÃO =============== -->
+<section class="module" id="pricing">
+  <div class="container">
+    <div class="mod-header">
+      <div class="mod-ref">F05</div>
+      <div class="mod-title">
+        <h2>Simulador de Precificação</h2>
+        <p>Descubra o preço mínimo para cada margem alvo, considerando custo do produto e estrutura de despesas. Conectado à tabela de precificação real da PRLS.</p>
+      </div>
+      <div class="mod-meta">
+        <div class="mm-chip">Base: <b>Tabela Varejo</b></div>
+        <div class="mm-chip">13 SKUs: <b>Prejuízo</b></div>
+      </div>
+    </div>
+
+    <div class="calc">
+      <div class="calc-grid">
+        <div class="calc-inputs">
+          <label>Custo do produto (R$)</label>
+          <input type="number" id="prCusto" value="54" step="1">
+          <div class="hint">Padrão CE R$ 54, SC ANA R$ 66,96, SC ISIS R$ 74,40</div>
+
+          <label>Despesas fixas (%)</label>
+          <input type="number" id="prFixas" value="13.9" step="0.5">
+          <div class="hint">Aluguel, energia, sistemas, admin</div>
+
+          <label>Descontos programados (%)</label>
+          <input type="number" id="prDesc" value="15" step="1">
+          <div class="hint">Cupom + promoção já embutidos</div>
+
+          <label>Despesas variáveis (%)</label>
+          <input type="number" id="prVar" value="18.6" step="0.5">
+          <div class="hint">Impostos, taxas, fretes, comissões</div>
+
+          <label>Margem líquida desejada (%)</label>
+          <input type="number" id="prMargem" value="25" step="1">
+          <div class="hint">Referência campeões: 25% a 33%</div>
+        </div>
+
+        <div class="calc-out">
+          <div class="row hero"><div class="k">Preço mínimo recomendado</div><div class="v" id="prPrecoIdeal">R$ 196,36</div></div>
+          <div class="row"><div class="k">Total de despesas sobre preço</div><div class="v" id="prTotalDesp">47,5%</div></div>
+          <div class="row"><div class="k">Markup sobre custo</div><div class="v" id="prMarkup">3,64x</div></div>
+          <div class="row"><div class="k">Margem em R$ por par</div><div class="v pos" id="prMargemR">R$ 49,09</div></div>
+          <div class="row"><div class="k">Sugestão de preço de tabela</div><div class="v" id="prTabela">R$ 199,99</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-top:24px">
+      <div class="card ok">
+        <h3>Faixa saudável</h3>
+        <p><b>R$ 259,99 a R$ 279,99</b> · Margem 31% a 33%. Aqui vivem os campeões (Luna, Laura, Livia). Prioridade de reposição de estoque.</p>
+      </div>
+      <div class="card amber">
+        <h3>Faixa apertada</h3>
+        <p><b>R$ 149,99</b> · Margem 16,3%. Tolerável. Só faz sentido se for produto de entrada que puxa volume para as faixas superiores.</p>
+      </div>
+      <div class="card alert">
+        <h3>Faixa deficitária</h3>
+        <p><b>Abaixo de R$ 149,99</b> · Margem negativa. 13 SKUs ativos. Cada par vendido é prejuízo. Subir preço ou encerrar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== PROCESSO DE DECISÃO =============== -->
+<section class="module alt" id="decisao">
+  <div class="container">
+    <div class="mod-header">
+      <div class="mod-ref">F06</div>
+      <div class="mod-title">
+        <h2>Processo · Tomada de decisão financeira</h2>
+        <p>Decisão financeira na PRLS segue cinco estações, conectadas ao mapa operacional do OS. O objetivo é evitar decisão baseada em opinião e garantir que todo movimento de preço, estoque, compra ou retirada passe por método.</p>
+      </div>
+      <div class="mod-meta">
+        <div class="mm-chip">Cadência: <b>Semanal</b></div>
+        <div class="mm-chip">Ritual: <b>Terça</b></div>
+      </div>
+    </div>
+
+    <div class="decision-steps">
+      <div class="step">
+        <div class="step-ref">D01</div>
+        <div class="step-title">Leitura</div>
+        <div class="step-desc">Abrir DRE, DFC e fluxo de caixa da semana. Validar se o ponto de equilíbrio foi coberto e se a margem está dentro do intervalo.</div>
+        <div class="step-foot">Conecta · M07 Governança</div>
+      </div>
+      <div class="step">
+        <div class="step-ref">D02</div>
+        <div class="step-title">Diagnóstico</div>
+        <div class="step-desc">Identificar desvios. Margem caindo? Desconto fora do teto? Estoque inchando? Cada desvio é sinal de uma decisão pendente.</div>
+        <div class="step-foot">Conecta · M05 CRM</div>
+      </div>
+      <div class="step">
+        <div class="step-ref">D03</div>
+        <div class="step-title">Simulação</div>
+        <div class="step-desc">Usar o simulador de ponto de equilíbrio e de precificação. Nada vai para execução sem cenário calculado com no mínimo 3 variações.</div>
+        <div class="step-foot">Ferramenta · Calculadoras F03 e F05</div>
+      </div>
+      <div class="step">
+        <div class="step-ref">D04</div>
+        <div class="step-title">Decisão</div>
+        <div class="step-desc">Registrar a decisão com critério, dono, prazo e métrica de sucesso. Toda decisão entra na rotina de vendas da semana.</div>
+        <div class="step-foot">Conecta · Rotina de Vendas</div>
+      </div>
+      <div class="step">
+        <div class="step-ref">D05</div>
+        <div class="step-title">Revisão</div>
+        <div class="step-desc">Na semana seguinte, checar o resultado. Se o número não veio, ajustar. Se veio, consolidar no playbook e manter.</div>
+        <div class="step-foot">Conecta · M10 Playbook</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:32px">
+      <div class="card">
+        <h3>Ritual semanal</h3>
+        <p><b>Terça 09h</b> · Revisão financeira de 30 minutos. Gustavo, Júlio e Leonardo. Abrir KPIs, confrontar com metas, identificar um desvio, simular, decidir. A decisão entra na rotina da semana.</p>
+      </div>
+      <div class="card">
+        <h3>Gatilhos automáticos</h3>
+        <p><b>Caixa abaixo de R$ 20k</b> · suspender retirada. <b>Desconto mensal acima de 20%</b> · revisar cupons. <b>Estoque acima de 70 dias</b> · travar compra. <b>Margem Nov menor que 18%</b> · reunião emergencial.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== ALERTAS =============== -->
+<section class="module" id="alertas">
+  <div class="container">
+    <div class="mod-header">
+      <div class="mod-ref">F07</div>
+      <div class="mod-title">
+        <h2>Alertas e plano de ação</h2>
+        <p>Os nove problemas priorizados com dado, ação e responsável. P0 precisa ser resolvido esta semana. P1 no mês. P2 no trimestre.</p>
+      </div>
+      <div class="mod-meta">
+        <div class="mm-chip">Revisão: <b>Semanal</b></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0">
+      <div class="alert-row">
+        <div><span class="prio p0">P0</span></div>
+        <div class="col-title">Estoque inchando por sobrecompra</div>
+        <div class="col-text">Comprou R$ 267k em produto e vendeu R$ 160k em custo. R$ 107k virou estoque parado no trimestre.</div>
+        <div class="col-text">Parar compra nova até o estoque girar. Curva ABC dos SKUs. Queimar baixo giro com campanha dedicada.</div>
+        <div class="col-resp">Gustavo + Leonardo</div>
+      </div>
+      <div class="alert-row">
+        <div><span class="prio p0">P0</span></div>
+        <div class="col-title">Caixa em R$ 3,3k no fim de Nov</div>
+        <div class="col-text">Saldo caiu de R$ 52k (fim Set) para R$ 3,3k. Queima de R$ 48k em dois meses.</div>
+        <div class="col-text">Suspender distribuição de lucro até recompor caixa para R$ 60k (2 meses de despesa fixa).</div>
+        <div class="col-resp">Gustavo</div>
+      </div>
+      <div class="alert-row">
+        <div><span class="prio p0">P0</span></div>
+        <div class="col-title">Descontos comendo 25% da receita</div>
+        <div class="col-text">R$ 55k por mês em descontos. Maior dedução do DRE depois de impostos.</div>
+        <div class="col-text">Auditoria de cupons. Travar teto por pedido. Diferenciar desconto estratégico de desconto generalizado.</div>
+        <div class="col-resp">Gustavo + Ana Laura</div>
+      </div>
+      <div class="alert-row">
+        <div><span class="prio p1">P1</span></div>
+        <div class="col-title">Marketing acelerando sem retorno proporcional</div>
+        <div class="col-text">Marketing saiu de R$ 7k (Set) para R$ 16k (Nov). Aumento de 128%. Faturamento subiu só 7%.</div>
+        <div class="col-text">Pausar novas campanhas. Amarrar investimento ao ROAS mínimo. Rastrear conversão WhatsApp.</div>
+        <div class="col-resp">Ana Laura + Miner</div>
+      </div>
+      <div class="alert-row">
+        <div><span class="prio p1">P1</span></div>
+        <div class="col-title">13 SKUs com preço abaixo do custo total</div>
+        <div class="col-text">Produtos a R$ 49,99 a R$ 99,99 dão prejuízo unitário. FLATFORM LASSIE perde R$ 28,84/par.</div>
+        <div class="col-text">Subir preço para R$ 129,99 ou encerrar SKU. Decidir produto a produto na próxima semana.</div>
+        <div class="col-resp">Gustavo + Leonardo</div>
+      </div>
+      <div class="alert-row">
+        <div><span class="prio p1">P1</span></div>
+        <div class="col-title">Margem líquida caindo</div>
+        <div class="col-text">18,0% (Set), 19,6% (Out), 15,7% (Nov). Queda de 3,9 pontos em Nov.</div>
+        <div class="col-text">Rodar DRE por canal para isolar onde a margem está perdendo e decidir corretivo específico.</div>
+        <div class="col-resp">Júlio + Miner</div>
+      </div>
+      <div class="alert-row">
+        <div><span class="prio p2">P2</span></div>
+        <div class="col-title">Atacado sem política de preço</div>
+        <div class="col-text">22% do faturamento (R$ 47k/mês) sem tabela própria de margem.</div>
+        <div class="col-text">Criar matriz de preço B2B com margem mínima definida e regras por volume.</div>
+        <div class="col-resp">Gustavo + Leonardo</div>
+      </div>
+      <div class="alert-row">
+        <div><span class="prio p2">P2</span></div>
+        <div class="col-title">Site só representa 14% do faturamento</div>
+        <div class="col-text">R$ 30,8k/mês em média. Muito abaixo do potencial da audiência no Instagram.</div>
+        <div class="col-text">Migrar conversas do WhatsApp para checkout direto. Google Shopping. Régua de email.</div>
+        <div class="col-resp">Miner</div>
+      </div>
+      <div class="alert-row">
+        <div><span class="prio p2">P2</span></div>
+        <div class="col-title">Trocas e devoluções desalinhadas</div>
+        <div class="col-text">DRE mostra 2,3% em R$. Shopify mostra 42,7% dos pedidos reembolsados.</div>
+        <div class="col-text">Reconciliar metodologia. Entender se DRE está subnotificado ou Shopify contando crédito.</div>
+        <div class="col-resp">Júlio + Leonardo</div>
+      </div>
+    </div>
+
+    <a href="./PRLS_Analise_Financeira_Set-Nov25.xlsx" class="download" download>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Baixar análise completa em Excel
+    </a>
+  </div>
+</section>
+
+<!-- =============== FOOTER =============== -->
+<footer>
+  <div class="container">
+    <div>PRLS OS · Financeiro · v1.0</div>
+    <div>Leitura Set a Nov 2025 · Próxima revisão: Dez 2025</div>
+  </div>
+</footer>
+
+<script>
+  // Ponto de equilibrio
+  function calcPE(){
+    const fixos = parseFloat(document.getElementById('peFixos').value) || 0;
+    const mc = (parseFloat(document.getElementById('peMC').value) || 0) / 100;
+    const fat = parseFloat(document.getElementById('peFat').value) || 0;
+    const metaMargin = (parseFloat(document.getElementById('peMetaMargin').value) || 0) / 100;
+
+    const pe = mc > 0 ? fixos / mc : 0;
+    const cob = pe > 0 ? fat / pe : 0;
+    const lucro = (fat * mc) - fixos;
+    const margem = fat > 0 ? lucro / fat : 0;
+    // Para atingir margem desejada: fat = fixos / (mc - meta)
+    const fatMeta = (mc - metaMargin) > 0 ? fixos / (mc - metaMargin) : 0;
+    const gap = fatMeta - fat;
+
+    document.getElementById('peValor').textContent = 'R$ ' + pe.toLocaleString('pt-BR', {maximumFractionDigits:0});
+    document.getElementById('peCobertura').textContent = cob.toLocaleString('pt-BR', {maximumFractionDigits:1}) + 'x';
+    const lucEl = document.getElementById('peLucro');
+    lucEl.textContent = 'R$ ' + lucro.toLocaleString('pt-BR', {maximumFractionDigits:0});
+    lucEl.className = 'v ' + (lucro >= 0 ? 'pos' : 'neg');
+    document.getElementById('peMargemCen').textContent = (margem*100).toLocaleString('pt-BR', {maximumFractionDigits:1}) + '%';
+    document.getElementById('peFatMeta').textContent = 'R$ ' + fatMeta.toLocaleString('pt-BR', {maximumFractionDigits:0});
+    const gapEl = document.getElementById('peGap');
+    gapEl.textContent = 'R$ ' + gap.toLocaleString('pt-BR', {maximumFractionDigits:0});
+    gapEl.className = 'v ' + (gap > 0 ? 'amber' : 'pos');
+    if (gap <= 0) {
+      gapEl.style.color = 'var(--green)';
+    } else {
+      gapEl.style.color = 'var(--amber)';
+    }
+  }
+  ['peFixos','peMC','peFat','peMetaMargin'].forEach(id => document.getElementById(id).addEventListener('input', calcPE));
+  calcPE();
+
+  // Precificação
+  function calcPR(){
+    const custo = parseFloat(document.getElementById('prCusto').value) || 0;
+    const fixas = (parseFloat(document.getElementById('prFixas').value) || 0) / 100;
+    const desc = (parseFloat(document.getElementById('prDesc').value) || 0) / 100;
+    const varp = (parseFloat(document.getElementById('prVar').value) || 0) / 100;
+    const margem = (parseFloat(document.getElementById('prMargem').value) || 0) / 100;
+
+    const totalDesp = fixas + desc + varp;
+    const denom = 1 - totalDesp - margem;
+    const preco = denom > 0 ? custo / denom : 0;
+    const markup = custo > 0 ? preco / custo : 0;
+    const margemR = preco * margem;
+
+    // Sugestao de preco: arredondar para terminar em 9,99
+    let tabela = Math.ceil(preco / 10) * 10 - 0.01;
+    if (tabela < preco) tabela = Math.ceil((preco+10) / 10) * 10 - 0.01;
+
+    document.getElementById('prPrecoIdeal').textContent = 'R$ ' + preco.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+    document.getElementById('prTotalDesp').textContent = (totalDesp*100).toLocaleString('pt-BR', {maximumFractionDigits:1}) + '%';
+    document.getElementById('prMarkup').textContent = markup.toLocaleString('pt-BR', {maximumFractionDigits:2}) + 'x';
+    document.getElementById('prMargemR').textContent = 'R$ ' + margemR.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+    document.getElementById('prTabela').textContent = 'R$ ' + tabela.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+
+    if (denom <= 0) {
+      document.getElementById('prPrecoIdeal').textContent = 'Inviável · ajuste parâmetros';
+      document.getElementById('prPrecoIdeal').style.color = 'var(--red)';
+    } else {
+      document.getElementById('prPrecoIdeal').style.color = 'var(--ink)';
+    }
+  }
+  ['prCusto','prFixas','prDesc','prVar','prMargem'].forEach(id => document.getElementById(id).addEventListener('input', calcPR));
+  calcPR();
+</script>
+
+</body>
+</html>

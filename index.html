@@ -52,9 +52,16 @@
   .brand .sq{width:18px;height:18px;background:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;font-family:var(--font-mono)}
   .brand .sep{color:var(--muted-2);font-weight:400}
   .brand .sub{color:var(--muted);font-weight:500}
-  .top-nav{display:flex;gap:4px;font-size:13px}
+  .top-nav{display:flex;align-items:flex-end;gap:14px;font-size:13px}
+  .top-nav .nav-group{display:flex;flex-direction:column;gap:5px;position:relative}
+  .top-nav .nav-group + .nav-group::before{content:'';position:absolute;left:-7px;top:18px;bottom:4px;width:1px;background:var(--border)}
+  .top-nav .nav-label{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-weight:500;padding-left:12px;opacity:.7}
+  .top-nav .nav-items{display:flex;gap:2px}
+  .top-nav .nav-emphasis .nav-items{background:var(--bg-alt);border-radius:8px;padding:2px}
   .top-nav a{padding:8px 12px;color:var(--muted);border-radius:6px;transition:all 0.15s;font-weight:500}
   .top-nav a:hover{color:var(--ink);background:var(--bg-alt)}
+  .top-nav .nav-emphasis a:hover{background:#fff}
+  .top-nav a.active{background:var(--ink);color:#fff}
   .top-meta{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.02em}
 
   /* ============ HERO ============ */
@@ -294,51 +301,6 @@
     .inf-row{grid-template-columns:60px 1fr 1fr}
     .inf-row > div:nth-child(4){display:none}
   }
-
-  /* ============ DAILY BRIEFING ============ */
-  .daily-brief{padding:56px 0 32px;background:var(--bg);border-bottom:1px solid var(--border)}
-  .db-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:40px 44px;box-shadow:var(--shadow-md);max-width:860px;margin:0 auto}
-  .db-kicker{font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:10px;justify-content:center}
-  .db-kicker:before{content:'';width:20px;height:1px;background:var(--ink)}
-  .db-card h2{font-size:clamp(24px,2.8vw,32px);font-weight:500;letter-spacing:-0.025em;line-height:1.15;color:var(--ink);text-align:center;margin-bottom:10px}
-  .db-card .db-sub{text-align:center;color:var(--ink-2);font-size:14.5px;margin-bottom:28px;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.55}
-  .db-profiles{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:20px}
-  .db-prof{background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:9px 14px;font-size:12.5px;color:var(--ink-2);cursor:pointer;font-family:var(--font-sans);letter-spacing:-0.005em;display:inline-flex;align-items:center;gap:8px;transition:all 0.15s;font-weight:500}
-  .db-prof:hover{border-color:var(--ink);color:var(--ink)}
-  .db-prof.active{background:var(--ink);color:#fff;border-color:var(--ink)}
-  .db-prof .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:0.5}
-  .db-input{background:var(--bg-alt);border:1px solid var(--border);border-radius:28px;padding:14px 16px 14px 20px;display:flex;align-items:center;gap:12px}
-  .db-input input{flex:1;background:transparent;border:none;outline:none;font-family:var(--font-sans);font-size:14.5px;color:var(--ink);min-width:0;padding:4px 0}
-  .db-input input::placeholder{color:var(--muted-2)}
-  .db-tools{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px}
-  .db-tools .t-ic{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;font-size:15px;background:var(--surface)}
-  .db-tools .t-lbl{padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:var(--surface);display:inline-flex;align-items:center;gap:6px;font-size:12px}
-  .db-send{width:36px;height:36px;border-radius:50%;background:var(--ink);color:#fff;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:15px;transition:transform 0.15s;flex-shrink:0}
-  .db-send:hover{transform:translateY(-1px)}
-  .db-output{margin-top:28px;display:none}
-  .db-output.show{display:block;animation:dbFade 0.25s ease-out}
-  @keyframes dbFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-  .db-output-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);gap:16px;flex-wrap:wrap}
-  .db-output-head .oh-title{font-size:14px;font-weight:600;letter-spacing:-0.01em;color:var(--ink)}
-  .db-output-head .oh-meta{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase}
-  .db-actions{display:flex;flex-direction:column;gap:10px}
-  .db-action{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:start;padding:14px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px}
-  .db-action .a-num{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.1em;padding-top:3px}
-  .db-action .a-body .a-title{font-weight:600;font-size:14px;letter-spacing:-0.01em;margin-bottom:4px;color:var(--ink)}
-  .db-action .a-body .a-desc{font-size:13px;color:var(--ink-2);line-height:1.5}
-  .db-action .a-tag{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;padding:4px 8px;border-radius:4px;background:var(--accent-soft);color:var(--ink);white-space:nowrap;font-weight:500;align-self:start}
-  .db-action .a-tag.drop{background:#dbeafe;color:#1e40af}
-  .db-action .a-tag.flash{background:#fee2e2;color:#b91c1c}
-  .db-action .a-tag.m1{background:#fef3c7;color:#b45309}
-  .db-action .a-tag.setor{background:#ccfbf1;color:#0f766e}
-  .db-empty{text-align:center;padding:18px;color:var(--muted);font-size:13px;font-style:italic}
-  @media (max-width:720px){
-    .db-card{padding:28px 20px}
-    .db-input{padding:10px 12px 10px 16px;gap:8px}
-    .db-tools .t-lbl{display:none}
-    .db-action{grid-template-columns:auto 1fr;gap:10px}
-    .db-action .a-tag{grid-column:1 / -1;justify-self:start}
-  }
 </style>
 </head>
 <body>
@@ -352,41 +314,35 @@
       <span class="sep">/</span>
       <span class="sub">Mapa de Processos</span>
     </div>
-    <nav class="top-nav">
-      <a href="#macro">Mapa</a>
-      <a href="#m08">Squad</a>
-      <a href="#m09">Benchmark</a>
-      <a href="#m10">Playbook</a>
-      <a href="#m11">CRM</a>
-      <a href="./calendario.html">Calendário</a>
-      <a href="./rotina-vendas.html" style="background:var(--ink);color:#fff">Rotina</a>
+    <nav class="top-nav" aria-label="Navegação principal">
+      <div class="nav-group">
+        <span class="nav-label">Estratégia</span>
+        <div class="nav-items">
+          <a href="#macro">Mapa</a>
+          <a href="#m08">Squad</a>
+          <a href="#m09">Benchmark</a>
+        </div>
+      </div>
+      <div class="nav-group nav-emphasis">
+        <span class="nav-label">Operação</span>
+        <div class="nav-items">
+          <a href="#m10">Playbook</a>
+          <a href="#m11">CRM</a>
+          <a href="./calendario.html">Calendário</a>
+          <a href="./rotina-vendas.html">Rotina</a>
+        </div>
+      </div>
+      <div class="nav-group">
+        <span class="nav-label">Suporte</span>
+        <div class="nav-items">
+          <a href="./financeiro.html">Financeiro</a>
+          <a href="./automacao.html">Automação</a>
+        </div>
+      </div>
     </nav>
     <div class="top-meta">v1.1 · 04/2026</div>
   </div>
 </header>
-
-<!-- =============== DAILY BRIEFING =============== -->
-<section class="daily-brief" id="daily-brief">
-  <div class="container">
-    <div class="db-card">
-      <div class="db-kicker" id="dbDate">Hoje</div>
-      <h2>Quer saber o que fazer hoje?</h2>
-      <p class="db-sub">Selecione seu perfil e receba as ações do dia com foco em gerar venda, ancoradas no mapa da operação e no momento do mês.</p>
-      <div class="db-profiles" id="dbProfiles">
-        <button class="db-prof" data-profile="ana" type="button"><span class="dot"></span>Ana Laura · Produto e Marketing</button>
-        <button class="db-prof" data-profile="gustavo" type="button"><span class="dot"></span>Gustavo · Site, CRM e Tráfego</button>
-        <button class="db-prof" data-profile="davi" type="button"><span class="dot"></span>Davi · Produtos e Supply</button>
-        <button class="db-prof" data-profile="leonardo" type="button"><span class="dot"></span>Leonardo · Operação de Vendas</button>
-      </div>
-      <form class="db-input" id="dbForm" onsubmit="return dbAsk(event)">
-        <input id="dbQ" type="text" placeholder="Hello there — o que você quer priorizar hoje?" autocomplete="off" />
-        <div class="db-tools"><span class="t-ic" aria-hidden="true">+</span><span class="t-lbl">⌯ Tools</span></div>
-        <button class="db-send" type="submit" aria-label="Enviar">↑</button>
-      </form>
-      <div class="db-output" id="dbOutput" aria-live="polite"></div>
-    </div>
-  </div>
-</section>
 
 <!-- =============== HERO =============== -->
 <section class="hero">
@@ -1607,169 +1563,6 @@
       grid.appendChild(el);
     }
   }
-</script>
-
-<script>
-/* ============ DAILY BRIEFING ============ */
-(function(){
-  const $ = (s,r=document)=>r.querySelector(s);
-  const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
-
-  const SEMANAS = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
-  const MESES = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-
-  function fmtDate(d){
-    return `Hoje · ${SEMANAS[d.getDay()]}, ${d.getDate()} de ${MESES[d.getMonth()]}`;
-  }
-
-  function context(d){
-    d = d || new Date();
-    const dow = d.getDay();
-    const day = d.getDate();
-    const first = new Date(d.getFullYear(), d.getMonth(), 1);
-    const firstSat = 1 + ((6 - first.getDay() + 7) % 7);
-    const secondSat = firstSat + 7;
-    const isM1 = (dow === 6) && (day === firstSat || day === secondSat);
-    const dropWindow = day >= 5 && day <= 10;
-    const endOfMonth = day >= 27;
-    const startOfMonth = day <= 3;
-    const isFlash = endOfMonth || startOfMonth;
-    return {dow, day, isM1, dropWindow, isFlash, endOfMonth, startOfMonth};
-  }
-
-  const BANK = {
-    ana: [
-      {t:'Briefar blogueiras da semana', d:'Duas por semana. Confirmar peças, ângulos e data do post. Quinta é dia de story + post comercial.', tag:'setor', when:c=>c.dow>=1 && c.dow<=3},
-      {t:'Revisar e aprovar post comercial de quinta', d:'Post foca no drop/oferta com story de blogueira. Copy e pauta fechadas até quarta 18h.', tag:'', when:c=>c.dow===3 || c.dow===4},
-      {t:'Agendar street shooting da semana', d:'Duas sessões por mês. Definir locação, looks e SKUs em destaque alinhados ao drop.', tag:'', when:c=>c.dow===1 || c.dow===2},
-      {t:'Fechar campanha de lançamento do drop', d:'Janela de drop (dia 5–10). Alinhar com Davi os SKUs que entram e com Gustavo o plano de mídia.', tag:'drop', when:c=>c.dropWindow || c.day>=25},
-      {t:'Preparar campanha sazonal (Mães / Namorados / BF)', d:'Setor de moda vive de efeméride. Roteiro de conteúdo precisa estar pronto com 4 semanas de antecedência.', tag:'setor', when:c=>true},
-      {t:'Rebalancear cadência de posts (feed + reels + stories)', d:'Revisar alcance e engajamento da semana passada. Se caiu, trocar formato e horário, não só criativo.', tag:'', when:c=>c.dow===1},
-      {t:'M1 — revisar marketing do mês', d:'Levar para a mesa: CPM, alcance, engajamento, top 3 conteúdos, aprendizado de blogueiras e calendário do mês seguinte.', tag:'m1', when:c=>c.isM1}
-    ],
-    gustavo: [
-      {t:'Abrir dashboard de vendas do dia anterior', d:'Receita, conversão, CPA, CPC, ROAS por canal. Marcar desvios > 15% e decidir ação corretiva antes das 11h.', tag:'', when:c=>c.dow>=1 && c.dow<=5},
-      {t:'Ajustar mídia Meta e TikTok', d:'Re-lançar criativo vencedor, pausar o que estourou o CPA teto. Comparar janela 3d vs 7d antes de mexer.', tag:'', when:c=>c.dow>=1 && c.dow<=5},
-      {t:'Disparar régua de CRM do mês', d:'Segmentos: compraram últimos 90d + abandono de carrinho 7d. Oferta costurada com o drop do mês.', tag:'drop', when:c=>c.dropWindow || c.isFlash},
-      {t:'Flash de fim/início de mês (WhatsApp + e-mail + stories)', d:'Pico comercial. Urgência + caixa antes do próximo drop. Segmentar VIP primeiro, broadcast depois.', tag:'flash', when:c=>c.isFlash},
-      {t:'Subir fichas dos SKUs novos no Shopify', d:'Janela de drop. Descrição, SEO, catálogo Meta/Google, preço e fotografia validados com Davi e Ana Laura.', tag:'drop', when:c=>c.dropWindow},
-      {t:'Benchmark Arezzo / Schutz / Vicenza', d:'O que essas lançaram na semana. Copiar padrões de pricing, vitrine e campanha — não criativo.', tag:'setor', when:c=>c.dow===2 || c.dow===4},
-      {t:'M1 — levar números para a mesa', d:'Receita, LTV, recompra, CAC, contribuição por canal. Propostas concretas para o mês seguinte, não só leitura.', tag:'m1', when:c=>c.isM1}
-    ],
-    davi: [
-      {t:'Conferência do recebimento da fábrica', d:'Separar lote, conferir etiqueta, organizar para fotografia e liberar para cadastro das vendedoras.', tag:'', when:c=>c.dow>=1 && c.dow<=5},
-      {t:'Cadastrar SKUs novos do drop', d:'Janela de drop. Código, grade, custo, ficha técnica. Vendedoras entram no cadastro para ganhar contexto.', tag:'drop', when:c=>c.dropWindow},
-      {t:'Revisar curva de sortimento', d:'Identificar SKUs com giro abaixo da meta e decidir: remarcar, combinar em kit ou descontinuar.', tag:'', when:c=>c.dow===1 || c.dow===3},
-      {t:'Alinhar próxima produção com a fábrica', d:'Amostra, prazo e mix da próxima coleção. Janela de 60 dias de antecedência é mínimo para não furar drop.', tag:'', when:c=>c.dow===2},
-      {t:'Fotografia de produto dos SKUs do drop', d:'Alinhar datas de shooting com Ana Laura. Sem foto não sobe no Shopify, não roda mídia e trava vendedora.', tag:'drop', when:c=>c.day>=1 && c.day<=10},
-      {t:'Contagem cíclica das top 30 referências', d:'Fechar inventário antes do M1. Discrepâncias entram na reunião com plano de ajuste.', tag:'', when:c=>c.day>=25 && c.day<=30},
-      {t:'M1 — estoque, giro e sortimento', d:'Levar cobertura, rupturas, top giros, perdas e plano de compra do próximo mês.', tag:'m1', when:c=>c.isM1}
-    ],
-    leonardo: [
-      {t:'Abrir WhatsApp 09h — primeiro turno', d:'P1: respostas pendentes > 12h. P2: carrinhos abertos. Follow-up padrão de 3 toques antes de arquivar.', tag:'', when:c=>c.dow>=1 && c.dow<=5},
-      {t:'Ativação da base — 20 clientes VIP do dia', d:'Cliente recorrente ou que comprou últimos 60 dias. Mensagem personalizada com novidade do drop.', tag:'', when:c=>c.dow>=1 && c.dow<=6},
-      {t:'Revisar OTE com Alyssa e Natasha', d:'Conversão do dia, ticket médio, conversas abertas. Feedback em cima de 2–3 chats concretos, não de média.', tag:'', when:c=>c.dow>=1 && c.dow<=5},
-      {t:'Push de flash no WhatsApp', d:'Fim/início de mês. Script curto + desconto + deadline. Disparo em blocos de 30 para evitar banimento.', tag:'flash', when:c=>c.isFlash},
-      {t:'Comunicar drop para lista quente', d:'Janela de drop. Top 200 clientes recebem 24h antes do Instagram. Oferta levemente melhor para criar clube.', tag:'drop', when:c=>c.dropWindow},
-      {t:'Zerar troca e reembolso pendentes', d:'Não deixar virar o mês. Cliente insatisfeito contamina NPS, tira recompra e vira reclamação em rede.', tag:'', when:c=>c.dow===5 || c.day>=25},
-      {t:'M1 — conversão, ticket médio, recompra', d:'Levar OTE consolidado, top objeções, propostas de script e meta de conversão do próximo mês.', tag:'m1', when:c=>c.isM1}
-    ]
-  };
-
-  const PROFILE_NAME = {
-    ana: 'Ana Laura — Produto e Marketing',
-    gustavo: 'Gustavo — Site, CRM e Tráfego',
-    davi: 'Davi — Produtos e Supply',
-    leonardo: 'Leonardo — Operação de Vendas'
-  };
-
-  const TAG_LABEL = {
-    drop: 'Janela de drop',
-    flash: 'Flash fim/início',
-    m1: 'Ritual M1',
-    setor: 'Setor · moda'
-  };
-
-  let currentProfile = null;
-
-  function suggestFor(profile){
-    const c = context();
-    const bank = BANK[profile] || [];
-    const matches = bank.filter(a => !a.when || a.when(c));
-    const priority = {m1:0, flash:1, drop:2, setor:3};
-    matches.sort((a,b)=>(priority[a.tag] ?? 9)-(priority[b.tag] ?? 9));
-    return matches.slice(0, 4);
-  }
-
-  function render(profile, userQuery){
-    const out = $('#dbOutput');
-    const list = suggestFor(profile);
-    const ctx = context();
-    const marks = [];
-    if(ctx.isM1) marks.push('M1 (reunião mensal)');
-    if(ctx.dropWindow) marks.push('Janela de drop (5–10)');
-    if(ctx.isFlash) marks.push('Flash de fim/início');
-    if(!marks.length) marks.push('Dia operacional');
-
-    const queryLine = userQuery ? `<div style="font-size:12.5px;color:var(--muted);margin-top:6px">Você perguntou: "${userQuery.replace(/</g,'&lt;')}"</div>` : '';
-
-    out.innerHTML = `
-      <div class="db-output-head">
-        <div>
-          <div class="oh-title">${PROFILE_NAME[profile]}</div>
-          ${queryLine}
-        </div>
-        <div class="oh-meta">${marks.join(' · ')}</div>
-      </div>
-      <div class="db-actions">
-        ${list.length ? list.map((a,i)=>`
-          <div class="db-action">
-            <div class="a-num">${String(i+1).padStart(2,'0')}</div>
-            <div class="a-body">
-              <div class="a-title">${a.t}</div>
-              <div class="a-desc">${a.d}</div>
-            </div>
-            ${a.tag ? `<div class="a-tag ${a.tag}">${TAG_LABEL[a.tag] || a.tag}</div>` : '<div class="a-tag">Rotina</div>'}
-          </div>
-        `).join('') : '<div class="db-empty">Sem ações recomendadas — aproveite para subir melhorias que acumulam.</div>'}
-      </div>
-    `;
-    out.classList.add('show');
-  }
-
-  function init(){
-    const dateEl = $('#dbDate');
-    if(dateEl) dateEl.textContent = fmtDate(new Date());
-
-    $$('.db-prof').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        $$('.db-prof').forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        currentProfile = btn.dataset.profile;
-        render(currentProfile);
-      });
-    });
-  }
-
-  window.dbAsk = function(e){
-    e.preventDefault();
-    const q = ($('#dbQ') && $('#dbQ').value || '').trim();
-    if(!currentProfile){
-      const out = $('#dbOutput');
-      out.innerHTML = '<div class="db-empty">Selecione um perfil acima para eu sugerir ações do dia.</div>';
-      out.classList.add('show');
-      return false;
-    }
-    render(currentProfile, q);
-    return false;
-  };
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
 </script>
 
 </body>
